@@ -8,6 +8,7 @@ public class TriofficeApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(TriofficeApplication.class, args);
+
 	}
 
 }
