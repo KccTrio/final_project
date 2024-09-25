@@ -9,7 +9,7 @@ public class TestController {
 
   @GetMapping("/nav")
   public String viewNav() {
-    return "/nav";
+    return "/component/nav";
   }
 
 }

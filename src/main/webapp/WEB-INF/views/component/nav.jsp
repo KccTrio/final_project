@@ -14,7 +14,9 @@ pageEncoding="UTF-8" %>
     <div class="full">
       <div class="top-bar">
         <div class="logo">
-          <!-- <a href="/static"><img src="kcc정보통신.png" /></a> -->
+          <a href="/"
+            ><img src="../../../static/component/kcc정보통신.png"
+          /></a>
         </div>
       </div>
       <div class="side-bar">
