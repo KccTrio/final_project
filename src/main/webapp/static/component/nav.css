@@ -1,10 +1,13 @@
 body {
   margin: 0;
+  font-family: "NanumSquare_ac", sans-serif;
 }
 
 .full {
-  width: 100vw; /* 브라우저 너비의 100% */
+  width: 99vw; /* 브라우저 너비의 100% */
   height: 100vh; /* 브라우저 높이의 100% */
+  display: flex;
+  flex-direction: column;
 }
 
 .top-bar {
@@ -16,24 +19,40 @@ body {
   justify-content: space-between;
 }
 
+.search {
+  font-family: "One Mobile Title", sans-serif;
+  font-weight: 400; /* Regular weight */
+}
+
 .side-bar-menu {
   border: 1px solid #e4e4e4;
   background-color: #ebebeb;
   width: 50px;
   height: 100%;
   box-shadow: inset 5px 0px 10px #dedede; /* 오른쪽으로 10px 그림자 */
-}
-
-.side-bar {
   display: flex;
-  height: calc(100% - 43px);
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.side-bar-display {
+.main {
+  display: flex;
+  height: calc(100% - 45px); /* top-bar 높이 제외 */
+}
+
+.second-side-bar {
   width: 22vw;
   height: 100%;
   background-color: #f5f5f5;
   border: 1px solid #e4e4e4;
+  overflow-y: auto;
+}
+
+.second-side-bar-menu {
+  background-color: green;
+  width: 100%;
+  height: 64rem;
 }
 
 .logo img {
@@ -47,5 +66,25 @@ body {
   margin-top: 5px;
   width: 100px;
   height: 30px; /*
-  border: 1px solid black;*/
+  border: 1px solid black; */
+}
+
+.contents {
+  width: 79rem;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.contents-test {
+  width: 100%;
+  height: 70rem;
+  background-color: beige;
+}
+
+.employee {
+  margin-top: 5px;
+  margin-right: 5px;
+  width: 30px;
+  height: 30px;
+  border: 1px solid black;
 }
