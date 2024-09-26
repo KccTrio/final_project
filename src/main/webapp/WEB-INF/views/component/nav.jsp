@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8" %> <%@ include file="lib.jsp" %>
+pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
 <!DOCTYPE html>
 <html lang="ko">
   <head>
@@ -40,14 +40,22 @@ pageEncoding="UTF-8" %> <%@ include file="lib.jsp" %>
       <div class="main">
         <div class="side-bar-menu">
           <div class="side-bar-menu-icon-with-name">
-            <div class="menu">menu</div>
-            <div class="menu">menu</div>
-            <div class="menu">menu</div>
+            <div class="alram">
+              <a href="/notifications" class="alram-atag">
+                <i class="fa-regular fa-bell"></i>알림</a
+              >
+            </div>
+            <div class="chat">채팅</div>
+            <div class="date">일정</div>
+            <div class="company">조직도</div>
           </div>
           <div class="chat-bot">bot</div>
         </div>
         <div class="second-side-bar">
-          <div class="second-side-bar-menu"></div>
+          <div class="second-side-bar-menu">
+            <div>123</div>
+            <div>gkdldy</div>
+          </div>
         </div>
         <!-- contents 안에서만 작업해주세요. -->
         <div class="contents">

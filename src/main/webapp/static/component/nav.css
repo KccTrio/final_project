@@ -146,3 +146,14 @@ body {
   right: 1px;
   margin: 0;
 }
+
+.side-bar-menu-icon-with-name > * {
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+
+.alram-atag {
+  display: flex;
+}
