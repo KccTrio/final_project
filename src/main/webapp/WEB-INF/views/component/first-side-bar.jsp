@@ -17,8 +17,9 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
     <div class="side-bar-menu">
       <div class="side-bar-menu-icon-with-name">
         <div class="alram">
-          <a href="/notifications" class="alram-atag">
-            <i class="fa-regular fa-bell"></i>알림</a
+          <a href="/notifications" class="alram-atag"></a>
+            <div><i class="fa-regular fa-bell"></i></div>
+            <div>알림</div></a
           >
         </div>
         <div class="chat">채팅</div>

@@ -35,7 +35,9 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       </div>
     </div>
     <jsp:include page="first-side-bar.jsp" />
-    <jsp:include page="second-side-bar.jsp" />
-    <jsp:include page="main-contents.jsp" />
+
+    <!-- 아래 두 공간은 임의로 만들어서 사용하세요 -->
+    <!-- <jsp:include page="second-side-bar.jsp" />
+    <jsp:include page="main-contents.jsp" /> -->
   </body>
 </html>

@@ -12,12 +12,15 @@
   position: absolute;
 }
 .side-bar-menu-icon-with-name > * {
-  margin-top: 5px;
+  margin-top: 20px;
   display: flex;
   justify-content: center;
   align-content: center;
 }
 
-.alram-atag {
+.alram {
   display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  text-align: center;
 }
