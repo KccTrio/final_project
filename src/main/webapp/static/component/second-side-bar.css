@@ -1,0 +1,16 @@
+/* 최외각 div class를 아래의 .second-side-bar와 바꿔주세요. */
+.second-side-bar {
+  position: absolute;
+  margin-left: 64px;
+  width: 22vw;
+  height: 55.9rem;
+  background-color: #f5f5f5;
+  border: 1px solid #e4e4e4;
+  overflow-y: auto;
+}
+
+/* .second-side-bar-menu {
+  background-color: green;
+  width: 22vw;
+  height: 64rem;
+} */
