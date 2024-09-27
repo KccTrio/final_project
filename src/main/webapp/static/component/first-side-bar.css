@@ -1,3 +1,7 @@
+body {
+  font-family: "NanumSquare_ac", sans-serif;
+}
+
 /* 첫번째 사이드바 메뉴 정리 */
 .side-bar-menu {
   border: 1px solid #e4e4e4;
@@ -18,9 +22,17 @@
   align-content: center;
 }
 
-.alram {
+.alram,
+.date,
+.company,
+.chat-bot,
+.chat {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
   text-align: center;
+}
+
+.icons {
+  margin-bottom: 5px;
 }

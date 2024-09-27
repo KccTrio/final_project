@@ -32,15 +32,26 @@ pageEncoding="UTF-8" %>
       crossorigin="anonymous"
     />
 
-    <!-- <link
+    <!-- material_icons -->
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <link
       href="https://fonts.googleapis.com/css2?family=One+Mobile+Title:wght@400;700&display=swap"
       rel="stylesheet"
-    /> -->
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nanum+Square:wght@400;700&family=One+Mobile+Title:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
 
     <style>
       /* 적용방법 */
       .test-font {
-        font-family: "Nanum Square", sans-serif;
+        font-family: "NanumSquare_ac", sans-serif;
       }
 
       .test-title {
