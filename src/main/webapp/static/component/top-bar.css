@@ -94,11 +94,10 @@
   border: 1px solid black; */
 }
 
-.icons i,
-.menu-text {
+.employee > i {
   color: #676767; /* 원하는 색상 */
 }
 
-.side-bar-menu-icon-with-name *:hover {
+.employee > i:hover {
   color: #0056b3;
 }

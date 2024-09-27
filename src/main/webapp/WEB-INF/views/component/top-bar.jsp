@@ -5,19 +5,22 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
   <head>
     <meta charset="UTF-8" />
     <title></title>
-    <link rel="stylesheet" href="/src/main/webapp/static/component/reset.css" />
     <link
       rel="stylesheet"
-      href="/src/main/webapp/static/component/top-bar.css"
+      href="<%= request.getContextPath() %>/static/component/reset.css"
     />
-    <script src="/src/main/webapp/static/component/top-bar.js"></script>
+    <link
+      rel="stylesheet"
+      href="<%= request.getContextPath() %>/static/component/top-bar.css"
+    />
   </head>
 
   <body>
     <div class="top-bar">
       <div class="logo">
         <a href="/"
-          ><img src="/src/main/webapp/static/component/kcc정보통신.png"
+          ><img
+            src="<%= request.getContextPath() %>/static/component/kcc정보통신.png"
         /></a>
       </div>
       <!-- 검색창 -->
