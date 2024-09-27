@@ -60,7 +60,9 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
             </div>
           </div>
           <div id="status-container" class="hidden">
-            <div id="stutus-content"></div>
+            <div id="status-ok">대화 가능</div>
+            <div id="status-reset">자리 비움</div>
+            <div id="status-offline">오프라인</div>
           </div>
           <div id="status-message">
             <div id="status-message-contents">

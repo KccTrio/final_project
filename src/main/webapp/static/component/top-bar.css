@@ -264,3 +264,42 @@
   background-color: #0056b3;
   color: white;
 }
+
+/* 상태 변경 모달 */
+#status-container {
+  position: absolute;
+  margin-top: 8px;
+  width: 210px;
+  height: 75px;
+  border-radius: 3px;
+  border: 1.5px solid #5a5a5a;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position-area: y-end;
+  margin-right: 9px;
+  margin-top: 117px;
+  background-color: white;
+  flex-direction: column;
+}
+
+#status-container.hidden {
+  display: none;
+}
+.employee-icon,
+#modalCloseButton {
+  cursor: pointer;
+}
+
+#status-container > div {
+  font-size: 13px;
+  width: 210px;
+  display: flex;
+  justify-content: center;
+}
+
+#status-ok,
+#status-reset {
+  border-bottom: 1.5px solid #5a5a5a;
+}
