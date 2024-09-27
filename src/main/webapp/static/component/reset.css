@@ -132,3 +132,7 @@ a {
   text-decoration: none;
   color: black;
 }
+
+body {
+  font-family: "NanumSquare_ac", sans-serif;
+}

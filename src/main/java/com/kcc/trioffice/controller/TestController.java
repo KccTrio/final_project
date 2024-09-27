@@ -12,4 +12,14 @@ public class TestController {
     return "/component/nav";
   }
 
+  @GetMapping("/test")
+  public String getMethodName() {
+    return "/component/test";
+  }
+
+  @GetMapping("/top-bar")
+  public String topBar() {
+    return "/component/top-bar";
+  }
+
 }

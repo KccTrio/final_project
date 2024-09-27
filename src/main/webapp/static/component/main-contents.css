@@ -1,0 +1,14 @@
+.contents {
+  margin-left: 441px;
+  width: 79rem;
+  height: 55.9rem;
+  overflow-y: auto;
+  position: absolute;
+  background-color: white;
+}
+
+/* .contents-test {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+} */
