@@ -5,15 +5,20 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
   <head>
     <meta charset="UTF-8" />
     <title></title>
-    <link rel="stylesheet" href="../../../static/component/reset.css" />
-    <link rel="stylesheet" href="../../../static/component/top-bar.css" />
+    <link rel="stylesheet" href="/src/main/webapp/static/component/reset.css" />
+    <link
+      rel="stylesheet"
+      href="/src/main/webapp/static/component/top-bar.css"
+    />
     <script src="/src/main/webapp/static/component/top-bar.js"></script>
   </head>
 
   <body>
     <div class="top-bar">
       <div class="logo">
-        <a href="/"><img src="../../../static/component/kcc정보통신.png" /></a>
+        <a href="/"
+          ><img src="/src/main/webapp/static/component/kcc정보통신.png"
+        /></a>
       </div>
       <!-- 검색창 -->
       <div class="search">
@@ -35,6 +40,5 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       </div>
     </div>
     <jsp:include page="first-side-bar.jsp" />
-    <jsp:include page="main-contents.jsp"></jsp:include>
   </body>
 </html>

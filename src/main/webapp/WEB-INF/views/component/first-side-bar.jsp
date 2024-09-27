@@ -5,10 +5,10 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
   <head>
     <meta charset="UTF-8" />
     <title></title>
-    <link rel="stylesheet" href="../../../static/component/reset.css" />
+    <link rel="stylesheet" href="/src/main/webapp/static/component/reset.css" />
     <link
       rel="stylesheet"
-      href="../../../static/component/first-side-bar.css"
+      href="/src/main/webapp/static/component/first-side-bar.css"
     />
     <link
       rel="stylesheet"
