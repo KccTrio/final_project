@@ -7,7 +7,12 @@ pageEncoding="UTF-8" %>
     <meta charset="UTF-8" />
     <title></title>
     <link rel="stylesheet" href="../../../static/component/reset.css" />
-    <link rel="stylesheet" href="../../../static/component/nav.css" />
+    <link rel="stylesheet" href="../../../static/component/main-contents.css" />
+    <link
+      rel="stylesheet"
+      href="../../../static/component/second-side-bar.css"
+    />
+
     <!-- bootstrap -->
     <script
       src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
