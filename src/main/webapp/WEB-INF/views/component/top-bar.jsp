@@ -34,5 +34,6 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         </div>
       </div>
     </div>
+    <jsp:include page="first-side-bar.jsp" />
   </body>
 </html>

@@ -10,6 +10,14 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       rel="stylesheet"
       href="../../../static/component/first-side-bar.css"
     />
+    <link
+      rel="stylesheet"
+      href="/src/main/webapp/static/component/second-side-bar.css"
+    />
+    <link
+      rel="stylesheet"
+      href="/src/main/webapp/static/component/main-contents.css"
+    />
     <script src="/src/main/webapp/static/component/first-side-bar.js"></script>
   </head>
 
