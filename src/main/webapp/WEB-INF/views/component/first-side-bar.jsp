@@ -19,7 +19,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         <div class="alram">
           <a href="/notifications" class="alram-atag">
             <div class="icons"><i class="fa-regular fa-2x fa-bell"></i></div>
-            <div>알림</div>
+            <div class="menu-text">알림</div>
           </a>
         </div>
         <div class="chat">
@@ -27,7 +27,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
             <div class="icons">
               <i class="fa-regular fa-2x fa-comments"></i>
             </div>
-            <div>채팅</div>
+            <div class="menu-text">채팅</div>
           </a>
         </div>
         <div class="date">
@@ -35,7 +35,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
             <div class="icons">
               <i class="fa-regular fa-2x fa-calendar"></i>
             </div>
-            <div>일정</div>
+            <div class="menu-text">일정</div>
           </a>
         </div>
         <div class="company">
@@ -43,7 +43,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
             <div class="icons">
               <i class="fa-solid fa-2x fa-sitemap"></i>
             </div>
-            <div>조직도</div>
+            <div class="menu-text">조직도</div>
           </a>
         </div>
       </div>
