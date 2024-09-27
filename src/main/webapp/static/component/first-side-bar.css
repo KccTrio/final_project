@@ -18,9 +18,26 @@
   align-content: center;
 }
 
-.alram {
+.alram,
+.date,
+.company,
+.chat-bot,
+.chat {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
   text-align: center;
+}
+
+.icons {
+  margin-bottom: 5px;
+}
+
+.icons i,
+.menu-text {
+  color: #676767; /* 원하는 색상 */
+}
+
+.side-bar-menu-icon-with-name *:hover {
+  color: #0056b3;
 }
