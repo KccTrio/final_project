@@ -60,9 +60,28 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
             </div>
           </div>
           <div id="status-container" class="hidden">
-            <div id="status-ok">대화 가능</div>
-            <div id="status-reset">자리 비움</div>
-            <div id="status-offline">오프라인</div>
+            <div id="status-ok">
+              <div id="status-ok-icon"><i class="fa-solid fa-check"></i></div>
+              <span>대화가능</span>
+            </div>
+            <div id="status-reset">
+              <div id="status-reset-icon">
+                <i class="fa-solid fa-minus"></i>
+              </div>
+              <span>자리비움</span>
+            </div>
+            <div id="status-offline">
+              <div id="status-offline-icon">
+                <i class="fa-solid fa-minus"></i>
+              </div>
+              <span>오프라인</span>
+            </div>
+            <div id="status-disturb">
+              <div id="status-disturb-icon">
+                <i class="fa-solid fa-minus"></i>
+              </div>
+              <span>방해금지</span>
+            </div>
           </div>
           <div id="status-message">
             <div id="status-message-contents">
@@ -85,6 +104,23 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         </div>
       </div>
     </div>
+    <%--
+    <jsp:include
+      page="/WEB-INF/views/component/first-side-bar.jsp"
+    ></jsp:include>
+    <div id="second-contents">
+      <div id="left">
+        <jsp:include
+          page="/WEB-INF/views/component/second-side-bar.jsp"
+        ></jsp:include>
+      </div>
+      <div id="right">
+        <jsp:include
+          page="/WEB-INF/views/component/main-contents.jsp"
+        ></jsp:include>
+      </div>
+    </div>
+    --%>
   </body>
 
   <script src="<%= request.getContextPath() %>/static/component/top-bar.js"></script>

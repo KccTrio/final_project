@@ -268,9 +268,8 @@
 /* 상태 변경 모달 */
 #status-container {
   position: absolute;
-  margin-top: 8px;
   width: 210px;
-  height: 75px;
+  height: 95px;
   border-radius: 3px;
   border: 1.5px solid #5a5a5a;
   margin-left: auto;
@@ -278,8 +277,8 @@
   align-items: center;
   justify-content: center;
   position-area: y-end;
-  margin-right: 9px;
-  margin-top: 117px;
+  margin-right: 10px;
+  margin-top: 118px;
   background-color: white;
   flex-direction: column;
 }
@@ -300,6 +299,109 @@
 }
 
 #status-ok,
-#status-reset {
+#status-reset,
+#status-offline {
   border-bottom: 1.5px solid #5a5a5a;
+}
+
+/* second contents bar  css*/
+
+#second-contents {
+  display: flex;
+}
+
+#left {
+  flex-shrink: 1;
+}
+
+#right {
+  flex-shrink: 0;
+}
+
+#status-ok-icon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background-color: #92c353;
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+
+#status-reset-icon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background-color: #eaa300;
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  margin-bottom: 2px;
+}
+
+#status-offline-icon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background-color: #d9d9d9;
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+
+#status-disturb-icon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background-color: #ea0000;
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+#status-reset-icon > i,
+#status-offline-icon > i,
+#status-disturb-icon > i,
+#status-ok-icon > i {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-top: 1px;
+  color: white;
+  font-size: 13px;
+}
+
+#status-reset-icon,
+#status-offline-icon,
+#status-disturb-icon,
+#status-ok-icon {
+  margin-right: 10px;
+}
+
+#status-container > div > i {
+  margin-right: 10px;
+}
+
+#status-ok > span {
+  margin-top: 3px;
+}
+
+#status-offline > span,
+#status-disturb > span {
+  margin-top: 4px;
+}
+
+#status-reset > span {
+  margin-top: 6px;
+}
+
+#status-reset-icon {
+  margin-top: 2px;
 }
