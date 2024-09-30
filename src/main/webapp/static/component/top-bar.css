@@ -1,0 +1,407 @@
+.top-bar {
+  border: 1px solid #e4e4e4;
+  height: 40px;
+  width: 99.8vw;
+  background-color: #ebebeb;
+  display: flex;
+  justify-content: space-between;
+}
+
+.search {
+  font-family: "One Mobile Title", sans-serif;
+  font-weight: 400; /* Regular weight */
+}
+
+/* 검색창 */
+.search {
+  position: relative;
+  margin-top: 3px;
+  width: 20rem;
+}
+
+.search > input {
+  width: 100%;
+  border: 1px solid #bbb;
+  border-radius: 8px;
+  padding: 10px 10px;
+  font-size: 10px;
+}
+
+.search > img {
+  position: absolute;
+  width: 17px;
+  top: 9px;
+  right: 1px;
+  margin: 0;
+}
+
+.main {
+  display: flex;
+  height: calc(100% - 45px); /* top-bar 높이 제외 */
+}
+
+/* 우측 상태 확인 관련 css */
+
+.employee {
+  margin-top: 5px;
+  margin-right: 5px;
+  width: 30px;
+  height: 30px;
+  /* border: 1px solid black; */
+}
+
+.employee-icon {
+  width: 100%;
+  height: 100%;
+}
+
+.logo img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain; /* 이미지가 컨테이너 안에 맞게 조정됨 */
+}
+
+.logo {
+  margin-left: 5px;
+  margin-top: 5px;
+  width: 100px;
+  height: 30px; /*
+  border: 1px solid black; */
+}
+
+.employee > i {
+  color: #676767; /* 원하는 색상 */
+}
+
+.employee > i:hover {
+  color: #0056b3;
+}
+
+/* 모달관련 코드 */
+.employee-icon,
+#modalCloseButton {
+  cursor: pointer;
+}
+
+#modalContainer {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: end;
+  /* background: rgba(0, 0, 0, 0.5); */
+}
+
+#modalContent {
+  position: absolute;
+  margin-top: 41px;
+  background-color: #ffffff;
+  width: 230px;
+  height: 240px;
+  padding: 10px;
+  border: 1px solid #bbb;
+  border-radius: 3px;
+  display: flex;
+  flex-direction: column;
+}
+
+#modalContainer.hidden {
+  display: none;
+}
+
+#logout {
+  width: 45px;
+  height: 15px;
+  /* font-weight: 300; */
+  font-size: 13px;
+  margin-left: auto;
+}
+
+#profile-img {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  border: 2px solid rgb(143, 143, 143);
+  margin-left: 20px;
+  margin-top: 20px;
+  /* 이미지 업로드 시 삭제항목 */
+  border-radius: 30px;
+}
+
+#profile-img img {
+  max-width: 100%;
+  max-height: 100%;
+  border-radius: 30px;
+}
+
+#user-profile {
+  margin-left: auto;
+  text-align: right;
+  margin-top: 15px;
+}
+
+#profile-img-modify {
+  position: absolute;
+  margin-top: -15px;
+  margin-left: 40px;
+  width: 10px;
+  height: 10px;
+}
+
+#profile-img-modify > i {
+  color: #3d3d3d;
+}
+
+#user-status-box {
+  margin-top: 8px;
+  width: 210px;
+  height: 25px;
+  border-radius: 3px;
+  border: 1.5px solid black;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+#status {
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background-color: #92c353;
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+
+#status > i {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-top: 1px;
+  color: white;
+  font-size: 13px;
+}
+
+#status-text {
+  margin-left: auto;
+  font-size: 13px;
+}
+
+#status-modify-icon {
+  margin-left: auto;
+  margin-right: 10px;
+  display: flex;
+  align-items: center;
+}
+
+#status-modify-icon > i {
+  font-size: 10px;
+}
+
+#buttons {
+  margin-top: 10px;
+  display: flex;
+  margin-left: auto;
+}
+
+#user-dept {
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+#user-email {
+  margin-top: 5px;
+  font-size: 13px;
+}
+
+#status-message {
+  margin-top: 5px;
+  width: 210px;
+  height: 90px;
+  border-radius: 5px;
+  background-color: #e0e0e0;
+  margin-left: auto;
+}
+
+#status-message-contents {
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  height: 65px;
+  font-size: 12px;
+  line-height: normal;
+}
+
+#status-message-buttons {
+  display: flex;
+  justify-content: end;
+}
+
+#status-message-buttons > div {
+  margin-right: 5px;
+}
+
+#status-message-buttons > div > i {
+  margin-right: 5px;
+  color: #676767;
+}
+
+#modalCloseButton,
+#modify-status {
+  font-size: 10px;
+  width: 60px;
+  height: 20px;
+  margin-left: 5px;
+  border-radius: 3px;
+  border: 0.5px solid #c0c0c0;
+}
+
+#modify-status {
+  background-color: #0056b3;
+  color: white;
+}
+
+/* 상태 변경 모달 */
+#status-container {
+  position: absolute;
+  width: 210px;
+  height: 95px;
+  border-radius: 3px;
+  border: 1.5px solid #5a5a5a;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position-area: y-end;
+  margin-right: 10px;
+  margin-top: 118px;
+  background-color: white;
+  flex-direction: column;
+}
+
+#status-container.hidden {
+  display: none;
+}
+.employee-icon,
+#modalCloseButton {
+  cursor: pointer;
+}
+
+#status-container > div {
+  font-size: 13px;
+  width: 210px;
+  display: flex;
+  justify-content: center;
+}
+
+#status-ok,
+#status-reset,
+#status-offline {
+  border-bottom: 1.5px solid #5a5a5a;
+}
+
+/* second contents bar  css*/
+
+#second-contents {
+  display: flex;
+}
+
+#left {
+  flex-shrink: 1;
+}
+
+#right {
+  flex-shrink: 0;
+}
+
+#status-ok-icon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background-color: #92c353;
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+
+#status-reset-icon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background-color: #eaa300;
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+  margin-bottom: 2px;
+}
+
+#status-offline-icon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background-color: #d9d9d9;
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+
+#status-disturb-icon {
+  width: 20px;
+  height: 20px;
+  border: 1px solid white;
+  background-color: #ea0000;
+  border-radius: 70%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-left: 10px;
+}
+#status-reset-icon > i,
+#status-offline-icon > i,
+#status-disturb-icon > i,
+#status-ok-icon > i {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  margin-top: 1px;
+  color: white;
+  font-size: 13px;
+}
+
+#status-reset-icon,
+#status-offline-icon,
+#status-disturb-icon,
+#status-ok-icon {
+  margin-right: 10px;
+}
+
+#status-container > div > i {
+  margin-right: 10px;
+}
+
+#status-ok > span {
+  margin-top: 3px;
+}
+
+#status-offline > span,
+#status-disturb > span {
+  margin-top: 4px;
+}
+
+#status-reset > span {
+  margin-top: 6px;
+}
+
+#status-reset-icon {
+  margin-top: 2px;
+}
