@@ -13,6 +13,8 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       rel="stylesheet"
       href="<%= request.getContextPath() %>/static/chat_room/chat-room-list.css"
     />
+<%--    js 추가--%>
+    <script type="text/javascript"><%@include file="/static/chat_room/chat-room-list.js"%></script>
     <link
       href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square.css"
       rel="stylesheet"
@@ -507,11 +509,10 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         </div>
         <div class="chat">
             <%--전 사람과 같은 채팅일 시--%>
-            <div class="row">
+            <div class="row chat-one">
                 <div class="col-10">
                     <div class="row">
-                        <div class="col-1">
-                        </div>
+                        <div class="col-1"></div>
                         <div class="col-9">
                             <div class="chat-bubble-container d-flex align-items-end">
                                 <div
@@ -522,6 +523,9 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
                                 <div class="chat-time">
                                     24/09/12 오전 9:30
                                 </div>
+                              <div class="unread-count-box">
+                                <span class="unread-count">1</span>
+                              </div>
                             </div>
                         </div>
                     </div>
@@ -549,7 +553,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
                             </div>
                         </div>
                         <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end">
+                            <div class="emoticon-chat-bubble-container d-flex align-items-end">
                                 <div
                                         class="chat-content d-flex align-items-center justify-content-center"
                                 >
@@ -561,6 +565,32 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
                             </div>
                         </div>
                     </div>
+                  <div class="row d-flex align-items-start emoticon-boxes">
+                    <div class="blank">
+                    </div>
+                    <div class="emoticon-box">
+                      <button class="emoticon-button">
+                        <i class="fa-solid fa-check"></i>
+                        <span>5</span>
+                      </button>
+                      <button class="emoticon-button active-button">
+                        <i class="fa-solid fa-heart heart-icon"></i>
+                        <span>5</span>
+                      </button>
+                      <button class="emoticon-button">
+                        <i class="fa-solid fa-thumbs-up"></i>
+                        <span>5</span>
+                      </button>
+                      <button class="emoticon-button">
+                        <i class="fa-solid fa-face-smile"></i>
+                        <span>5</span>
+                      </button>
+                      <button class="emoticon-button">
+                        <i class="fa-solid fa-face-sad-cry"></i>
+                        <span>5</span>
+                      </button>
+                    </div>
+                  </div>
                 </div>
             </div>
 
@@ -825,6 +855,14 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           </div>
 
       </div>
+    </div>
+    <div id="emoticon-box" style="display: none; position: absolute; padding: 5px; border: 1px solid #ccc; background: white;">
+      <!-- Example emoticons, replace these with your actual emoticons -->
+      <i class="fa-solid fa-check"></i>
+      <i class="fa-solid fa-heart heart-icon"></i>
+      <i class="fa-solid fa-thumbs-up"></i>
+      <i class="fa-solid fa-face-smile"></i>
+      <i class="fa-solid fa-face-sad-cry"></i>
     </div>
   </body>
 

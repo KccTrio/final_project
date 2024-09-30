@@ -200,3 +200,102 @@
     background: #EFEFEF;
     border-radius: 20px;
 }
+
+.emoticon-boxes {
+    margin-bottom: 10px !important;
+}
+
+.emoticon-box {
+    align-items: center; /* 버튼을 세로 중앙에 배치 */
+    width: 30%; /* 컨테이너의 전체 너비를 사용 */
+    display: flex;
+    justify-content: start; /* 버튼을 가로 중앙에 배치 */
+}
+
+.inactive-emoticon {
+    width: 5%;
+    height: 100%;
+    border: 1px solid #B0B0B0;
+    border-radius: 10px;
+    align-items: center;
+}
+
+.emoticon-button {
+    height: 100%;
+    background: white;
+    border: 1px solid #0056B3;
+    border-radius: 10px;
+    align-items: center;
+}
+
+.emoticon-button i {
+    font-size: 12px;
+}
+
+.emoticon-button span {
+    font-size: 15px;
+}
+
+
+.emoticon-button:focus {
+    outline: none;
+    background: #7AB7FA;
+    border: 1px solid #0056B3;
+}
+
+.blank {
+    width: 10%;
+}
+
+.emoticon-chat-bubble-container {
+    display: flex;
+    align-items: center; /* 세로 중앙 정렬 */
+}
+
+.unread-count-box {
+    margin-left: 10px;
+    padding-bottom: 4px;
+}
+
+.unread-count {
+    color: #7AB7FA;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+#emoticon-box {
+    display: none; /* Hidden by default */
+    position: absolute;
+    border: 1px solid #ccc;
+    background-color: #fff;
+    padding: 10px;
+    z-index: 1000; /* Ensures it appears on top of other elements */
+    cursor: pointer;
+    font-size: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+
+}
+
+.heart-icon {
+    color: #FF585B;
+}
+
+.fa-thumbs-up {
+    color: #AD18CB;
+}
+
+.fa-face-smile {
+    color: #FFC14E;
+}
+
+.fa-face-sad-cry {
+    color: #FFC14E;
+}
+
+#emoticon-box i {
+    margin: 0px 5px;
+}
+
+.active-button {
+    background: #7AB7FA;
+}
