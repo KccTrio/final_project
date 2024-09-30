@@ -1,5 +1,42 @@
 $(document).ready(function() {
     var timeoutId = null; // 타이머 ID 저장 변수
+    var roomId = 1 // $('#roomId').val();
+    var sockJs = new SockJS("/stomp/connection");
+    //1. SockJS를 내부에 들고있는 stomp를 내어줌
+    var stomp = Stomp.over(sockJs);
+    //2. SockJS를 통해 연결을 시도한다.
+    stomp.connect({}, function() {
+        //3. 연결이 성공하면 실행되는 콜백
+        console.log("connected");
+
+        //4. 구독하기
+        stomp.subscribe("/sub/chat/room/" + roomId, function(data) {
+            //5. 메시지가 도착하면 실행되는 콜백
+            var chatMessage = JSON.parse(data.body);
+            console.log(chatMessage);
+            addMessage(chatMessage);
+        });
+
+        //6. 메시지 보내기
+        $('#send').on('click', function() {
+            var chatMessage = {
+                roomId: roomId,
+                sender: "WooYoungDoo",
+                message: $('.chat-input').val()
+            };
+            stomp.send("/pub/chat/send", {}, JSON.stringify(chatMessage));
+            $('.chat-input').val('');
+        });
+
+    });
+
+    // chat-input에 엔터키 이벤트 추가
+    $('.chat-input').keypress(function(event) {
+        if (event.keyCode == 13) {
+            $('#send').click();
+            $('.chat-input').val('');
+        }
+    });
 
     function showEmoticonBoxByChatContent() {
         var emoticonBox = $('#emoticon-box');
@@ -17,10 +54,14 @@ $(document).ready(function() {
         emoticonBox.css('top', $(this).offset().top - emoticonBox.outerHeight() + 10 + 'px'); // 위치 조정
     }
 
-    $('.my-chat-content').hover(
-        showEmoticonBoxByMyChatContent,
-        hideEmoticonBox
-    );
+    // 동적 요소에 대한 이벤트 위임
+    $('.chat').on('mouseenter', '.my-chat-content', function() {
+        showEmoticonBoxByMyChatContent.call(this);
+    });
+
+    $('.chat').on('mouseleave', '.my-chat-content', function() {
+        hideEmoticonBox();
+    });
 
 
     // 이모티콘 박스 숨김
@@ -46,3 +87,32 @@ $(document).ready(function() {
     );
 
 });
+
+function addMessage(chatMessage) {
+
+    var addContent = `
+    <div class="row d-flex justify-content-end">
+                <div class="col-10">
+                    <div class="row d-flex justify-content-end">
+                        <div class="col-9">
+                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
+                                <div class="my-chat-time">
+                                    24/09/12 오전 9:30
+                                </div>
+                                <div
+                                        class="my-chat-content d-flex align-items-center justify-content-center"
+                                >
+                                    <p>${chatMessage.message}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    `;
+    // .chat 맨 앞에 addContent 추가
+    $('.chat').prepend(addContent);
+    //.chat 맨 앞으로 스크롤 이동
+    $('.chat').scrollTop(0);
+
+}

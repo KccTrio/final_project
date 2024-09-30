@@ -14,7 +14,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       href="<%= request.getContextPath() %>/static/chat_room/chat-room-list.css"
     />
 <%--    js 추가--%>
-    <script type="text/javascript"><%@include file="/static/chat_room/chat-room-list.js"%></script>
+    <script src="/static/chat_room/chat-room-list.js" charset="utf-8"></script>
     <link
       href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square.css"
       rel="stylesheet"
@@ -845,11 +845,9 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           <div class="chat-send-box">
               <div class="container-fluid">
                   <div class="chat-send-input d-flex justify-content-center">
-                      <form action="">
-                          <input type="text" class="chat-input" placeholder="메시지를 입력하세요." />
-                      </form>
+                      <input type="text" class="chat-input" placeholder="메시지를 입력하세요." />
                       <i class="fa-regular fa-file"></i>
-                      <i class="fa-regular fa-paper-plane"></i>
+                      <i id="send" class="fa-regular fa-paper-plane"></i>
                   </div>
               </div>
           </div>
@@ -866,4 +864,6 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
     </div>
   </body>
 
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 </html>
