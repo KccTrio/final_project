@@ -29,4 +29,9 @@ public class UserContoller {
   public String findPasswordEmail() {
     return "user/find-password-email";
   }
+
+  @GetMapping("/find-password/done")
+  public String findPasswordDone() {
+    return "user/find-password-done";
+  }
 }

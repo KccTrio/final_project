@@ -20,23 +20,13 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
               src="<%= request.getContextPath() %>/static/component/kcc-logo-no-title.png"
             />
           </div>
-          <div id="find-password-title">비밀번호 찾기</div>
+          <div id="find-password-title">임시비밀번호 발송</div>
           <div id="find-password-message">
-            등록했던 외부 메일 주소를 입력해 주세요.
-          </div>
-          <form id="password-form" action="/find-password/email" method="post">
-            <div id="input1">
-              외부 메일 주소 :
-              <input type="email" name="email" required />
-            </div>
+            임시 비밀번호가 발송되었습니다.<br /><br />
 
-            <div class="buttons-email">
-              <button id="find-password-email-button" type="submit">
-                다음
-              </button>
-              <button id="find-password-email-backpage">뒤로가기</button>
-            </div>
-          </form>
+            등록하신 외부 메일에서 임시 비밀번호를 확인하세요.
+          </div>
+          <button id="close-password-page">닫기</button>
         </div>
       </div>
     </div>

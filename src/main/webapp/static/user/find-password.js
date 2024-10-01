@@ -2,6 +2,7 @@ const closeButton = document.getElementById("find-password-close");
 const returnInsertIdPageButton = document.getElementById(
   "find-password-email-backpage"
 );
+const doneFindPassword = document.getElementById("close-password-page");
 
 function closePage() {
   window.location.href = "/login";
@@ -24,5 +25,12 @@ if (returnInsertIdPageButton) {
     console.log("return page");
     event.preventDefault();
     donePage();
+  });
+}
+
+if (doneFindPassword) {
+  doneFindPassword.addEventListener("click", function (event) {
+    event.preventDefault();
+    closePage();
   });
 }
