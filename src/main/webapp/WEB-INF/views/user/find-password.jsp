@@ -39,4 +39,5 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       </div>
     </div>
   </body>
+  <script src="<%= request.getContextPath() %>/static/user/find-password.js"></script>
 </html>
