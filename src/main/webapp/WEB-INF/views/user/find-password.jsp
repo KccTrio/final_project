@@ -24,7 +24,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           <div id="find-password-message">
             임시 비밀번호를 받으려면 아이디를 입력해주세요.
           </div>
-          <form id="password-form" action="/find-password/email" method="post">
+          <form id="password-form" action="/find-password/id" method="post">
             <div id="input1">
               아이디 :
               <input type="email" name="email" required />

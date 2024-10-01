@@ -2,9 +2,8 @@ package com.kcc.trioffice.domain.user.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
 public class UserContoller {
@@ -20,7 +19,7 @@ public class UserContoller {
   }
 
   @PostMapping("/find-password/id")
-  public String findPasswordCheckId(@RequestBody String entity) {
+  public String findPasswordCheckId(@ModelAttribute String entity) {
     // POST 요청 처리 로직
     return "redirect:/find-password/email";
   }
@@ -33,5 +32,11 @@ public class UserContoller {
   @GetMapping("/find-password/done")
   public String findPasswordDone() {
     return "user/find-password-done";
+  }
+
+  @PostMapping("/find-password/email")
+  public String findPasswordSendEmail(@ModelAttribute String entity) {
+    // POST 요청 처리 로직
+    return "redirect:/find-password/done";
   }
 }
