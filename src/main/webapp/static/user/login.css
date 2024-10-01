@@ -16,6 +16,7 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
+  padding-bottom: 30px;
 }
 
 @media screen and (max-width: 700px) {
@@ -27,15 +28,12 @@
 #logo {
   width: 150px;
   height: 150px;
-  border: 1px solid black;
-  margin-top: 34px;
 }
 
 #company-name {
   font-family: "One Mobile Title", sans-serif;
   width: 300px;
   height: 40px;
-  border: 1px solid black;
   margin-top: 16px;
   font-size: 36px;
   display: flex;
@@ -48,4 +46,42 @@
   border: 1px solid #cecece;
   width: 350px;
   height: 35px;
+  margin-top: 14px;
+}
+
+#login-button {
+  width: 350px;
+  height: 40px;
+  background-color: #0056b3;
+  border-radius: 2px;
+  color: white;
+  margin-top: 14px;
+  border: 1px solid white;
+  box-shadow: 1px 1px 1px #cecece;
+  cursor: pointer;
+}
+
+#login-options {
+  display: flex;
+  height: 15px;
+  margin-top: 3px;
+  justify-content: left;
+  margin-right: 8.9rem;
+}
+
+#login-options > * {
+  font-size: 10px;
+  margin-right: 5px;
+}
+
+#remember-id {
+  margin-bottom: 5px;
+}
+.bar {
+  margin-top: 5px;
+}
+
+#find-id,
+#find-password {
+  margin-top: 5px;
 }
