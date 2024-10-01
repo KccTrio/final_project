@@ -49,6 +49,15 @@
 .date > a:hover .icons i,
 .date > a:hover .menu-text,
 .company > a:hover .icons i,
-.company > a:hover .menu-text {
+.company > a:hover .menu-text,
+.chat-bot:hover .icons i {
+  color: #0056b3;
+}
+.chat-bot .icons i {
+  cursor: pointer;
+}
+
+.active .icons i,
+.active .menu-text {
   color: #0056b3;
 }

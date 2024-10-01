@@ -22,4 +22,9 @@ public class TestController {
     return "/component/top-bar";
   }
 
+  @GetMapping("/notifications")
+  public String alram() {
+    return "/component/alram";
+  }
+
 }
