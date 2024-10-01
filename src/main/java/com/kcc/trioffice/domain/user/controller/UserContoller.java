@@ -12,4 +12,9 @@ public class UserContoller {
     return "user/login";
   }
 
+  @GetMapping("/find-password")
+  public String findPassword() {
+    return "user/find-password";
+  }
+
 }
