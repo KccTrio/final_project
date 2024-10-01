@@ -39,4 +39,9 @@ public class UserContoller {
     // POST 요청 처리 로직
     return "redirect:/find-password/done";
   }
+
+  @GetMapping("/employees/detail")
+  public String employeeDetail() {
+    return "user/modify";
+  }
 }
