@@ -20,7 +20,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       <div class="logo">
         <a href="/"
           ><img
-            src="<%= request.getContextPath() %>/static/component/kcc정보통신.png"
+            src="<%= request.getContextPath() %>/static/component/kcc-logo.png"
         /></a>
       </div>
       <!-- 검색창 -->
