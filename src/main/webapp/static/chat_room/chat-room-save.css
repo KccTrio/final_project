@@ -88,3 +88,21 @@ input::placeholder {
     color: black;
     border: 1px solid #959595;
 }
+
+.tagify {
+    display: block;
+    width: 100%;
+    min-height: 38px; /* 필요에 따라 최소 높이 조절 */
+    height: auto !important;
+}
+
+/* 태그가 많아질 때 입력 필드의 높이를 자동으로 늘림 */
+.tagify__input {
+    white-space: normal !important;
+    height: auto;
+}
+
+.input-add-emp-box {
+    overflow: visible;
+    height: auto;
+}

@@ -17,8 +17,11 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square.css"
       rel="stylesheet"
     />
+    <script src="/static/chat_room/chat-room-save.js" charset="utf-8"></script>
+
     <!-- 소스 다운 -->
     <script src="https://unpkg.com/@yaireo/tagify"></script>
+
     <!-- 폴리필 (구버젼 브라우저 지원) -->
     <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
     <link
@@ -467,7 +470,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         </div>
         <form
           name="create-chatroom-form"
-          action="http://localhost:8081/"
+          action="http://localhost:8081/chatrooms/save"
           method="post"
         >
           <div class="input-box">
@@ -482,7 +485,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
                 </div>
                 <div class="col-11">
                   <input
-                    name="employees"
+                    name="employees[]"
                     placeholder="사용자를 추가해주세요."
                     value=""
                     data-blacklist=".NET,PHP"
@@ -497,7 +500,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
                   <i class="fa-solid fa-pen-to-square"></i>
                 </div>
                 <div class="col-11">
-                  <input type="text" placeholder="채팅방 명을 입력해주세요." />
+                  <input name="chatRoomName" type="text" name="chatRoomName" placeholder="채팅방 명을 입력해주세요." />
                 </div>
               </div>
             </div>
@@ -509,7 +512,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
                       <button type="submit" class="create-button">생성</button>
                     </div>
                     <div class="col-6">
-                      <button class="cancel-button">취소</button>
+                      <button class="cancel-button" onclick="history.back();">취소</button>
                     </div>
                   </div>
                 </div>
@@ -522,94 +525,6 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
   </body>
 
   <script>
-    let inputElm = document.querySelector("input[name=employees]");
 
-    // 화이트 리스트 : 해당 문자만 태그로 추가 가능
-    let whitelist = [
-      "우영두",
-      "도성구",
-      "이예림",
-      "이수호",
-      "지승용",
-      "유은서",
-    ];
-
-    // initialize Tagify
-    var tagify = new Tagify(inputElm, {
-      enforceWhitelist: true, // 화이트리스트에서 허용된 태그만 사용
-      whitelist: whitelist, // 화이트 리스트 배열. 화이트 리스트를 등록하면 자동으로 드롭다운 메뉴가 생긴다
-    });
-
-    // 만일 모든 태그 지우기 기능 버튼을 구현한다면
-    document
-      .querySelector("버튼")
-      .addEventListener("click", tagify.removeAllTags.bind(tagify));
-
-    // tagify 전용 이벤트 리스터. 참조 : https://github.com/yairEO/tagify#events
-    tagify
-      .on("add", onAddTag) // 태그가 추가되면
-      .on("remove", onRemoveTag) // 태그가 제거되면
-      .on("input", onInput) // 태그가 입력되고 있을 경우
-      .on("invalid", onInvalidTag) // 허용되지 않는 태그일 경우
-      .on("click", onTagClick) // 해시 태그 블럭을 클릭할 경우
-      .on("focus", onTagifyFocusBlur) // 포커스 될 경우
-      .on("blur", onTagifyFocusBlur) // 반대로 포커스를 잃을 경우
-
-      .on("edit:start", onTagEdit) // 입력된 태그 수정을 할 경우
-
-      .on("dropdown:hide dropdown:show", (e) => console.log(e.type)) // 드롭다운 메뉴가 사라질경우
-      .on("dropdown:select", onDropdownSelect); // 드롭다운 메뉴에서 아이템을 선택할 경우
-
-    // tagify 전용 이벤트 리스너 제거 할떄
-    tagify.off("add", onAddTag);
-
-    // 이벤트 리스너 콜백 메소드
-    function onAddTag(e) {
-      console.log("onAddTag: ", e.detail);
-      console.log("original input value: ", inputElm.value);
-    }
-
-    // tag remvoed callback
-    function onRemoveTag(e) {
-      console.log(
-        "onRemoveTag:",
-        e.detail,
-        "tagify instance value:",
-        tagify.value
-      );
-    }
-
-    function onTagEdit(e) {
-      console.log("onTagEdit: ", e.detail);
-    }
-
-    // invalid tag added callback
-    function onInvalidTag(e) {
-      console.log("onInvalidTag: ", e.detail);
-    }
-
-    // invalid tag added callback
-    function onTagClick(e) {
-      console.log(e.detail);
-      console.log("onTagClick: ", e.detail);
-    }
-
-    function onTagifyFocusBlur(e) {
-      console.log(e.type, "event fired");
-    }
-
-    function onDropdownSelect(e) {
-      console.log("onDropdownSelect: ", e.detail);
-    }
-
-    function onInput(e) {
-      console.log("onInput: ", e.detail);
-
-      tagify.loading(true); // 태그 입력하는데 우측에 loader 애니메이션 추가
-      tagify.loading(false); // loader 애니메이션 제거
-
-      tagify.dropdown.show(e.detail.value); // 드롭다운 메뉴 보여주기
-      tagify.dropdown.hide(); // // 드롭다운 제거
-    }
   </script>
 </html>
