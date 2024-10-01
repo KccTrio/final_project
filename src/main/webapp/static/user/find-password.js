@@ -1,11 +1,28 @@
-const colseButton = document.getElementById("find-password-close");
+const closeButton = document.getElementById("find-password-close");
+const returnInsertIdPageButton = document.getElementById(
+  "find-password-email-backpage"
+);
 
-function colsePage() {
+function closePage() {
   window.location.href = "/login";
 }
 
-colseButton.addEventListener("click", (event) => {
-  console.log("close find-password page");
-  event.preventDefault();
-  colsePage();
-});
+function donePage() {
+  window.location.href = "/find-password";
+}
+
+if (closeButton) {
+  closeButton.addEventListener("click", (event) => {
+    console.log("close find-password page");
+    event.preventDefault();
+    closePage();
+  });
+}
+
+if (returnInsertIdPageButton) {
+  returnInsertIdPageButton.addEventListener("click", function (event) {
+    console.log("return page");
+    event.preventDefault();
+    donePage();
+  });
+}

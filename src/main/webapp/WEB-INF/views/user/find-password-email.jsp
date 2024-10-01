@@ -22,17 +22,19 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           </div>
           <div id="find-password-title">비밀번호 찾기</div>
           <div id="find-password-message">
-            임시 비밀번호를 받으려면 아이디를 입력해주세요.
+            등록했던 외부 메일 주소를 입력해 주세요.
           </div>
-          <form id="password-form" action="/find-password/email" method="post">
+          <form id="password-form" action="/find-password/id" method="post">
             <div id="input1">
-              아이디 :
+              외부 메일 주소 :
               <input type="email" name="email" required />
             </div>
 
-            <div class="buttons">
-              <button id="find-password-button" type="submit">다음</button>
-              <button id="find-password-close">닫기</button>
+            <div class="buttons-email">
+              <button id="find-password-email-button" type="submit">
+                다음
+              </button>
+              <button id="find-password-email-backpage">뒤로가기</button>
             </div>
           </form>
         </div>
