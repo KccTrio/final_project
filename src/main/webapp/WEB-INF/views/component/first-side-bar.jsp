@@ -43,7 +43,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           </a>
         </div>
         <div class="company">
-          <a href="">
+          <a href="/departments">
             <div class="icons">
               <i class="fa-solid fa-2x fa-sitemap"></i>
             </div>
