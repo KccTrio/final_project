@@ -40,4 +40,54 @@
         where employee_id = #{employee_id}
     </select>
 
+
+    <insert id="saveEmployee">
+    insert into employee (
+        employee_id,
+        dept_id,
+        company_id,
+        email,
+        password,
+        phone_num,
+        external_email,
+        name,
+        birth,
+        profile_url,
+        fax,
+        location,
+        is_receive_notification,
+        position,
+        status,
+        status_message, 
+        writer,
+        write_dt,
+        modifier,
+        modified_dt,
+        is_deleted
+    ) values (
+        seq_employee.nextval,
+        #{deptId},
+        #{companyId},
+        #{email},
+        #{password},
+        #{phoneNum},
+        #{externalEmail},
+        #{name},
+        #{birth},
+        #{profileUrl},
+        #{fax},
+        #{location},
+        #{isReceiveNotification},
+        #{position},
+        #{status},
+        #{statusMessage, jdbcType=VARCHAR}, <!-- 여기에서 JDBC 타입 설정 -->
+        #{writer},
+        sysdate,
+        #{modifier},
+        sysdate,
+        0
+    )
+    </insert>
+
+
 </mapper>
