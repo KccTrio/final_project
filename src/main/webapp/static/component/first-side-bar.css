@@ -38,6 +38,26 @@
   color: #676767; /* 원하는 색상 */
 }
 
-.side-bar-menu-icon-with-name *:hover {
+/* .side-bar-menu-icon-with-name *:hover {
+  color: #0056b3;
+} */
+
+.alram > a:hover .icons i,
+.alram > a:hover .menu-text,
+.chat > a:hover .icons i,
+.chat > a:hover .menu-text,
+.date > a:hover .icons i,
+.date > a:hover .menu-text,
+.company > a:hover .icons i,
+.company > a:hover .menu-text,
+.chat-bot:hover .icons i {
+  color: #0056b3;
+}
+.chat-bot .icons i {
+  cursor: pointer;
+}
+
+.active .icons i,
+.active .menu-text {
   color: #0056b3;
 }

@@ -104,23 +104,10 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         </div>
       </div>
     </div>
-    <%--
-    <jsp:include
-      page="/WEB-INF/views/component/first-side-bar.jsp"
-    ></jsp:include>
-    <div id="second-contents">
-      <div id="left">
-        <jsp:include
-          page="/WEB-INF/views/component/second-side-bar.jsp"
-        ></jsp:include>
-      </div>
-      <div id="right">
-        <jsp:include
-          page="/WEB-INF/views/component/main-contents.jsp"
-        ></jsp:include>
-      </div>
+
+    
+    
     </div>
-    --%>
   </body>
 
   <script src="<%= request.getContextPath() %>/static/component/top-bar.js"></script>
