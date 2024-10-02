@@ -67,6 +67,7 @@
   margin-top: 3px;
   justify-content: left;
   margin-right: 8.9rem;
+  margin-left: 27px;
 }
 
 #login-options > * {
@@ -75,6 +76,7 @@
 }
 
 #reemployeeInfo-id {
+  margin-top: 7px;
   margin-bottom: 5px;
 }
 .bar {
@@ -83,7 +85,12 @@
 
 #find-id,
 #find-password {
-  margin-top: 5px;
+  margin-top: 6px;
+}
+
+#find-password > a {
+  text-decoration: none;
+  color: inherit;
 }
 
 #find-id > a {

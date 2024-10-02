@@ -40,6 +40,32 @@
         where employee_id = #{employee_id}
     </select>
 
+    <select id="getEmployeeInfoFindById" parameterType="String"
+            resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
+        select employee_id as employeeId,
+               dept_id as deptId,
+               company_id as companyId,
+               email,
+               password,
+               phone_num as phoneNum,
+               external_email as externalEmail,
+               name,
+               birth,
+               profile_url as profileUrl,
+               fax,
+               location,
+               is_receive_notification as isReceiveNotification,
+               position,
+               status,
+               status_message as statusMessage,
+               writer,
+               write_dt as writeDt,
+               modifier,
+               modified_dt as modifiedDt,
+               is_deleted as isDeleted
+        from employee 
+        where email = #{id}
+    </select>
 
     <insert id="saveEmployee">
     insert into employee (

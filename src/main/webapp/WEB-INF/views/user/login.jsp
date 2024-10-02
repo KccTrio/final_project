@@ -25,12 +25,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
 
         <form id="login-form" action="/login" method="post">
           <div id="input1">
-            <input
-              type="email"
-              placeholder="아이디(메일)"
-              name="email"
-              required
-            />
+            <input type="email" placeholder="아이디(메일)" name="id" required />
           </div>
 
           <div id="input2">

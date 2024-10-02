@@ -18,5 +18,5 @@ public interface EmployeeMapper {
 
     int saveEmployee(SaveEmployee saveEmployee);
 
-    Optional<EmployeeInfo> getEmployeeInfoFindById(String employeeId);
+    Optional<EmployeeInfo> getEmployeeInfoFindById(String id);
 }
