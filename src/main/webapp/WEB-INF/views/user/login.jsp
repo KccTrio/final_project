@@ -48,12 +48,8 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         </form>
 
         <div id="login-options">
-          <label id="reemployeeInfo-id">
-            <input
-              type="checkbox"
-              name="reemployeeInfo-id"
-              value="reemployeeInfo-id"
-            />
+          <label id="remember-label">
+            <input type="checkbox" name="remember-check" id="remember-check" />
             <span style="position: relative; top: -3px">아이디 저장하기</span>
           </label>
           <div class="bar">|</div>
