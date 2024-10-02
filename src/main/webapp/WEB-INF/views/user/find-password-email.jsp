@@ -36,6 +36,11 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
               </button>
               <button id="find-password-email-backpage">뒤로가기</button>
             </div>
+            <input
+              type="hidden"
+              name="${_csrf.parameterName}"
+              value="${_csrf.token}"
+            />
           </form>
         </div>
       </div>

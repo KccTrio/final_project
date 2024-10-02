@@ -45,11 +45,20 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           <button id="login-button" class="btn-primary" type="submit">
             로그인
           </button>
+          <input
+            type="hidden"
+            name="${_csrf.parameterName}"
+            value="${_csrf.token}"
+          />
         </form>
 
         <div id="login-options">
-          <label id="remember-id">
-            <input type="checkbox" name="remember-id" value="remember-id" />
+          <label id="reemployeeInfo-id">
+            <input
+              type="checkbox"
+              name="reemployeeInfo-id"
+              value="reemployeeInfo-id"
+            />
             <span style="position: relative; top: -3px">아이디 저장하기</span>
           </label>
           <div class="bar">|</div>

@@ -34,6 +34,11 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
               <button id="find-password-button" type="submit">다음</button>
               <button id="find-password-close">닫기</button>
             </div>
+            <input
+              type="hidden"
+              name="${_csrf.parameterName}"
+              value="${_csrf.token}"
+            />
           </form>
         </div>
       </div>

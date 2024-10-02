@@ -17,4 +17,6 @@ public interface EmployeeMapper {
             @Param("employeeId") Long employeeId);
 
     int saveEmployee(SaveEmployee saveEmployee);
+
+    Optional<EmployeeInfo> getEmployeeInfoFindById(String employeeId);
 }
