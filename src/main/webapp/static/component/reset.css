@@ -136,3 +136,11 @@ a {
 body {
   font-family: "NanumSquare_ac", sans-serif;
 }
+
+.row {
+  margin: 0px;
+}
+
+.container-fluid {
+    padding: 0px;
+}
