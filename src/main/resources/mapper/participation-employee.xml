@@ -5,10 +5,41 @@
 
 <mapper namespace="com.kcc.trioffice.domain.chat_room.mapper.ParticipationEmployeeMapper">
 
-    <insert id="saveParticipationEmployee" parameterType="map" >
+    <insert id="saveParticipationEmployee" parameterType="map">
         INSERT INTO participation_employee (chat_room_id, employee_id, is_favorited, is_entered, writer, write_dt, modifier, modified_dt, is_deleted)
-        VALUES (#{chatRoomId}, #{employeeId}, 0, 0, #{employeeId}, SYSDATE, #{employeeId}, SYSDATE, 0)
+        VALUES (#{chatRoomId}, #{employeeId}, 0, 0, #{writer}, SYSDATE, #{writer}, SYSDATE, 0)
     </insert>
+
+    <select id="getEmployeeByChatRoomIdExceptOneSelf" resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
+        SELECT
+            employee_id as employeeId,
+            dept_id as deptId,
+            company_id as companyId,
+            email,
+            password,
+            phone_num as phoneNum,
+            external_email as externalEmail,
+            name,
+            birth,
+            profile_url as profileUrl,
+            fax,
+            location,
+            is_receive_notification as isReceiveNotification,
+            position,
+            status,
+            status_message as statusMessage,
+            writer,
+            write_dt as writeDt,
+            modifier,
+            modified_dt as modifiedDt,
+            is_deleted as isDeleted
+        FROM
+            employee e
+                INNER JOIN participation_employee pe ON e.employee_id = pe.employee_id
+        WHERE
+            pe.chat_room_id = #{chatRoomId}
+            AND e.employee_id != #{employeeId}
+    </select>
 
 
 </mapper>

@@ -1,13 +1,17 @@
 package com.kcc.trioffice.domain.chat_room.controller;
 
 import com.kcc.trioffice.domain.chat_room.dto.request.ChatRoomCreate;
+import com.kcc.trioffice.domain.chat_room.dto.response.ChatRoomInfo;
 import com.kcc.trioffice.domain.chat_room.service.ChatRoomService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+
+import java.util.List;
 
 @Controller
 @Slf4j
@@ -17,7 +21,10 @@ public class ChatRoomController {
     private final ChatRoomService chatRoomService;
 
     @GetMapping("/chatrooms")
-    public String chatRoomList() {
+    public String chatRoomList(Model model) {
+        List<ChatRoomInfo> chatRoomList = chatRoomService.getChatRoomList(1L);
+
+        model.addAttribute("chatRoomList", chatRoomList);
         return "chat_room/chat-room-list";
     }
 

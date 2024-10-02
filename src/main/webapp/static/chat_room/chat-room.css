@@ -69,15 +69,77 @@
     margin-top: 20px;
 }
 
+.unread-count-box {
+    margin-top: 20px;
+}
+
 .sub-text {
     color: #8C8C8C;
 }
 
 .chat-room {
     border-bottom: 2px solid #e0e0e0;
+    cursor: pointer;
+    padding: 15px 0px;
+
 }
 
 .chat-rooms-list {
-    padding : 15px;
 }
 
+.chat-room-item.active {
+    background-color: rgba(0, 123, 255, 0.5)
+
+}
+
+.last-message-at {
+    text-align: right;
+}
+
+.chat-room .unread-count-box {
+    display: inline-block;
+    background-color: #FF5442;
+    border-radius: 12px;
+    padding: 2px 6px;
+    justify-items: center;
+}
+
+.chat-room .unread-count {
+    color: #FFFFFF;
+    font-size: 12px;
+    margin: 0;
+}
+
+.chat-room-name {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.chat-room-name p {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1; /* 남은 공간을 차지하도록 설정 */
+}
+
+.chat-room-last-message p {
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex: 1; /* 남은 공간을 차지하도록 설정 */
+}
+
+.last-message-at p {
+    margin: 0;
+}
+
+.no-padding-left {
+    padding-left: 0 !important;
+}
+
+.name-time-box {
+    width: 100%; !important;
+    padding-left: 0 !important;
+}
