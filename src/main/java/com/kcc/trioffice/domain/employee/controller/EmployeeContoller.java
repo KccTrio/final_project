@@ -1,4 +1,4 @@
-package com.kcc.trioffice.domain.user.controller;
+package com.kcc.trioffice.domain.employee.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
-public class UserContoller {
+public class EmployeeContoller {
 
   @GetMapping("/login")
   public String login() {

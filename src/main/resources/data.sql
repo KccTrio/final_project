@@ -1,0 +1,1 @@
+-- INSERT INTO employees (username, password, role) VALUES ('john_doe', '$2a$10$7QZBq7E82V8uRfT5IjhTeuTQOHTV1jR03c9Okp.3KFHOSV9IhzxSG', 'ROLE_USER');
