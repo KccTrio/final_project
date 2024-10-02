@@ -37,7 +37,21 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       <!-- 사용자 상태 조회 모달 -->
       <div id="modalContainer" class="hidden">
         <div id="modalContent">
-          <div id="logout">로그아웃</div>
+          <div id="logout">
+            <form
+              id="logoutForm"
+              action="/logout"
+              method="post"
+              style="display: inline"
+            >
+              <input
+                type="hidden"
+                name="${_csrf.parameterName}"
+                value="${_csrf.token}"
+              />
+              <a href="#" id="logoutLink">로그아웃</a>
+            </form>
+          </div>
           <div id="profile-img">
             <img
               src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
@@ -103,10 +117,6 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           </div>
         </div>
       </div>
-    </div>
-
-    
-    
     </div>
   </body>
 
