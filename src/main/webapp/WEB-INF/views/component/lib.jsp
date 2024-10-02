@@ -23,16 +23,8 @@ pageEncoding="UTF-8" %>
       href="<%= request.getContextPath() %>/static/component/main-contents.css"
     />
     <!-- bootstrap -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-      integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
-      integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy"
-      crossorigin="anonymous"
-    ></script>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     <!-- 폰트 2개 -->
     <link
       href="https://fonts.googleapis.com/css2?family=Nanum+Square:wght@400;700&family=One+Mobile+Title:wght@400;700&display=swap"
@@ -61,6 +53,8 @@ pageEncoding="UTF-8" %>
       href="https://fonts.googleapis.com/css2?family=Nanum+Square:wght@400;700&family=One+Mobile+Title:wght@400;700&display=swap"
       rel="stylesheet"
     />
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <style>
       /* 적용방법 */

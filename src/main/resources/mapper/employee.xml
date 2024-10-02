@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kcc.trioffice.domain.employee.mapper.EmployeeMapper">
+
+    <select id="getEmployeeByCompanyIdExceptOneSelf" parameterType="map"
+            resultType="com.kcc.trioffice.domain.employee.dto.response.SearchEmployee">
+        select e.employee_id as id, e.name, d.name as deptName, e.position
+        from employee e
+                 LEFT JOIN department d ON e.dept_id = d.dept_id
+        where e.company_id = #{companyId} and  e.employee_id != #{employeeId}
+    </select>
+
+    <select id="getEmployeeInfo" parameterType="Long"
+            resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
+        select employee_id as employeeId,
+               dept_id as deptId,
+               company_id as companyId,
+               email,
+               password,
+               phone_num as phoneNum,
+               external_email as externalEmail,
+               name,
+               birth,
+               profile_url as profileUrl,
+               fax,
+               location,
+               is_receive_notification as isReceiveNotification,
+               position,
+               status,
+               status_message as statusMessage,
+               writer,
+               write_dt as writeDt,
+               modifier,
+               modified_dt as modifiedDt,
+               is_deleted as isDeleted
+        from employee e
+        where employee_id = #{employee_id}
+    </select>
+
+</mapper>

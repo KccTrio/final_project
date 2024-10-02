@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kcc.trioffice.domain.chat_room.mapper.ChatRoomMapper">
+
+    <insert id="saveChatRoom">
+        <selectKey keyProperty="chatRoomCreate.chatRoomId" resultType="long" order="BEFORE">
+            SELECT SEQ_CHAT_ROOM.NEXTVAL FROM DUAL
+        </selectKey>
+
+        INSERT INTO chat_room (chat_room_id, name, writer, write_dt, modifier, modified_dt, is_deleted)
+        VALUES (#{chatRoomCreate.chatRoomId}, #{chatRoomCreate.chatRoomName}, #{writer}, SYSDATE, #{writer}, SYSDATE, 0)
+    </insert>
+
+    <select id="getChatRoomListByEmployeeId" parameterType="long" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ChatRoomInfo">
+        SELECT
+            cr.chat_room_id AS chatRoomId,
+            cr.name AS chatRoomName,
+            pe.chat_room_profile_url AS chatRoomProfileImageUrl,
+            cm.contents AS lastMessage,
+            cm.write_dt AS lastMessageTime,
+            COUNT(CASE WHEN cs.is_read = 0 THEN 1 END) AS unreadMessageCount,
+            (
+                SELECT COUNT(1)
+                FROM participation_employee pe2
+                WHERE pe2.chat_room_id = cr.chat_room_id
+            ) AS participantCount
+        FROM
+            chat_room cr
+                INNER JOIN participation_employee pe ON cr.chat_room_id = pe.chat_room_id
+                LEFT JOIN chat cm ON cr.last_chat_id = cm.chat_id
+                LEFT JOIN chat_status cs ON cr.chat_room_id = cs.chat_room_id
+                AND cs.employee_id = #{employeeId}
+                AND cs.is_read = 0
+        WHERE
+            pe.employee_id = #{employeeId}
+        GROUP BY
+            cr.chat_room_id,
+            cr.name,
+            pe.chat_room_profile_url,
+            cm.contents,
+            cm.write_dt
+        ORDER BY
+            cm.write_dt DESC
+    </select>
+</mapper>
