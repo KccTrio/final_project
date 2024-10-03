@@ -18,7 +18,6 @@
             href="<%= request.getContextPath() %>/static/chat_room/chat-room-list.css"
     />
     <%--    js 추가--%>
-    <script src="/static/chat_room/chat-room-list.js" charset="utf-8"></script>
     <script src="/static/chat_room/chat-room.js" charset="utf-8"></script>
     <link
             href="https://hangeul.pstatic.net/hangeul_static/css/nanum-square.css"
@@ -169,6 +168,7 @@
                 <div class="chat-room-profile">
                     <img
                             src="https://e7.pngegg.com/pngimages/1/723/png-clipart-graphy-business-portrait-business-people-public-relations.png"
+                            class="chat-room-profile-image"
                     />
                     <div
                             class="status d-flex justify-content-center align-items-center"
@@ -309,236 +309,36 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
+                    <div class="row d-flex align-items-start justify-content-end emoticon-boxes">
+                        <div class="blank">
+                        </div>
+                        <div class="emoticon-box justify-content-end">
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-check"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button active-button">
+                                <i class="fa-solid fa-heart heart-icon"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-face-smile"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-face-sad-cry"></i>
+                                <span>5</span>
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
 
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="row d-flex justify-content-end">
-                <div class="col-10">
-                    <div class="row d-flex justify-content-end">
-                        <div class="col-9">
-                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                <div class="my-chat-time">
-                                    24/09/12 오전 9:30
-                                </div>
-                                <div
-                                        class="my-chat-content d-flex align-items-center justify-content-center"
-                                >
-                                    <p>안녕하세요. 신입 사원입니다.ㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇㅇ</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
         <div class="chat-send-box">
             <div class="container-fluid">
@@ -555,11 +355,11 @@
 <div id="emoticon-box"
      style="display: none; position: absolute; padding: 5px; border: 1px solid #ccc; background: white;">
     <!-- Example emoticons, replace these with your actual emoticons -->
-    <i class="fa-solid fa-check"></i>
-    <i class="fa-solid fa-heart heart-icon"></i>
-    <i class="fa-solid fa-thumbs-up"></i>
-    <i class="fa-solid fa-face-smile"></i>
-    <i class="fa-solid fa-face-sad-cry"></i>
+    <i class="fa-solid fa-check" data-emoticon-type="CHECK"></i>
+    <i class="fa-solid fa-heart heart-icon" data-emoticon-type="HEART"></i>
+    <i class="fa-solid fa-thumbs-up" data-emoticon-type="THUMBS_UP"></i>
+    <i class="fa-solid fa-face-smile" data-emoticon-type="SMILE"></i>
+    <i class="fa-solid fa-face-sad-cry" data-emoticon-type="SAD"></i>
 </div>
 </body>
 
