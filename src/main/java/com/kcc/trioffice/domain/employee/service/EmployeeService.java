@@ -23,4 +23,8 @@ public class EmployeeService {
 
         return employeeMapper.getEmployeeByCompanyIdExceptOneSelf(employeeInfo.getCompanyId(), employeeId);
     }
+
+    public EmployeeInfo getEmployeeInfo(Long employeeId) {
+        return employeeMapper.getEmployeeInfo(employeeId).orElseThrow(() -> new NotFoundException("해당 직원이 존재하지 않습니다."));
+    }
 }
