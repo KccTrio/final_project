@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +25,13 @@ public class EmployeeService {
     private final BCryptPasswordEncoder passwordEncoder;
 
     private final EmployeeMapper employeeMapper;
+
+    private final EmployeeInfo employeeInfo = new EmployeeInfo();
+
+    // 임시비밀번호 생성
+    private String generateTempPassword() {
+        return UUID.randomUUID().toString().substring(0, 8); // example
+    }
 
     public List<SearchEmployee> getEmployeeByCompanyId(Long employeeId) {
 
@@ -53,11 +61,27 @@ public class EmployeeService {
 
     @Transactional
     public void checkEmployeeEmail(String email) {
-
-        String findedEmail = employeeMapper.findByEmail(email)
+        employeeMapper.findByEmail(email)
                 .orElseThrow(() -> new NotFoundException("일치하는 회원의 아이디가 없습니다."));
 
+        // 사내이메일과 외부이메일 매칭을 위한 값 저장.
+        employeeInfo.setEmail(email);
         // return findedEmail;
+    }
+
+    @Transactional
+    public void changePassword(String externalEmail) {
+        String employeeMail = employeeInfo.getEmail();
+
+        String findedExternalEmail = employeeMapper.temporaryPassword(employeeMail).get();
+
+        if (externalEmail.equals(findedExternalEmail)) {
+            // 임시비밀번호 발급
+            String tmpPassword = generateTempPassword();
+            System.out.println("임시 비밀번호 : " + tmpPassword);
+        } else {
+            throw new NotFoundException("등록하신 외부이메일과 다릅니다.");
+        }
     }
 
 }

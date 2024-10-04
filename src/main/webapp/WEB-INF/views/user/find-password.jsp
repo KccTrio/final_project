@@ -27,7 +27,13 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           <form id="password-form" action="/find-password/id" method="post">
             <div id="input1">
               아이디 :
-              <input id="employeeId" type="email" name="email" required />
+              <input
+                id="employeeId"
+                type="email"
+                name="email"
+                placeholder=""
+                required
+              />
             </div>
             <div id="checkedId">
               <!-- 아이디 검증 이후 실패 시 추가 -->

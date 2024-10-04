@@ -21,4 +21,6 @@ public interface EmployeeMapper {
     Optional<EmployeeInfo> getEmployeeInfoFindById(String id);
 
     Optional<String> findByEmail(String email);
+
+    Optional<String> temporaryPassword(String employeeMail);
 }

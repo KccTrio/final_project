@@ -36,9 +36,4 @@ public class EmployeeContoller {
     return "user/find-password-done";
   }
 
-  @PostMapping("/find-password/email")
-  public String findPasswordSendEmail(@ModelAttribute String entity) {
-    // POST 요청 처리 로직
-    return "redirect:/find-password/done";
-  }
 }

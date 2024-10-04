@@ -40,4 +40,11 @@ public class EmployeeRestController {
         return HttpStatus.OK;
     }
 
+    @PostMapping("/find-password/email")
+    public HttpStatus passwordChange(@RequestParam final String externalEmail) {
+        System.out.println("요청한 사외 이메일 :" + externalEmail);
+        employeeService.changePassword(externalEmail);
+        return HttpStatus.OK;
+    }
+
 }
