@@ -1,3 +1,10 @@
+// var csrfHeaderName = "${_csrf.headerName}";
+// var csrfTokenValue = "${_csrf.token}";
+
+// $(document).ajaxSend(function (e, xhr) {
+//   xhr.setRequestHeader(csrfHeaderName, csrfTokenValue);
+// });
+
 const closeButton = document.getElementById("find-password-close");
 const returnInsertIdPageButton = document.getElementById(
   "find-password-email-backpage"
@@ -34,3 +41,27 @@ if (doneFindPassword) {
     closePage();
   });
 }
+
+$("#find-password-button").click(function (event) {
+  event.preventDefault();
+  var employeeId = $("#employeeId").val();
+
+  // 이메일 값 확인을 위해 콘솔 출력
+  console.log("이메일 값: " + employeeId);
+
+  if (employeeId) {
+    $.ajax({
+      url: "/api/find-password/id",
+      type: "GET",
+      data: { email: employeeId },
+      success: function () {
+        window.location.href = "/find-password/email";
+      },
+      error: function () {
+        $("#checkedId").html(
+          '<p class="text-danger">일치하는 회원정보가 없습니다.</p>'
+        );
+      },
+    });
+  }
+});

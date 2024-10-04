@@ -67,6 +67,12 @@
         where email = #{id}
     </select>
 
+    <select id="findByEmail" parameterType="String" resultType="String">
+        select email
+        from employee
+        where email = #{email}
+    </select>
+
     <insert id="saveEmployee">
     insert into employee (
         employee_id,

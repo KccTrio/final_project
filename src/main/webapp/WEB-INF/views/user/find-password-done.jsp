@@ -20,7 +20,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
               src="<%= request.getContextPath() %>/static/component/kcc-logo-no-title.png"
             />
           </div>
-          <div id="find-password-title">임시비밀번호 발송</div>
+          <div id="find-password-title">임시 비밀번호 발송</div>
           <div id="find-password-message">
             임시 비밀번호가 발송되었습니다.<br /><br />
 

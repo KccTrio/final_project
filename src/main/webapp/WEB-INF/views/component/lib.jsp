@@ -23,8 +23,14 @@ pageEncoding="UTF-8" %>
       href="<%= request.getContextPath() %>/static/component/main-contents.css"
     />
     <!-- bootstrap -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <link
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      rel="stylesheet"
+    />
     <!-- 폰트 2개 -->
     <link
       href="https://fonts.googleapis.com/css2?family=Nanum+Square:wght@400;700&family=One+Mobile+Title:wght@400;700&display=swap"
@@ -55,6 +61,8 @@ pageEncoding="UTF-8" %>
     />
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!-- sweet alert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <style>
       /* 적용방법 */

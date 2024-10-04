@@ -51,4 +51,13 @@ public class EmployeeService {
         }
     }
 
+    @Transactional
+    public void checkEmployeeEmail(String email) {
+
+        String findedEmail = employeeMapper.findByEmail(email)
+                .orElseThrow(() -> new NotFoundException("일치하는 회원의 아이디가 없습니다."));
+
+        // return findedEmail;
+    }
+
 }
