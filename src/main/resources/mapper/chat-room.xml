@@ -78,17 +78,17 @@
         e.name AS senderName,
         e.profile_url AS senderProfileUrl,
         -- 이모티콘 카운트
-        SUM(CASE WHEN cs.emoticon_type = 1 THEN 1 ELSE 0 END) AS checkEmoticonCount,
-        SUM(CASE WHEN cs.emoticon_type = 2 THEN 1 ELSE 0 END) AS heartEmoticonCount,
-        SUM(CASE WHEN cs.emoticon_type = 3 THEN 1 ELSE 0 END) AS thumbsUpEmoticonCount,
-        SUM(CASE WHEN cs.emoticon_type = 4 THEN 1 ELSE 0 END) AS smileEmoticonCount,
-        SUM(CASE WHEN cs.emoticon_type = 5 THEN 1 ELSE 0 END) AS sadEmoticonCount,
+        SUM(CASE WHEN cs.emoticon_type = 1 AND cs.is_emoticon = 1 THEN 1 ELSE 0 END) AS checkEmoticonCount,
+        SUM(CASE WHEN cs.emoticon_type = 2 AND cs.is_emoticon = 1 THEN 1 ELSE 0 END) AS heartEmoticonCount,
+        SUM(CASE WHEN cs.emoticon_type = 3 AND cs.is_emoticon = 1 THEN 1 ELSE 0 END) AS thumbsUpEmoticonCount,
+        SUM(CASE WHEN cs.emoticon_type = 4 AND cs.is_emoticon = 1 THEN 1 ELSE 0 END) AS smileEmoticonCount,
+        SUM(CASE WHEN cs.emoticon_type = 5 AND cs.is_emoticon = 1 THEN 1 ELSE 0 END) AS sadEmoticonCount,
         -- 현재 사용자의 이모티콘 클릭 여부
-        MAX(CASE WHEN cs.emoticon_type = 1 AND cs.employee_id = #{employeeId} THEN 1 ELSE 0 END) AS isClickedCheckEmoticon,
-        MAX(CASE WHEN cs.emoticon_type = 2 AND cs.employee_id = #{employeeId} THEN 1 ELSE 0 END) AS isClickedHeartEmoticon,
-        MAX(CASE WHEN cs.emoticon_type = 3 AND cs.employee_id = #{employeeId} THEN 1 ELSE 0 END) AS isClickedThumbsUpEmoticon,
-        MAX(CASE WHEN cs.emoticon_type = 4 AND cs.employee_id = #{employeeId} THEN 1 ELSE 0 END) AS isClickedSmileEmoticon,
-        MAX(CASE WHEN cs.emoticon_type = 5 AND cs.employee_id = #{employeeId} THEN 1 ELSE 0 END) AS isClickedSadEmoticon,
+        MAX(CASE WHEN cs.emoticon_type = 1 AND cs.employee_id = #{employeeId} AND cs.is_emoticon = 1 THEN 1 ELSE 0 END) AS isClickedCheckEmoticon,
+        MAX(CASE WHEN cs.emoticon_type = 2 AND cs.employee_id = #{employeeId} AND cs.is_emoticon = 1 THEN 1 ELSE 0 END) AS isClickedHeartEmoticon,
+        MAX(CASE WHEN cs.emoticon_type = 3 AND cs.employee_id = #{employeeId} AND cs.is_emoticon = 1 THEN 1 ELSE 0 END) AS isClickedThumbsUpEmoticon,
+        MAX(CASE WHEN cs.emoticon_type = 4 AND cs.employee_id = #{employeeId} AND cs.is_emoticon = 1 THEN 1 ELSE 0 END) AS isClickedSmileEmoticon,
+        MAX(CASE WHEN cs.emoticon_type = 5 AND cs.employee_id = #{employeeId} AND cs.is_emoticon = 1 THEN 1 ELSE 0 END) AS isClickedSadEmoticon,
         -- 읽지 않은 사람 수 계산
         #{participantCount} - COUNT(DISTINCT CASE WHEN cs.is_read = 1 THEN cs.employee_id END) AS unreadMessageCount
         FROM
@@ -96,7 +96,7 @@
         JOIN employee e ON c.writer = e.employee_id
         LEFT JOIN chat_status cs ON c.chat_id = cs.chat_id
         WHERE
-        c.chatroom_id = #{chatRoomId}
+        c.chatroom_id = #{chatRoomId} and c.is_deleted = 0 and e.is_deleted = 0 and cs.is_deleted = 0
         GROUP BY
         c.chat_id, c.contents, c.chat_type, c.writer, c.write_dt, e.name, e.profile_url
         ORDER BY
