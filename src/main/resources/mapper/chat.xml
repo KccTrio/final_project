@@ -32,4 +32,17 @@
         0
         )
     </insert>
+
+    <select id="getChatDetailInfo" parameterType="map" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ChatDetailInfo">
+        SELECT
+            chat_id AS chatId,
+            chatroom_id AS chatroomId,
+            contents,
+            chat_type AS chatType,
+            writer AS senderId
+        FROM
+            chat
+        WHERE
+            chat_id = #{chatId}
+    </select>
 </mapper>

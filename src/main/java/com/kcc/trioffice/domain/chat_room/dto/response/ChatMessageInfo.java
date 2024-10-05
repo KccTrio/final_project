@@ -11,21 +11,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ChatMessageInfo {
     private Long roomId;
+    private Long chatId;
     private Long senderId;
     private String senderName;
     private String senderProfileUrl;
     private String chatContents;
     private LocalDateTime chatTime;
     private String type;
+    private int unreadMessageCount;
 
-    public static ChatMessageInfo of(EmployeeInfo employeeInfo, ChatMessage chatMessage) {
+    public static ChatMessageInfo of(EmployeeInfo employeeInfo, ChatMessage chatMessage, int unreadMessageCount) {
         return new ChatMessageInfo(
                 chatMessage.getRoomId(),
+                chatMessage.getChatId(),
                 employeeInfo.getEmployeeId(),
                 employeeInfo.getName(),
                 employeeInfo.getProfileUrl(),
                 chatMessage.getMessage(),
                 LocalDateTime.now(),
-                "CHAT");
+                "CHAT",
+                unreadMessageCount);
     }
 }

@@ -97,7 +97,6 @@ public class ChatRoomService {
     public ChatMessageInfo saveChatMessage(ChatMessage chatMessage) {
         chatMapper.saveChatMessage(chatMessage);
 
-
         //채팅 참여자 조회
         List<ParticipantEmployeeInfo> participantEmployeeInfos = participationEmployeeMapper.getEmployeeInfoByChatRoomId(chatMessage.getRoomId());
 
@@ -111,11 +110,13 @@ public class ChatRoomService {
         }
 
         EmployeeInfo employeeInfo = employeeService.getEmployeeInfo(chatMessage.getSenderId());
-        ChatMessageInfo chatMessageInfo = ChatMessageInfo.of(employeeInfo, chatMessage);
+        ChatMessageInfo chatMessageInfo = ChatMessageInfo.of(employeeInfo, chatMessage, participantEmployeeInfos.size()-1);
 
 
         return chatMessageInfo;
     }
+
+
 
 
 
