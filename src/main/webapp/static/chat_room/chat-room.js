@@ -249,46 +249,40 @@ $(document).ready(function() {
     }
 
     function updateEmoticon(emoticonMessage) {
-        var messageRow = $('.chat .row[data-message-id="' + emoticonMessage.chatId + '"]');
 
-        if (messageRow.length === 0) {
-            // 해당 메시지를 찾을 수 없는 경우 처리
-            return;
-        }
+        $.ajax({
+            url: '/api/chatrooms/' + currentChatRoomId +'/chats/' + currentMessageId + '/emoticon',
+            method: 'GET',
+            dataType: 'json',
+            success: function(response) {
+                var messageRow = $('.chat .row[data-message-id="' + emoticonMessage.chatId + '"]');
 
-        // 이모티콘 박스 요소를 찾아 업데이트 또는 생성
-        var emoticonBox = messageRow.find('.emoticon-box');
-        if (emoticonBox.length === 0) {
-            emoticonBox = $(`
-            <div class="row d-flex align-items-start emoticon-boxes">
-                <div class="blank"></div>
-                <div class="emoticon-box"></div>
-            </div>
-        `);
-            messageRow.append(emoticonBox);
-        }
+                if (messageRow.length === 0) {
+                    return;
+                }
 
-        // 이모티콘 버튼 업데이트 또는 추가
-        var emoticonButton = emoticonBox.find('.emoticon-button[data-emoticon-type="' + emoticonMessage.emoticonType + '"]');
-        if (emoticonButton.length === 0) {
-            // 이모티콘 버튼이 없으면 생성
-            emoticonButton = $(`
-            <button class="emoticon-button" data-emoticon-type="${emoticonMessage.emoticonType}">
-                <i class="${getEmoticonIconClass(emoticonMessage.emoticonType)}"></i>
-                <span>5</span>
-            </button>
-        `);
-            emoticonBox.find('.emoticon-box').append(emoticonButton);
-        } else {
-            // 이미 있으면 카운트 업데이트
-            emoticonButton.find('span').text(5);
-            // 필요한 경우 active 상태 업데이트
-            if (emoticonMessage.senderId === currentEmployeeId) {
-                emoticonButton.addClass('active-button');
-            } else {
-                emoticonButton.removeClass('active-button');
+                // 기존 이모티콘 박스 제거
+                messageRow.find('.emoticon-boxes').remove();
+
+                console.log(emoticonMessage.chatterId);
+                console.log(currentEmployeeId);
+
+                // 새로운 이모티콘 박스 생성
+                let emoticonHtml;
+                if (emoticonMessage.chatterId === currentEmployeeId) {
+                    emoticonHtml = createMyEmoticonBoxHtml(response);
+                } else {
+                    emoticonHtml = createEmoticonBoxHtml(response);
+                }
+
+                // 새로운 이모티콘 박스 DOM에 추가
+                messageRow.find('.col-10').append(emoticonHtml);
+            },
+            error: function(xhr, status, error) {
+                console.error('이모티콘 추가에 실패했습니다:', error);
             }
-        }
+        });
+
     }
 
     function addMessage(chatMessage) {
