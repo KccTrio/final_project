@@ -187,20 +187,6 @@
     width: 90%;
 }
 
-.chat::-webkit-scrollbar {
-    width: 10px;
-}
-
-.chat::-webkit-scrollbar-thumb {
-    background: #B0B0B0;
-    border-radius: 20px;
-}
-
-.chat::-webkit-scrollbar-track {
-    background: #EFEFEF;
-    border-radius: 20px;
-}
-
 .emoticon-boxes {
     margin-bottom: 10px !important;
 }
