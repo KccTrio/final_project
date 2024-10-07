@@ -40,4 +40,107 @@
         where employee_id = #{employee_id}
     </select>
 
+    <select id="getEmployeeInfoFindById" parameterType="String"
+            resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
+        select employee_id as employeeId,
+               dept_id as deptId,
+               company_id as companyId,
+               email,
+               password,
+               phone_num as phoneNum,
+               external_email as externalEmail,
+               name,
+               birth,
+               profile_url as profileUrl,
+               fax,
+               location,
+               is_receive_notification as isReceiveNotification,
+               position,
+               status,
+               status_message as statusMessage,
+               writer,
+               write_dt as writeDt,
+               modifier,
+               modified_dt as modifiedDt,
+               is_deleted as isDeleted
+        from employee 
+        where email = #{id}
+    </select>
+
+    <select id="findByEmail" parameterType="String" resultType="String">
+        select email
+        from employee
+        where email = #{email}
+    </select>
+
+    <select id="getExternalEmail" parameterType="String" resultType="String" >
+        select external_email
+        from employee
+        where email = #{email}
+    </select>
+
+    <update id="temporaryPassword" parameterType="map" >
+        update employee 
+        set password = #{incodingPassword}
+        where email = #{email} 
+    </update>
+
+    <insert id="saveEmployee">
+    insert into employee (
+        employee_id,
+        dept_id,
+        company_id,
+        email,
+        password,
+        phone_num,
+        external_email,
+        name,
+        birth,
+        profile_url,
+        fax,
+        location,
+        is_receive_notification,
+        position,
+        status,
+        status_message, 
+        writer,
+        write_dt,
+        modifier,
+        modified_dt,
+        is_deleted
+    ) values (
+        seq_employee.nextval,
+        #{deptId},
+        #{companyId},
+        #{email},
+        #{password},
+        #{phoneNum},
+        #{externalEmail},
+        #{name},
+        #{birth},
+        #{profileUrl},
+        #{fax},
+        #{location},
+        #{isReceiveNotification},
+        #{position},
+        #{status},
+        #{statusMessage, jdbcType=VARCHAR}, <!-- 여기에서 JDBC 타입 설정 -->
+        #{writer},
+        sysdate,
+        #{modifier},
+        sysdate,
+        0
+    )
+    </insert>
+
+    <select id="getAdminInfo" resultType="com.kcc.trioffice.domain.employee.dto.response.AdminInfo">
+    select name, 
+    phone_num as phoneNum
+    from employee
+    where employee_id = (select employee_id
+                            from role
+                            where name = 'ROLE_ADMIN')
+    </select>
+
+
 </mapper>

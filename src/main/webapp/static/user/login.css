@@ -1,0 +1,151 @@
+.full {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-box {
+  width: 700px;
+  height: 500px;
+  border: 1.5px solid #eaeaea;
+  border-radius: 5px;
+  background-color: rgb(248, 248, 248);
+  box-shadow: 3px 3px 3px rgba(167, 167, 167, 0.5); /* 그림자 추가 */
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 30px;
+}
+
+@media screen and (max-width: 700px) {
+  .login-box {
+    width: 40rem; /* 1rem = 16px, 700px = 43.75rem */
+  }
+}
+
+#logo {
+  width: 150px;
+  height: 150px;
+}
+
+#company-name {
+  font-family: "One Mobile Title", sans-serif;
+  width: 300px;
+  height: 40px;
+  margin-top: 16px;
+  font-size: 36px;
+  display: flex;
+  justify-content: center;
+}
+
+#input1 > input,
+#input2 > input {
+  border-radius: 2px;
+  border: 1px solid #cecece;
+  width: 350px;
+  height: 35px;
+  margin-top: 14px;
+}
+
+#login-button {
+  width: 350px;
+  height: 40px;
+  background-color: #0056b3;
+  border-radius: 2px;
+  color: white;
+  margin-top: 14px;
+  border: 1px solid white;
+  box-shadow: 1px 1px 1px #cecece;
+  cursor: pointer;
+}
+
+#login-options {
+  display: flex;
+  height: 15px;
+  margin-top: 3px;
+  justify-content: left;
+  margin-right: 8.9rem;
+  margin-left: 27px;
+}
+
+#login-options > * {
+  font-size: 10px;
+  margin-right: 5px;
+}
+
+#remember-check {
+  margin-top: 7px;
+  margin-bottom: 5px;
+}
+.bar {
+  margin-top: 5px;
+}
+
+#find-id,
+#find-password {
+  margin-top: 6px;
+}
+
+#find-password > a {
+  text-decoration: none;
+  color: inherit;
+}
+
+#find-id > a {
+  cursor: pointer;
+}
+
+/* 상태 변경 모달 */
+#find-id-container {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+#find-id-contents {
+  position: absolute;
+  background-color: #ffffff;
+  width: 700px;
+  height: 450px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  padding-bottom: 2rem;
+}
+
+#find-id-container.hidden {
+  display: none;
+}
+
+#find-id-close {
+  position: absolute;
+  width: 100px;
+  height: 40px;
+  background-color: #0056b3;
+  color: white;
+  border: 1px solid white;
+  cursor: pointer;
+  border-radius: 3px;
+  margin-left: 36rem;
+  margin-top: 26rem;
+}
+
+#find-id-title {
+  font-family: "One Mobile Title", sans-serif;
+  font-size: 36px;
+}
+
+#find-id-text {
+  margin-top: 20px;
+  font-size: 25px;
+}

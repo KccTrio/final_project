@@ -92,12 +92,14 @@
   display: flex;
   justify-content: end;
   /* background: rgba(0, 0, 0, 0.5); */
+  z-index: 9999; /* 모든 요소 위에 보이도록 */
 }
 
 #modalContent {
   position: absolute;
   margin-top: 41px;
   background-color: #ffffff;
+  margin-right: 5px;
   width: 230px;
   height: 240px;
   padding: 10px;
@@ -105,10 +107,17 @@
   border-radius: 3px;
   display: flex;
   flex-direction: column;
+  z-index: 10000; /* 모달 내용이 모달 배경 위에 표시되도록 */
 }
 
 #modalContainer.hidden {
   display: none;
+}
+
+#logoutLink {
+  text-decoration: none; /* 밑줄 제거 */
+  color: inherit; /* 부모 요소의 색상 상속 */
+  cursor: pointer; /* 마우스 커서를 포인터로 변경 */
 }
 
 #logout {
@@ -124,7 +133,6 @@
   width: 60px;
   height: 60px;
   border: 2px solid rgb(143, 143, 143);
-  margin-left: 20px;
   margin-top: 20px;
   /* 이미지 업로드 시 삭제항목 */
   border-radius: 30px;
