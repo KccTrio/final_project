@@ -199,10 +199,10 @@
             <div
                     class="col-2 d-flex justify-content-center d-flex align-items-center"
             >
-                <a href="#">
+                <div class="emp-count-box">
                     <i class="fa-solid fa-user-group"></i>
                     <span class="emp-count ml-2">3</span>
-                </a>
+                </div>
             </div>
         </div>
         <div class="chat">
@@ -225,6 +225,32 @@
                                     <span class="unread-count">1</span>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                    <div class="row d-flex align-items-start emoticon-boxes">
+                        <div class="blank">
+                        </div>
+                        <div class="emoticon-box">
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-check"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button active-button">
+                                <i class="fa-solid fa-heart heart-icon"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-face-smile"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-face-sad-cry"></i>
+                                <span>5</span>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -361,6 +387,8 @@
     <i class="fa-solid fa-face-smile" data-emoticon-type="SMILE"></i>
     <i class="fa-solid fa-face-sad-cry" data-emoticon-type="SAD"></i>
 </div>
+<%@ include file="/WEB-INF/views/chat_room/modal/participant-emp-modal.jsp" %>
+
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>

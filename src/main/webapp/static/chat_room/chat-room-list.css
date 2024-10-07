@@ -300,3 +300,7 @@
 .active-button {
     background: #7AB7FA;
 }
+
+.emp-count-box {
+    cursor: pointer;
+}

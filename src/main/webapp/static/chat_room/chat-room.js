@@ -409,6 +409,77 @@ $(document).ready(function() {
             hour12: false
         });
     }
+
+    //emp-count-box 클릭 시 ajax로 직원 목록 가져오기
+    var modal = $('#emp-modal');
+    var modalVisible = false;
+    // 모달 이벤트 핸들러 중복 방지
+    $('.emp-count-box').off('click').on('click', function() {
+        if (modalVisible) {
+            // 모달이 보이면 숨기기
+            modal.hide();
+            modalVisible = false;  // 모달 상태 업데이트
+            return;
+        }
+        modalVisible = true;
+
+        // AJAX 요청 전에 기존 데이터 비우기
+        $('.emp-list').empty();
+        $('.count').text('사람 (0)');
+
+        // 모달 보이기
+        modal.show();
+
+        // 데이터 불러오기
+        $.ajax({
+            url: '/api/chatrooms/' + currentChatRoomId + '/employees',
+            type: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                updateEmployeeList(data);
+            },
+            error: function(xhr, status, error) {
+                console.error("데이터를 불러오는 데 실패했습니다:", error);
+            }
+        });
+    });
+
+    // 모달 외부 클릭 시 닫기
+    $(window).on('click', function(event) {
+        if (!$(event.target).closest('#emp-modal, .emp-count-box').length && modalVisible) {
+            modal.hide();
+            modalVisible = false;
+        }
+    });
+
+
+
+    function updateEmployeeList(data) {
+        var listElement = $('.emp-list');
+        $.each(data, function(index, employee) {
+            listElement.append(
+                `<div class="row emp-one d-flex align-items-center">
+                <div class="col-5">
+                    <div class="profile">
+                        <img src="${employee.profileUrl}" />
+                        <div class="status d-flex justify-content-center align-items-center">
+                            <i class="fa-solid fa-check check-icon"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-7 pl-0">
+                    <p class="emp-name">${employee.name}</p>
+                </div>
+            </div>`
+            );
+        });
+        $('.count').text(`사람 (${data.length})`);
+    }
+
+    // 채팅방 목록에서 첫 번째 채팅방 선택
+    // var firstChatRoom = $('.chat-room-item').first();
+    // firstChatRoom.trigger('click');
+
 });
 
 document.addEventListener("DOMContentLoaded", function() {
