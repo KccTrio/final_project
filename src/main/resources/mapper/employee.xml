@@ -40,4 +40,15 @@
         where employee_id = #{employee_id}
     </select>
 
+    <select id="getEmployeeInfoList" parameterType="java.util.List"
+            resultType="String">
+        SELECT
+        name
+        FROM employee
+        WHERE employee_id IN
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
 </mapper>

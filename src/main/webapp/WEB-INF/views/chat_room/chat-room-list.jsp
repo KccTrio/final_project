@@ -206,6 +206,29 @@
             </div>
         </div>
         <div class="chat">
+            <%-- 채팅 인원 추가 --%>
+            <div class="row chat-one">
+                <div class="col-10">
+                    <div class="row">
+                        <div class="col-1 d-flex justify-content-end">
+                            <div class="add-chat-profile">
+                                <i class="fa-solid fa-user-plus"></i>
+                            </div>
+                        </div>
+                        <div class="col-9">
+                            <div class="chat-bubble-container d-flex align-items-end">
+                                <div
+                                        class="d-flex align-items-center justify-content-center"
+                                >
+                                    <p>우영두님이 우영두님을 초대하셨습니다.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <%--전 사람과 같은 채팅일 시--%>
             <div class="row chat-one">
                 <div class="col-10">

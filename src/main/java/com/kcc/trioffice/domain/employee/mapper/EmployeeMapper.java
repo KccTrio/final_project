@@ -12,4 +12,5 @@ import java.util.Optional;
 public interface EmployeeMapper {
     Optional<EmployeeInfo> getEmployeeInfo(Long employeeId);
     List<SearchEmployee> getEmployeeByCompanyIdExceptOneSelf(@Param("companyId") Long companyId, @Param("employeeId") Long employeeId);
+    List<String> getEmployeeInfoList(List<Long> employees);
 }

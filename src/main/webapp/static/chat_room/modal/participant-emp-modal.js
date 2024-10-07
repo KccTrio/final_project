@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     var modal = document.getElementById("emp-modal");
     var empCountBox = document.querySelector(".emp-count-box");
-    var span = document.getElementsByClassName("close")[0];
 
     // emp-count-box 클릭 시 모달 열기
     empCountBox.addEventListener('click', function() {
@@ -20,10 +19,4 @@ document.addEventListener('DOMContentLoaded', function() {
         modal.style.display = "block";
     });
 
-    // 모달 외부 클릭 시 모달 닫기
-    window.onclick = function(event) {
-        if (event.target == modal) {
-            modal.style.display = "none";
-        }
-    };
 });

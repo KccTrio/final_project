@@ -117,5 +117,6 @@ s
         </div>
     </div>
 </div>
+<%@ include file="/WEB-INF/views/chat_room/modal/add-emp-modal.jsp" %>
 </body>
 </html>
