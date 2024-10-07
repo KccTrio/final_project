@@ -98,7 +98,18 @@ public class EmployeeService {
                 helper.setFrom(employeeMail);
                 helper.setTo(externalEmail);
                 helper.setSubject("KCC정보통신 사내계정 임시비밀번호");
-                helper.setText("임시 비밀번호는: " + tmpPassword + " 입니다.", true);
+                String htmlContent = "<div style='font-family: Arial, sans-serif; color: #333;'>"
+                        + "<h2 style='color: #4CAF50;'>임시 비밀번호</h2></br>"
+                        + "<p>요청하신 임시 비밀번호가 생성되었습니다. 아래의 임시 비밀번호를 사용하여 로그인해 주세요:</p>"
+                        + "<div style='background-color: #f9f9f9; border: 1px solid #ddd; padding: 10px; margin: 15px 0;'>"
+                        + "<strong>임시 비밀번호:</strong> <span style='color: #e74c3c; font-size: 18px;'>" + tmpPassword
+                        + "</span>"
+                        + "</div>"
+                        + "<p>보안을 위해 로그인 후 비밀번호를 반드시 변경해 주시기 바랍니다.</p>"
+                        + "<br>"
+                        + "<p style='font-size: 12px; color: #777;'>감사합니다.</p>"
+                        + "</div>";
+                helper.setText(htmlContent, true);
 
                 mailSender.send(message);
             } catch (MailException e) {
