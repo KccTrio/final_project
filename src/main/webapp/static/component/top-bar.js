@@ -32,3 +32,17 @@ statusOpenButton.addEventListener("click", function () {
   }
   isStatusOpen = !isStatusOpen;
 });
+
+document
+  .getElementById("logoutLink")
+  .addEventListener("click", function (event) {
+    event.preventDefault(); // 기본 링크 동작 방지
+
+    // POST 요청을 위한 form 생성
+    const logoutForm = document.createElement("form");
+    logoutForm.method = "POST";
+    logoutForm.action = "/logout"; // 로그아웃 URL
+
+    document.body.appendChild(logoutForm); // form을 body에 추가
+    logoutForm.submit(); // 폼 제출
+  });
