@@ -39,9 +39,10 @@ public class EmployeeRestController {
     }
 
     @PostMapping("/find-password/email")
-    public HttpStatus passwordChange(@RequestParam final String externalEmail) throws MessagingException {
+    public HttpStatus passwordChange(@RequestParam final String email, @RequestParam final String externalEmail)
+            throws MessagingException {
         System.out.println("요청한 사외 이메일 :" + externalEmail);
-        employeeService.temporaryPassword(externalEmail);
+        employeeService.temporaryPassword(email, externalEmail);
         return HttpStatus.OK;
     }
 

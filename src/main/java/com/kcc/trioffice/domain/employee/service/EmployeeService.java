@@ -33,7 +33,7 @@ public class EmployeeService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final EmployeeMapper employeeMapper;
     private final JavaMailSender mailSender;
-    private final EmployeeInfo employeeInfo = new EmployeeInfo();
+    // private final EmployeeInfo employeeInfo = new EmployeeInfo();
 
     // 임시비밀번호 생성
     private String generateTempPassword() {
@@ -72,13 +72,13 @@ public class EmployeeService {
                 .orElseThrow(() -> new NotFoundException("일치하는 회원의 아이디가 없습니다."));
 
         // 사내이메일과 외부이메일 매칭을 위한 값 저장.
-        employeeInfo.setEmail(email);
+        // employeeInfo.setEmail(email);
         // return findedEmail;
     }
 
     @Transactional
-    public void temporaryPassword(String externalEmail) throws MessagingException {
-        String employeeMail = employeeInfo.getEmail();
+    public void temporaryPassword(String email, String externalEmail) throws MessagingException {
+        String employeeMail = email;
 
         String findedExternalEmail = employeeMapper.getExternalEmail(employeeMail).get();
 

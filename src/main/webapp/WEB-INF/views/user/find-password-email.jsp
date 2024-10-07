@@ -48,5 +48,5 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
     </div>
   </body>
   <script src="<%= request.getContextPath() %>/static/user/find-password.js"></script>
-  <script src="<%= request.getContextPath() %>/static/user/find-password-empty.js"></script>
+  <script src="<%= request.getContextPath() %>/static/user/find-password-empty-check.js"></script>
 </html>

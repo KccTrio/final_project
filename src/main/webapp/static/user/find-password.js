@@ -49,6 +49,22 @@ function setFindPasswordEmailCookie(email) {
   document.cookie = `findPasswordEmail=${email}; expires=${expiryDate.toUTCString()}; path=/`;
 }
 
+function getCookie(name) {
+  const nameEquals = name + "=";
+  const decodedCookie = decodeURIComponent(document.cookie);
+  const cookieArray = decodedCookie.split(";");
+  for (let i = 0; i < cookieArray.length; i++) {
+    const cookie = cookieArray[i];
+    while (cookie.charAt(0) === " ") {
+      cookie = cookie.substring(1);
+    }
+    if (cookie.indexOf(nameEquals) === 0) {
+      return cookie.substring(nameEquals.length, cookie.length);
+    }
+  }
+  return null;
+}
+
 $("#find-password-button").click(function (event) {
   event.preventDefault();
   var employeeId = $("#employeeId").val();
@@ -63,7 +79,6 @@ $("#find-password-button").click(function (event) {
   }
   // // 이메일 값 확인을 위해 콘솔 출력
   // console.log("이메일 값: " + employeeId);
-
   if (employeeId) {
     $.ajax({
       url: "/api/find-password/id",
@@ -85,6 +100,7 @@ $("#find-password-email-button").click(function (event) {
   // console.log("임시 비밀번호 발급 버튼 ");
   event.preventDefault();
   var externalEmailVal = $("#externalEmail").val();
+  const findPasswordEmail = getCookie("findPasswordEmail");
 
   if (externalEmailVal === null || externalEmailVal === "") {
     $("#checkedId").html(
@@ -100,6 +116,9 @@ $("#find-password-email-button").click(function (event) {
       confirmButtonText: "예",
       cancelButtonText: "아니요",
     }).then((result) => {
+      console.log(
+        "사내메일 : " + findPasswordEmail + "외부메일 : " + externalEmailVal
+      );
       if (result.isConfirmed) {
         $.ajax({
           url: "/api/find-password/email",
