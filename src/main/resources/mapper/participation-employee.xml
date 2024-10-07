@@ -3,7 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.kcc.trioffice.domain.chat_room.mapper.ParticipationEmployeeMapper">
+<mapper namespace="com.kcc.trioffice.domain.participation_employee.mapper.ParticipationEmployeeMapper">
 
     <insert id="saveParticipationEmployee" parameterType="map">
         INSERT INTO participation_employee (chat_room_id, employee_id, is_favorited, is_entered, writer, write_dt, modifier, modified_dt, is_deleted)
@@ -84,6 +84,23 @@
             pe.chat_room_id = #{chatRoomId}
         ORDER BY
             e.name
+    </select>
+
+    <select id="getEmployeeByChatRoomIdExceptParticipants" resultType="com.kcc.trioffice.domain.employee.dto.response.SearchEmployee">
+        select e.employee_id as id, e.name, d.name as deptName, e.position
+        from employee e
+                 LEFT JOIN department d ON e.dept_id = d.dept_id
+        where e.company_id = #{companyId}
+            and e.employee_id NOT IN (
+                SELECT
+                    employee_id
+                FROM
+                    participation_employee
+                WHERE
+                    chat_room_id = #{chatRoomId} and is_deleted = 0
+            )
+        and e.is_deleted = 0
+        order by e.name
     </select>
 
 </mapper>

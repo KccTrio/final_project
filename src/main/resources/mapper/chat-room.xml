@@ -94,9 +94,9 @@
         FROM
         chat c
         JOIN employee e ON c.writer = e.employee_id
-        LEFT JOIN chat_status cs ON c.chat_id = cs.chat_id
+        LEFT JOIN chat_status cs ON c.chat_id = cs.chat_id and cs.is_deleted = 0
         WHERE
-        c.chatroom_id = #{chatRoomId} and c.is_deleted = 0 and e.is_deleted = 0 and cs.is_deleted = 0
+        c.chatroom_id = #{chatRoomId} and c.is_deleted = 0 and e.is_deleted = 0
         GROUP BY
         c.chat_id, c.contents, c.chat_type, c.writer, c.write_dt, e.name, e.profile_url
         ORDER BY

@@ -2,6 +2,7 @@ package com.kcc.trioffice.domain.chat_room.dto.response;
 
 import com.kcc.trioffice.domain.chat_room.dto.request.ChatMessage;
 import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
+import com.kcc.trioffice.global.enums.ChatType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -17,7 +18,7 @@ public class ChatMessageInfo {
     private String senderProfileUrl;
     private String chatContents;
     private LocalDateTime chatTime;
-    private String type;
+    private String chatType;
     private int unreadMessageCount;
 
     public static ChatMessageInfo of(EmployeeInfo employeeInfo, ChatMessage chatMessage, int unreadMessageCount) {
@@ -29,7 +30,7 @@ public class ChatMessageInfo {
                 employeeInfo.getProfileUrl(),
                 chatMessage.getMessage(),
                 LocalDateTime.now(),
-                "CHAT",
+                ChatType.toName(chatMessage.getChatType()),
                 unreadMessageCount);
     }
 }

@@ -1,5 +1,6 @@
 package com.kcc.trioffice.domain.chat_room.dto.response;
 
+import com.kcc.trioffice.global.enums.ChatType;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -25,4 +26,8 @@ public class ChatInfo {
     private int sadEmoticonCount;
     private Boolean isClickedSadEmoticon;
     private int unreadMessageCount;
+
+    public void setChatType(Long chatType) {
+        this.chatType = ChatType.toName(chatType);
+    }
 }

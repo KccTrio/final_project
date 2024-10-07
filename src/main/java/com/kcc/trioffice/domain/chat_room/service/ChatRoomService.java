@@ -6,7 +6,7 @@ import com.kcc.trioffice.domain.chat_room.dto.response.*;
 import com.kcc.trioffice.domain.chat_room.mapper.ChatMapper;
 import com.kcc.trioffice.domain.chat_room.mapper.ChatRoomMapper;
 import com.kcc.trioffice.domain.chat_status.mapper.ChatStatusMapper;
-import com.kcc.trioffice.domain.chat_room.mapper.ParticipationEmployeeMapper;
+import com.kcc.trioffice.domain.participation_employee.mapper.ParticipationEmployeeMapper;
 import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.service.EmployeeService;
 import com.kcc.trioffice.global.exception.type.BadRequestException;

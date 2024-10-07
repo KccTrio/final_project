@@ -1,12 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var modal = document.getElementById("emp-modal");
-    var empCountBox = document.querySelector(".emp-count-box");
+    var modal = document.getElementById("add-emp-modal");
+    var addEmpBox = document.querySelector(".add-emp-box");
 
     // emp-count-box 클릭 시 모달 열기
-    empCountBox.addEventListener('click', function() {
-        console.log("emp-count-box 클릭");
+    addEmpBox.addEventListener('click', function() {
         // emp-count-box의 위치 가져오기
-        var rect = empCountBox.getBoundingClientRect();
+        var rect = addEmpBox.getBoundingClientRect();
         var modalWidth = modal.offsetWidth;
 
         // 모달 위치 설정 (empCountBox의 아래 왼쪽 끝에 모달의 오른쪽 끝을 맞춤)

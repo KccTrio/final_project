@@ -63,20 +63,6 @@
     margin-right: 10px;
 }
 
-.emp-list::-webkit-scrollbar {
-    width: 10px;
-}
-
-.emp-list::-webkit-scrollbar-thumb {
-    background: #B0B0B0;
-    border-radius: 20px;
-}
-
-.emp-list::-webkit-scrollbar-track {
-    background: #EFEFEF;
-    border-radius: 20px;
-}
-
 .add-emp-box p {
     margin: 0;
 }

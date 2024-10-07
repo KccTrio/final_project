@@ -40,6 +40,17 @@
         where employee_id = #{employee_id}
     </select>
 
+    <select id="getEmployeeInfoList" parameterType="java.util.List"
+            resultType="String">
+        SELECT
+        name
+        FROM employee
+        WHERE employee_id IN
+        <foreach item="id" collection="list" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </select>
+
     <select id="getEmployeeInfoFindById" parameterType="String"
             resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
         select employee_id as employeeId,
@@ -63,7 +74,7 @@
                modifier,
                modified_dt as modifiedDt,
                is_deleted as isDeleted
-        from employee 
+        from employee
         where email = #{id}
     </select>
 
@@ -80,9 +91,9 @@
     </select>
 
     <update id="temporaryPassword" parameterType="map" >
-        update employee 
+        update employee
         set password = #{incodingPassword}
-        where email = #{email} 
+        where email = #{email}
     </update>
 
     <insert id="saveEmployee">
@@ -102,7 +113,7 @@
         is_receive_notification,
         position,
         status,
-        status_message, 
+        status_message,
         writer,
         write_dt,
         modifier,
@@ -134,7 +145,7 @@
     </insert>
 
     <select id="getAdminInfo" resultType="com.kcc.trioffice.domain.employee.dto.response.AdminInfo">
-    select name, 
+    select name,
     phone_num as phoneNum
     from employee
     where employee_id = (select employee_id
