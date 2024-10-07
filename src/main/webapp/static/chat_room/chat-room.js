@@ -6,6 +6,10 @@ $(document).ready(function() {
     var previousSenderId = null;
     var timeoutId = null;
     var currentMessageId = null;
+    var offset = 0; // 현재 로드된 메시지의 수
+    var limit = 50; // 한 번에 로드할 메시지 수
+    var hasMoreData = true; // 더 로드할 데이터가 있는지 확인
+    var loading = false; // AJAX 로드 중복 실행 방지
 
     // 유저 정보 로드
     $.ajax({
@@ -60,8 +64,8 @@ $(document).ready(function() {
     }
 
     function loadChatRoom(chatRoomId) {
-        var offset = 0;
-        var limit = 50;
+        offset = 0;
+        limit = 50;
 
         $.ajax({
             url: '/api/chatrooms/' + chatRoomId,
@@ -69,9 +73,15 @@ $(document).ready(function() {
             dataType: 'json',
             data: { offset: offset, limit: limit },
             success: function(data) {
+                if (data.chatInfoList.length < limit) {
+                    hasMoreData = false; // 모든 데이터 로드 완료
+                }
+
                 console.log(data)
                 updateChatRoomInfo(data);
                 updateChatContents(data.chatInfoList);
+                offset += data.chatInfoList.length; // 오프셋 업데이트
+                loading = false;
             },
             error: function(xhr, status, error) {
                 console.error('채팅방 데이터를 가져오는 데 실패했습니다:', error);
@@ -98,12 +108,33 @@ $(document).ready(function() {
         chatContainer.scrollTop(chatContainer[0].scrollHeight);
     }
 
+    function addChatContents(messages) {
+        var chatContainer = $('.chat');
+
+        // 스크롤 위치와 높이를 저장합니다.
+        var oldScrollTop = chatContainer.scrollTop();
+        var oldScrollHeight = chatContainer[0].scrollHeight;
+
+        // 메시지를 추가합니다.
+        messages.forEach(function(message) {
+            var chatRow = generateMessageHtml(message);
+            chatContainer.append(chatRow);
+        });
+
+        // 새로운 스크롤 높이를 가져옵니다.
+        var newScrollHeight = chatContainer[0].scrollHeight;
+
+        // 스크롤 높이의 변화를 계산합니다.
+        var scrollHeightDiff = newScrollHeight - oldScrollHeight;
+
+        // 스크롤 위치를 조정합니다.
+        chatContainer.scrollTop(oldScrollTop + scrollHeightDiff);
+    }
+
     function generateMessageHtml(message) {
         var isSameSender = (message.senderId === previousSenderId);
         previousSenderId = message.senderId;
         var chatRow;
-
-        console.log(message);
 
         if (message.chatType === "ENTER") {
             chatRow = createEnterMessage(message);
@@ -720,6 +751,48 @@ $(document).ready(function() {
     $('.cancel-button').on('click', function() {
         addEmpModal.hide();
         addEmpModalVisible = false
+    });
+
+    function loadChatMessages() {
+        if (loading || !hasMoreData) return;
+        loading = true;
+
+        $.ajax({
+            url: '/api/chatrooms/' + currentChatRoomId,
+            method: 'GET',
+            dataType: 'json',
+            data: { offset: offset, limit: limit },
+            success: function(data) {
+                if (data.chatInfoList.length < limit) {
+                    hasMoreData = false; // 모든 데이터 로드 완료
+                }
+                offset += data.chatInfoList.length; // 오프셋 업데이트
+                addChatContents(data.chatInfoList);
+                loading = false;
+            },
+            error: function(xhr, status, error) {
+                console.error('추가 채팅 데이터 로드 실패:', error);
+                loading = false;
+            }
+        });
+    }
+
+    // 스크롤 이벤트 핸들러
+    $('.chat').scroll(function() {
+        var $this = $(this);
+        var scrollTop = $this.scrollTop();
+        var scrollHeight = $this[0].scrollHeight;
+        var containerHeight = $this.innerHeight();
+
+        console.log('scrollTop:', scrollTop);
+        console.log('scrollHeight:', scrollHeight);
+        console.log('containerHeight:', containerHeight);
+
+        // 스크롤 위치가 최상단 근처에 있을 때 데이터 로드
+        // flex-direction: column-reverse로 인해 scrollTop이 음수가 되고, 위로 스크롤할수록 더 큰 음수가 됩니다.
+        if (-scrollTop + containerHeight >= scrollHeight - 100 && !loading && hasMoreData) {
+            loadChatMessages();
+        }
     });
 
 
