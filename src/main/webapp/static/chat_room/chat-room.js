@@ -546,6 +546,8 @@ $(document).ready(function() {
         $('.count').text(`사람 (${data.length})`);
     }
 
+    let tagify;
+
     $('.add-emp-box').off('click').on('click', function() {
 
         if (addEmpModalVisible) {
@@ -554,6 +556,10 @@ $(document).ready(function() {
             addEmpModal.hide();
             addEmpModalVisible = false;  // 모달 상태 업데이트
             return;
+        }
+
+        if (tagify) {
+            tagify.destroy();
         }
 
         let whitelist = [];
@@ -566,6 +572,7 @@ $(document).ready(function() {
             success: function(data) {
                 addEmpModal.show();
                 addEmpModalVisible = true;
+                console.log('직원 데이터를 성공적으로 가져왔습니다:', data);
                 whitelist = data.map(function(employee) {
                     return {
                         name: employee.name + '/' + employee.position + '/' + employee.deptName, // 태그에 표시될 내용
@@ -579,7 +586,7 @@ $(document).ready(function() {
                 let inputElm = document.querySelector("input[name='employees[]']");
 
                 // initialize Tagify
-                var tagify = new Tagify(inputElm, {
+                tagify = new Tagify(inputElm, {
                     enforceWhitelist: true, // 화이트리스트에서 허용된 태그만 사용
                     whitelist: whitelist, // 화이트 리스트 배열. 화이트 리스트를 등록하면 자동으로 드롭다운 메뉴가 생긴다
                     autogrow: true, // 태그 입력창이 자동으로 늘어난다
