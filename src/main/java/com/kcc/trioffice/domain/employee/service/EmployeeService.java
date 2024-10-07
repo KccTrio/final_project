@@ -1,6 +1,7 @@
 package com.kcc.trioffice.domain.employee.service;
 
 import com.kcc.trioffice.domain.employee.dto.request.SaveEmployee;
+import com.kcc.trioffice.domain.employee.dto.response.AdminInfo;
 import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.dto.response.SearchEmployee;
 import com.kcc.trioffice.domain.employee.mapper.EmployeeMapper;
@@ -116,8 +117,10 @@ public class EmployeeService {
     public Map<String, Object> getAdminInfo() {
         Map<String, Object> getAdminNameAndPhone = new HashMap<>();
 
-        getAdminNameAndPhone.put("adminName", "홍길동");
-        getAdminNameAndPhone.put("adminPhone", "010-1212-1212");
+        AdminInfo adminInfo = employeeMapper.getAdminInfo()
+                .orElseThrow(() -> new NotFoundException("admin 정보를 찾을 수 없습니다."));
+        getAdminNameAndPhone.put("adminName", adminInfo.getName());
+        getAdminNameAndPhone.put("adminPhone", adminInfo.getPhoneNum());
 
         return getAdminNameAndPhone;
     }

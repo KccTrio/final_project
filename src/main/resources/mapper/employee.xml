@@ -133,5 +133,14 @@
     )
     </insert>
 
+    <select id="getAdminInfo" resultType="com.kcc.trioffice.domain.employee.dto.response.AdminInfo">
+    select name, 
+    phone_num as phoneNum
+    from employee
+    where employee_id = (select employee_id
+                            from role
+                            where name = 'ROLE_ADMIN')
+    </select>
+
 
 </mapper>

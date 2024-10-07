@@ -25,4 +25,5 @@ public class EmployeeInfo {
     private Long modifier;
     private String modifiedDt;
     private String isDeleted;
+
 }

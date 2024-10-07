@@ -1,6 +1,7 @@
 package com.kcc.trioffice.domain.employee.mapper;
 
 import com.kcc.trioffice.domain.employee.dto.request.SaveEmployee;
+import com.kcc.trioffice.domain.employee.dto.response.AdminInfo;
 import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.dto.response.SearchEmployee;
 import org.apache.ibatis.annotations.Mapper;
@@ -25,4 +26,6 @@ public interface EmployeeMapper {
     Optional<String> getExternalEmail(String employeeMail);
 
     int temporaryPassword(String incodingPassword, String email);
+
+    Optional<AdminInfo> getAdminInfo();
 }
