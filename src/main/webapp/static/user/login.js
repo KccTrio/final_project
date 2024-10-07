@@ -1,11 +1,20 @@
 const findId = document.getElementById("find-id").querySelector("a");
 const modelFindId = document.getElementById("find-id-container");
 const closeFindId = document.getElementById("find-id-close");
-
+var adminId = "";
+var adminPhoneNum = "";
 findId.addEventListener("click", function (event) {
   event.preventDefault(); // 기본 링크 동작 방지
   console.log("open find"); // 클릭 시 콘솔에 출력
   modelFindId.classList.remove("hidden"); // 모달 표시
+  $.ajax({
+    url: "api/find-admin",
+    type: "GET",
+    success: function () {
+      console.log("admin의 정보를 가져왔습니다.");
+    },
+    error: function () {},
+  });
 });
 
 closeFindId.addEventListener("click", () => {

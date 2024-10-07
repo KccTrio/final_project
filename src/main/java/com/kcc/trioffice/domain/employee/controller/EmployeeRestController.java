@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -44,6 +45,11 @@ public class EmployeeRestController {
         System.out.println("요청한 사외 이메일 :" + externalEmail);
         employeeService.temporaryPassword(email, externalEmail);
         return HttpStatus.OK;
+    }
+
+    @GetMapping("/find-admin")
+    public ResponseEntity<Map<String, Object>> findAdminNameAndPhoneNum() {
+        return ResponseEntity.ok(employeeService.getAdminInfo());
     }
 
 }

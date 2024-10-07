@@ -22,7 +22,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -109,6 +111,15 @@ public class EmployeeService {
         } else {
             throw new NotFoundException("등록하신 외부이메일과 다릅니다.");
         }
+    }
+
+    public Map<String, Object> getAdminInfo() {
+        Map<String, Object> getAdminNameAndPhone = new HashMap<>();
+
+        getAdminNameAndPhone.put("adminName", "홍길동");
+        getAdminNameAndPhone.put("adminPhone", "010-1212-1212");
+
+        return getAdminNameAndPhone;
     }
 
 }
