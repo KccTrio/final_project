@@ -75,9 +75,9 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           <div id="find-id-text">
             인사과 담당자에게 문의 부탁드립니다.<br />
             <br />
-            담당자 : <span id="find-id-employee">홍길동 팀장</span><br />
+            담당자 : <span id="find-id-employee"></span><br />
             Tel.
-            <span id="find-id-employee-tel">02-122-8855</span>
+            <span id="find-id-employee-tel"></span>
           </div>
           <button id="find-id-close">닫기</button>
         </div>

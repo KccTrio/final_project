@@ -49,7 +49,8 @@ public class EmployeeRestController {
 
     @GetMapping("/find-admin")
     public ResponseEntity<Map<String, Object>> findAdminNameAndPhoneNum() {
-        return ResponseEntity.ok(employeeService.getAdminInfo());
+        Map<String, Object> adminInfo = employeeService.getAdminInfo();
+        return ResponseEntity.ok(adminInfo);
     }
 
 }

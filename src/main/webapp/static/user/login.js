@@ -10,8 +10,12 @@ findId.addEventListener("click", function (event) {
   $.ajax({
     url: "api/find-admin",
     type: "GET",
-    success: function () {
-      console.log("admin의 정보를 가져왔습니다.");
+    success: function (adminInfo) {
+      adminId = adminInfo.adminName;
+      adminPhoneNum = adminInfo.adminPhone;
+      document.getElementById("find-id-employee").textContent = adminId;
+      document.getElementById("find-id-employee-tel").textContent =
+        adminPhoneNum;
     },
     error: function () {},
   });
