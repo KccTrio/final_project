@@ -1,5 +1,6 @@
 package com.kcc.trioffice.domain.employee.controller;
 
+import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.dto.response.SearchEmployee;
 import com.kcc.trioffice.domain.employee.service.EmployeeService;
 
@@ -26,7 +27,12 @@ public class EmployeeRestController {
 
     @GetMapping("/employees/all")
     public ResponseEntity<List<SearchEmployee>> getEmployeesByCompany() {
-        return ResponseEntity.ok(employeeService.getEmployeeByCompanyId(2L));
+        return ResponseEntity.ok(employeeService.getEmployeeByCompanyId(1L));
+    }
+
+    @GetMapping("/api/current-employee")
+    public ResponseEntity<EmployeeInfo> getCurrentEmployee() {
+        return ResponseEntity.ok(employeeService.getEmployeeInfo(1L));
     }
 
     @GetMapping("/find-password/id")

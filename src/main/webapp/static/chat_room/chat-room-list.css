@@ -210,6 +210,7 @@
     width: 30%; /* 컨테이너의 전체 너비를 사용 */
     display: flex;
     justify-content: start; /* 버튼을 가로 중앙에 배치 */
+    padding-right: 15px;
 }
 
 .inactive-emoticon {
@@ -253,7 +254,7 @@
 }
 
 .unread-count-box {
-    margin-left: 10px;
+    margin: 0px 10px;
     padding-bottom: 4px;
 }
 
@@ -298,4 +299,8 @@
 
 .active-button {
     background: #7AB7FA;
+}
+
+.emp-count-box {
+    cursor: pointer;
 }
