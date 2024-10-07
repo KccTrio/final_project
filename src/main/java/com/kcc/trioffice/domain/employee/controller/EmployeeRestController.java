@@ -2,6 +2,8 @@ package com.kcc.trioffice.domain.employee.controller;
 
 import com.kcc.trioffice.domain.employee.dto.response.SearchEmployee;
 import com.kcc.trioffice.domain.employee.service.EmployeeService;
+
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -10,12 +12,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -36,14 +35,13 @@ public class EmployeeRestController {
         // String responseEmail = employeeService.checkEmployeeEmail(email);
         // Map<String, Object> response = new HashMap<>();
         // response.put("email", responseEmail);
-
         return HttpStatus.OK;
     }
 
     @PostMapping("/find-password/email")
-    public HttpStatus passwordChange(@RequestParam final String externalEmail) {
+    public HttpStatus passwordChange(@RequestParam final String externalEmail) throws MessagingException {
         System.out.println("요청한 사외 이메일 :" + externalEmail);
-        employeeService.changePassword(externalEmail);
+        employeeService.temporaryPassword(externalEmail);
         return HttpStatus.OK;
     }
 

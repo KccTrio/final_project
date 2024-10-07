@@ -22,5 +22,7 @@ public interface EmployeeMapper {
 
     Optional<String> findByEmail(String email);
 
-    Optional<String> temporaryPassword(String employeeMail);
+    Optional<String> getExternalEmail(String employeeMail);
+
+    int temporaryPassword(String incodingPassword, String email);
 }

@@ -10,6 +10,7 @@ const returnInsertIdPageButton = document.getElementById(
   "find-password-email-backpage"
 );
 const doneFindPassword = document.getElementById("close-password-page");
+var findPasswordEmail = "";
 
 function closePage() {
   window.location.href = "/login";
@@ -42,17 +43,26 @@ if (doneFindPassword) {
   });
 }
 
+function setFindPasswordEmailCookie(email) {
+  const expiryDate = new Date();
+  expiryDate.setDate(expiryDate.getDate() + 1); // 쿠키 유효 기간을 1일로 설정
+  document.cookie = `findPasswordEmail=${email}; expires=${expiryDate.toUTCString()}; path=/`;
+}
+
 $("#find-password-button").click(function (event) {
   event.preventDefault();
   var employeeId = $("#employeeId").val();
-
+  findPasswordEmail = employeeId;
+  setFindPasswordEmailCookie(findPasswordEmail);
   if (employeeId === null || employeeId === "") {
     $("#checkedId").html(
       '<p class="text-danger">아이디(이메일)을 입력해주세요.</p>'
     );
+  } else {
+    $("#checkedId").html(""); // 해당 영역 초기화
   }
-  // 이메일 값 확인을 위해 콘솔 출력
-  console.log("이메일 값: " + employeeId);
+  // // 이메일 값 확인을 위해 콘솔 출력
+  // console.log("이메일 값: " + employeeId);
 
   if (employeeId) {
     $.ajax({
@@ -72,7 +82,7 @@ $("#find-password-button").click(function (event) {
 });
 
 $("#find-password-email-button").click(function (event) {
-  console.log("임시 비밀번호 발급 버튼 ");
+  // console.log("임시 비밀번호 발급 버튼 ");
   event.preventDefault();
   var externalEmailVal = $("#externalEmail").val();
 
@@ -81,7 +91,7 @@ $("#find-password-email-button").click(function (event) {
       '<p class="text-danger">아이디(이메일)을 입력해주세요.</p>'
     );
   } else {
-    // SweetAlert2 사용
+    $("#checkedId").html("");
     Swal.fire({
       title: "확인",
       text: "해당 이메일로 임시 비밀번호를 발급 받으시겠습니까?",
@@ -91,17 +101,19 @@ $("#find-password-email-button").click(function (event) {
       cancelButtonText: "아니요",
     }).then((result) => {
       if (result.isConfirmed) {
-        // 사용자가 확인 버튼을 눌렀을 때 실행
         $.ajax({
-          url: "/find-password/id",
+          url: "/api/find-password/email",
           type: "POST",
-          data: { externalEmail: externalEmailVal },
+          data: {
+            email: findPasswordEmail,
+            externalEmail: externalEmailVal,
+          },
           success: function () {
             window.location.href = "/find-password/done";
           },
           error: function () {
             $("#checkedId").html(
-              '<p class="text-danger">일치하는 회원정보가 없습니다.</p>'
+              '<p class="text-danger">등록하신 사외 이메일을 입력해주세요.</p>'
             );
           },
         });

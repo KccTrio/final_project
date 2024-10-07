@@ -73,11 +73,17 @@
         where email = #{email}
     </select>
 
-    <select id="temporaryPassword" parameterType="String" resultType="String" >
+    <select id="getExternalEmail" parameterType="String" resultType="String" >
         select external_email
         from employee
         where email = #{email}
     </select>
+
+    <update id="temporaryPassword" parameterType="map" >
+        update employee 
+        set password = #{incodingPassword}
+        where email = #{email} 
+    </update>
 
     <insert id="saveEmployee">
     insert into employee (
