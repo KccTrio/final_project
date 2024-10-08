@@ -106,7 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
   var calendar = new FullCalendar.Calendar(calendarEl, {
     themeSystem: "bootstrap4",
     headerToolbar: {
-      left: "prev,next today",
+      left: "prev next today",
       center: "title",
       right: "dayGridMonth,dayGridWeek,dayGridDay",
     },
