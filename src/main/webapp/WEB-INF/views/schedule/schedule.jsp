@@ -32,6 +32,8 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         <button id="left-button"><</button>
         <button id="right-button">></button>
       </div>
+
+      <div id="calendar"></div>
     </div>
   </body>
   <script src="<%= request.getContextPath() %>/static/schedule/schedule.js"></script>
