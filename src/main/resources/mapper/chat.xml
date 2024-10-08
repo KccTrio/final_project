@@ -10,26 +10,26 @@
             SELECT SEQ_CHAT.NEXTVAL FROM DUAL
         </selectKey>
         INSERT INTO chat (
-        chat_id,
-        chatroom_id,
-        contents,
-        chat_type,
-        writer,
-        write_dt,
-        modifier,
-        modified_dt,
-        is_deleted
+            chat_id,
+            chatroom_id,
+            contents,
+            chat_type,
+            writer,
+            write_dt,
+            modifier,
+            modified_dt,
+            is_deleted
         )
         VALUES (
-        #{chatId},
-        #{roomId},
-        #{message},
-        #{chatType},
-        #{senderId},
-        SYSDATE,
-        #{senderId},
-        SYSDATE,
-        0
+            #{chatId},
+            #{roomId},
+            #{message},
+            #{chatType},
+            #{senderId},
+            SYSDATE,
+            #{senderId},
+            SYSDATE,
+            0
         )
     </insert>
 

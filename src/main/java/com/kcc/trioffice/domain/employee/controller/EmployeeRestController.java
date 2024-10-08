@@ -4,11 +4,13 @@ import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.dto.response.SearchEmployee;
 import com.kcc.trioffice.domain.employee.service.EmployeeService;
 
+import com.kcc.trioffice.global.auth.PrincipalDetail;
 import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,13 +28,14 @@ public class EmployeeRestController {
     private final EmployeeService employeeService;
 
     @GetMapping("/employees/all")
-    public ResponseEntity<List<SearchEmployee>> getEmployeesByCompany() {
-        return ResponseEntity.ok(employeeService.getEmployeeByCompanyId(1L));
+    public ResponseEntity<List<SearchEmployee>> getEmployeesByCompany(@AuthenticationPrincipal PrincipalDetail principalDetail) {
+        return ResponseEntity.ok(employeeService
+                .getEmployeeByCompanyId(principalDetail.getEmployeeId()));
     }
 
-    @GetMapping("/api/current-employee")
-    public ResponseEntity<EmployeeInfo> getCurrentEmployee() {
-        return ResponseEntity.ok(employeeService.getEmployeeInfo(1L));
+    @GetMapping("/current-employee")
+    public ResponseEntity<EmployeeInfo> getCurrentEmployee(@AuthenticationPrincipal PrincipalDetail principalDetail) {
+        return ResponseEntity.ok(employeeService.getEmployeeInfo(principalDetail.getEmployeeId()));
     }
 
     @GetMapping("/find-password/id")

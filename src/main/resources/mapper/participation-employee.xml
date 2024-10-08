@@ -12,30 +12,31 @@
 
     <select id="getEmployeeByChatRoomIdExceptOneSelf" resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
         SELECT
-            e.employee_id as employeeId,
-            e.dept_id as deptId,
-            e.company_id as companyId,
-            e.email,
-            e.password,
-            e.phone_num as phoneNum,
-            e.external_email as externalEmail,
-            e.name,
-            e.birth,
-            e.profile_url as profileUrl,
-            e.fax,
-            e.location,
-            e.is_receive_notification as isReceiveNotification,
-            e.position,
-            e.status,
-            e.status_message as statusMessage,
-            e.writer,
-            e.write_dt as writeDt,
-            e.modifier,
-            e.modified_dt as modifiedDt,
-            e.is_deleted as isDeleted
+            e.employee_id as employeeId
+            , e.dept_id as deptId
+            , e.company_id as companyId
+            , e.email
+            , e.password
+            , e.phone_num as phoneNum
+            , e.external_email as externalEmail
+            , e.name
+            , e.birth
+            , e.profile_url as profileUrl
+            , e.fax
+            , e.location
+            , e.is_receive_notification as isReceiveNotification
+            , e.position
+            , e.status
+            , e.status_message as statusMessage
+            , e.writer
+            , e.write_dt as writeDt
+            , e.modifier
+            , e.modified_dt as modifiedDt
+            , e.is_deleted as isDeleted
         FROM
             employee e
-                INNER JOIN participation_employee pe ON e.employee_id = pe.employee_id
+                INNER JOIN participation_employee pe
+                    ON e.employee_id = pe.employee_id
         WHERE
             pe.chat_room_id = #{chatRoomId}
             AND e.employee_id != #{employeeId}
@@ -43,43 +44,45 @@
 
     <select id="getParticipantEmployeeInfoByChatRoomId" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ParticipantEmployeeInfo">
         SELECT
-            chat_room_id as chatRoomId,
-            employee_id as employeeId,
-            is_favorited as isFavorited,
-            chat_room_profile_url as chatRoomProfileUrl,
-            is_entered as isEntered
+            chat_room_id as chatRoomId
+            , employee_id as employeeId
+            , is_favorited as isFavorited
+            , chat_room_profile_url as chatRoomProfileUrl
+            , is_entered as isEntered
         FROM
             participation_employee
         WHERE
-            chat_room_id = #{chatRoomId} and is_deleted = 0
+            chat_room_id = #{chatRoomId}
+            AND is_deleted = 0
     </select>
 
     <select id="getEmployeeInfoByChatRoomId" resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
         SELECT
-            e.employee_id as employeeId,
-            e.dept_id as deptId,
-            e.company_id as companyId,
-            e.email,
-            e.password,
-            e.phone_num as phoneNum,
-            e.external_email as externalEmail,
-            e.name,
-            e.birth,
-            e.profile_url as profileUrl,
-            e.fax,
-            e.location,
-            e.is_receive_notification as isReceiveNotification,
-            e.position,
-            e.status,
-            e.status_message as statusMessage,
-            e.writer,
-            e.write_dt as writeDt,
-            e.modifier,
-            e.modified_dt as modifiedDt,
-            e.is_deleted as isDeleted
+            e.employee_id as employeeId
+            , e.dept_id as deptId
+            , e.company_id as companyId
+            , e.email
+            , e.password
+            , e.phone_num as phoneNum
+            , e.external_email as externalEmail
+            , e.name
+            , e.birth
+            , e.profile_url as profileUrl
+            , e.fax
+            , e.location
+            , e.is_receive_notification as isReceiveNotification
+            , e.position
+            , e.status
+            , e.status_message as statusMessage
+            , e.writer
+            , e.write_dt as writeDt
+            , e.modifier
+            , e.modified_dt as modifiedDt
+            , e.is_deleted as isDeleted
         FROM
             employee e
-                INNER JOIN participation_employee pe ON e.employee_id = pe.employee_id
+                INNER JOIN participation_employee pe
+                    ON e.employee_id = pe.employee_id
         WHERE
             pe.chat_room_id = #{chatRoomId}
         ORDER BY
@@ -87,20 +90,22 @@
     </select>
 
     <select id="getEmployeeByChatRoomIdExceptParticipants" resultType="com.kcc.trioffice.domain.employee.dto.response.SearchEmployee">
-        select e.employee_id as id, e.name, d.name as deptName, e.position
-        from employee e
-                 LEFT JOIN department d ON e.dept_id = d.dept_id
-        where e.company_id = #{companyId}
-            and e.employee_id NOT IN (
+        SELECT e.employee_id as id, e.name, d.name as deptName, e.position
+        FROM employee e
+            LEFT JOIN department d ON e.dept_id = d.dept_id
+        WHERE e.company_id = #{companyId}
+            AND e.employee_id NOT IN
+                (
                 SELECT
                     employee_id
                 FROM
                     participation_employee
                 WHERE
-                    chat_room_id = #{chatRoomId} and is_deleted = 0
-            )
-        and e.is_deleted = 0
-        order by e.name
+                    chat_room_id = #{chatRoomId}
+                        AND is_deleted = 0
+                )
+        AND e.is_deleted = 0
+        ORDER BY e.name
     </select>
 
 </mapper>
