@@ -148,6 +148,13 @@ document.addEventListener("DOMContentLoaded", function () {
       alert("이벤트 제목: " + info.event.title);
       // 추가적인 로직을 여기에 작성
     },
+    eventDidMount: function (info) {
+      // 이벤트에 우클릭 이벤트 리스너 추가
+      info.el.addEventListener("contextmenu", function (event) {
+        event.preventDefault(); // 브라우저 기본 우클릭 메뉴를 막음
+        alert("이벤트를 우클릭했습니다: " + info.event.title);
+      });
+    },
     displayEventTime: true,
     displayEventEnd: true,
     locale: "ko",
