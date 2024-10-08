@@ -53,4 +53,7 @@ public class PrincipalDetail implements UserDetails {
     return true;
   }
 
+  public Long getEmployeeId() {
+    return employeeInfo.getEmployeeId();
+  }
 }
