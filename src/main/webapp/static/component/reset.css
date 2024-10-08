@@ -136,3 +136,25 @@ a {
 body {
   font-family: "NanumSquare_ac", sans-serif;
 }
+
+.row {
+  margin: 0px;
+}
+
+.container-fluid {
+    padding: 0px;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #B0B0B0;
+  border-radius: 20px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #EFEFEF;
+  border-radius: 20px;
+}

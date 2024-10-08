@@ -20,7 +20,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       <div class="logo">
         <a href="/"
           ><img
-            src="<%= request.getContextPath() %>/static/component/kcc정보통신.png"
+            src="<%= request.getContextPath() %>/static/component/kcc-logo.png"
         /></a>
       </div>
       <!-- 검색창 -->
@@ -31,16 +31,94 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         />
       </div>
       <!-- 사용자 -->
-      <div class="employee">
-        <i class="fa-solid fa-user fa-2x employee-icon"></i>
+      <div class="employee" id="employee-icon">
+        <i class="fa-solid fa-user fa-2x"></i>
       </div>
       <!-- 사용자 상태 조회 모달 -->
       <div id="modalContainer" class="hidden">
         <div id="modalContent">
-          <p>호소세 화이팅</p>
-          <button id="modalCloseButton">닫기</button>
+          <div id="logout">
+            <form
+              id="logoutForm"
+              action="/logout"
+              method="post"
+              style="display: inline"
+            >
+              <input
+                type="hidden"
+                name="${_csrf.parameterName}"
+                value="${_csrf.token}"
+              />
+              <a href="#" id="logoutLink">로그아웃</a>
+            </form>
+          </div>
+          <div id="profile-img">
+            <img
+              src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+              alt="Profile Image"
+              width="150"
+              height="150"
+            />
+            <div id="profile-img-modify"><i class="fa-solid fa-pen"></i></div>
+          </div>
+          <div id="user-profile">
+            <div id="user-name">김길동 대리</div>
+            <div id="user-dept">SI영업 1팀</div>
+            <div id="user-email">gildongkim@kcc.co.kr</div>
+          </div>
+          <div id="user-status-box">
+            <div id="status"><i class="fa-solid fa-check"></i></div>
+            <div id="status-text">대화 가능</div>
+            <div id="status-modify-icon">
+              <i class="fa-solid fa-chevron-right"></i>
+            </div>
+          </div>
+          <div id="status-container" class="hidden">
+            <div id="status-ok">
+              <div id="status-ok-icon"><i class="fa-solid fa-check"></i></div>
+              <span>대화가능</span>
+            </div>
+            <div id="status-reset">
+              <div id="status-reset-icon">
+                <i class="fa-solid fa-minus"></i>
+              </div>
+              <span>자리비움</span>
+            </div>
+            <div id="status-offline">
+              <div id="status-offline-icon">
+                <i class="fa-solid fa-minus"></i>
+              </div>
+              <span>오프라인</span>
+            </div>
+            <div id="status-disturb">
+              <div id="status-disturb-icon">
+                <i class="fa-solid fa-minus"></i>
+              </div>
+              <span>방해금지</span>
+            </div>
+          </div>
+          <div id="status-message">
+            <div id="status-message-contents">
+              [SI영업] <br />
+              국민건강보험공단 영업 담당<br />
+              인터넷 진흥원 영업 담당
+            </div>
+
+            <div id="status-message-buttons">
+              <div id="message-pen"><i class="fa-solid fa-pen"></i></div>
+              <div id="message-trash">
+                <i class="fa-solid fa-trash-can"></i>
+              </div>
+            </div>
+          </div>
+          <div id="buttons">
+            <button id="modify-status">정보 수정</button>
+            <button id="modalCloseButton">닫기</button>
+          </div>
         </div>
       </div>
     </div>
   </body>
+
+  <script src="<%= request.getContextPath() %>/static/component/top-bar.js"></script>
 </html>

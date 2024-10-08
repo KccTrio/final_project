@@ -2,7 +2,6 @@ package com.kcc.trioffice.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 public class TestController {
@@ -20,6 +19,11 @@ public class TestController {
   @GetMapping("/top-bar")
   public String topBar() {
     return "/component/top-bar";
+  }
+
+  @GetMapping("/notifications")
+  public String alram() {
+    return "/component/alram";
   }
 
 }
