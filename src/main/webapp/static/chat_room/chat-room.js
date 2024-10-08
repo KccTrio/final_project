@@ -1,15 +1,17 @@
+var stompClient = null;
+var currentSubscription = null;
+var currentChatRoomId = null;
+var currentEmployeeId = null;
+var previousSenderId = null;
+var timeoutId = null;
+var currentMessageId = null;
+var offset = 0; // 현재 로드된 메시지의 수
+var limit = 50; // 한 번에 로드할 메시지 수
+var hasMoreData = true; // 더 로드할 데이터가 있는지 확인
+var loading = false; // AJAX 로드 중복 실행 방지
+
+
 $(document).ready(function() {
-    var stompClient = null;
-    var currentSubscription = null;
-    var currentChatRoomId = null;
-    var currentEmployeeId = null;
-    var previousSenderId = null;
-    var timeoutId = null;
-    var currentMessageId = null;
-    var offset = 0; // 현재 로드된 메시지의 수
-    var limit = 50; // 한 번에 로드할 메시지 수
-    var hasMoreData = true; // 더 로드할 데이터가 있는지 확인
-    var loading = false; // AJAX 로드 중복 실행 방지
 
     // 유저 정보 로드
     $.ajax({
@@ -18,18 +20,136 @@ $(document).ready(function() {
         dataType: 'json',
         success: function(data) {
             currentEmployeeId = data.employeeId;
+
+            connectChatRoomListSocket();
         },
         error: function(xhr, status, error) {
             console.error('유저 정보를 가져오는 데 실패했습니다:', error);
         }
     });
 
+    function connectChatRoomListSocket() {
+        var sockJs = new SockJS("/stomp/connection");
+        stompClient = Stomp.over(sockJs);
+
+        stompClient.connect({}, function() {
+            console.log("WebSocket 연결 성공");
+
+            subscribeToChatRoomList();
+        });
+    }
+
+    function subscribeToChatRoomList() {
+        stompClient.subscribe("/sub/chatrooms/employees/" + currentEmployeeId, function(message) {
+            var receivedMessage = JSON.parse(message.body);
+            handleChatRoomListUpdate(receivedMessage);
+        });
+    }
+
+    function handleChatRoomListUpdate(receivedMessage) {
+
+        // ajax 요청을 통해 채팅방 정보 가져오기
+        $.ajax({
+            url: '/api/chatrooms',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                console.log(data);
+                updateChatRoomList(data);
+                updateDateFormat();
+            },
+            error: function(xhr, status, error) {
+                console.error('채팅방 정보를 가져오는 데 실패했습니다:', error);
+            }
+        });
+    }
+
+    function updateChatRoomList(chatRooms) {
+
+        var chatRoomsList = $('.chat-rooms-list');
+        chatRoomsList.empty();
+
+        chatRooms.forEach(function(chatRoom) {
+            var chatRoomItem = `
+            <div class="row chat-room chat-room-item justify-content-between" data-chat-room-id="${chatRoom.chatRoomId}">
+                <div class="col-3">
+                    <div class="profile">
+                        <img src="${chatRoom.chatRoomProfileImageUrl}" />
+                        ` + addProfileStatus(chatRoom) + `
+                    </div>
+                </div>
+                <div class="col-8 d-flex align-content-between flex-wrap no-padding-left">
+                    <div class="row d-flex justify-content-between name-time-box">
+                        <div class="col-8 no-padding-left">
+                            <div class="chat-room-name">
+                                <p class="group-name">${chatRoom.chatRoomName}</p>
+                            </div>
+                        </div>
+                        <div class="col-4">
+                            <div class="last-message-at sub-text">
+                                <p>${chatRoom.lastMessageTime}</p>
+                            </div>
+                        </div>
+                        
+                    </div>
+                    <div class="row w-100 d-flex justify-content-between">
+                        <div class="col-9 no-padding-left">
+                            <div class="chat-room-last-message sub-text">
+                                <p>${chatRoom.lastMessage}</p>
+                            </div>
+                        </div>`
+                            + addUnReadMessage(chatRoom) + `
+                        <!-- 필요 시 안 읽은 메시지 수 추가 -->
+                    </div>
+                </div>
+            </div>`;
+            chatRoomsList.append(chatRoomItem);
+            addChatRoomActive(chatRoom);
+        });
+    }
+
+    function addUnReadMessage(chatRoom) {
+        if (chatRoom.unreadMessageCount > 0) {
+            return `<div class="col-3 text-end">
+                        <div class="unread-count-box">
+                            <p class="unread-count">${chatRoom.unreadMessageCount}</p>
+                        </div>
+                    </div>`;
+        }
+        return ''
+    }
+
+    function addProfileStatus(chatRoom) {
+        if (chatRoom.participantCount == 2) {
+            return `<div class="status d-flex justify-content-center align-items-center">
+                            <i class="fa-solid fa-check check-icon"></i>
+                        </div>`;
+        }
+        return '';
+    }
+
+    function addChatRoomActive(chatRoom) {
+        console.log(chatRoom.chatRoomId);
+        console.log(currentChatRoomId);
+        if (chatRoom.chatRoomId == currentChatRoomId) {
+            $('.chat-room-item').each(function() {
+                if ($(this).data('chat-room-id') == chatRoom.chatRoomId) {
+                    $(this).addClass('active');
+                } else {
+                    $(this).removeClass('active');
+                }
+            });
+        }
+    }
+
     // 채팅방 아이템 클릭 이벤트 등록
-    $('.chat-room-item').on('click', function() {
+    $('.chat-rooms-list').on('click', '.chat-room-item', function() {
+        console.log('채팅방 클릭 이벤트 발생');
         var chatRoomId = $(this).data('chat-room-id');
 
         $('.chat-room-item').removeClass('active');
         $(this).addClass('active');
+        
 
         connectWebSocket(chatRoomId);
         loadChatRoom(chatRoomId);
@@ -90,7 +210,7 @@ $(document).ready(function() {
     }
 
     function updateChatRoomInfo(data) {
-        $('.contents .chat-room-name').text(data.chatRoomName);
+        $('.contents .group-name').text(data.chatRoomName);
         $('.chat-room-profile-image').attr('src', data.chatRoomProfileImageUrl);
         $('.emp-count').text(data.participantCount);
     }
@@ -284,17 +404,8 @@ $(document).ready(function() {
             currentSubscription.unsubscribe();
         }
 
-        if (stompClient == null || !stompClient.connected) {
-            var sockJs = new SockJS("/stomp/connection");
-            stompClient = Stomp.over(sockJs);
-
-            stompClient.connect({}, function() {
-                console.log("WebSocket 연결 성공");
-                subscribeToChatRoom(chatRoomId);
-            });
-        } else {
-            subscribeToChatRoom(chatRoomId);
-        }
+        console.log("채팅 웹 소켓 연결 성공");
+        subscribeToChatRoom(chatRoomId);
 
         currentChatRoomId = chatRoomId;
     }
@@ -804,15 +915,23 @@ $(document).ready(function() {
 });
 
 document.addEventListener("DOMContentLoaded", function() {
+    updateDateFormat();
+});
+
+function updateDateFormat() {
     const chatDates = document.querySelectorAll(".last-message-at p");
     const today = new Date().toISOString().slice(0, 10);
 
-    chatDates.forEach(function(dateElement) {
+    chatDates.forEach(function (dateElement) {
         const fullDate = new Date(dateElement.textContent.trim());
         if (fullDate.toISOString().slice(0, 10) === today) {
-            dateElement.textContent = fullDate.toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit', hour12: false });
+            dateElement.textContent = fullDate.toLocaleTimeString('ko-KR', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: false
+            });
         } else {
-            dateElement.textContent = fullDate.toLocaleDateString('ko-KR', { month: '2-digit', day: '2-digit' });
+            dateElement.textContent = fullDate.toLocaleDateString('ko-KR', {month: '2-digit', day: '2-digit'});
         }
     });
-});
+}

@@ -177,9 +177,9 @@
                     </div>
                 </div>
             </div>
-            <div class="col-2">
+            <div class="col-4">
                 <div class="chat-room-name">
-                    <span>우영두</span>
+                    <p class="group-name">우영두두두두둗두두두두두두</p>
                 </div>
             </div>
             <div
@@ -195,7 +195,7 @@
                     <a href="#">사진</a>
                 </div>
             </div>
-            <div class="col-5"></div>
+            <div class="col-3"></div>
             <div
                     class="col-2 d-flex justify-content-center d-flex align-items-center"
             >

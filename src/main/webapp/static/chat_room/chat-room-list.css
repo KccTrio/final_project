@@ -290,3 +290,9 @@
 .emp-count-box {
     cursor: pointer;
 }
+
+.group-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}

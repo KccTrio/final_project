@@ -17,6 +17,6 @@ public interface ChatRoomMapper {
     List<ChatRoomInfo> getChatRoomListByEmployeeId(Long employeeId);
     Optional<ChatRoomDetailInfo> getChatRoomInfo(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId);
     List<ChatInfo> getChatInfoByPage(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId, @Param("participantCount") int participantCount, @Param("limit") int limit, @Param("offset") int offset);
-
+    int updateChatRoomLastMessage(@Param("chatRoomId") Long chatRoomId, @Param("chatId") Long chatId);
 
 }
