@@ -134,3 +134,6 @@
   color: black; /* 이벤트 텍스트 색상 
 }
 */
+.fc-toolbar h2 {
+  font-family: "One Mobile Title", sans-serif; /* 제목 폰트 설정 */
+}

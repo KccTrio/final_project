@@ -90,22 +90,32 @@ var textColors = [
   "#FFFFFF", // 흰색
 ];
 
+function getRandomColor() {
+  const randomIndex = Math.floor(Math.random() * backgroundColors.length);
+  return backgroundColors[randomIndex];
+}
+
+function getRandomTextColor() {
+  const randomIndex = Math.floor(Math.random() * textColors.length);
+  return textColors[randomIndex];
+}
+
 // 캘린더 랜더링
 document.addEventListener("DOMContentLoaded", function () {
   var calendarEl = document.getElementById("calendar");
   var calendar = new FullCalendar.Calendar(calendarEl, {
     themeSystem: "bootstrap4",
     headerToolbar: {
-      left: "prevYear,prev,next,nextYear today",
+      left: "prev,next today",
       center: "title",
       right: "dayGridMonth,dayGridWeek,dayGridDay",
     },
     buttonText: {
-      today: "today",
-      month: "month",
-      week: "week",
-      day: "day",
-      list: "list",
+      today: "오늘",
+      month: "월",
+      week: "주",
+      day: "일",
+      list: "목록",
     },
     eventSources: [
       {
@@ -114,6 +124,7 @@ document.addEventListener("DOMContentLoaded", function () {
             title: "오전회의",
             start: "2024-10-08",
             end: "2024-10-10",
+            allDay: true,
           },
           {
             title: "오후회의",
@@ -122,11 +133,25 @@ document.addEventListener("DOMContentLoaded", function () {
             allDay: false,
           },
         ],
-
-        color: "black",
-        textColor: "yellow",
       },
     ],
+
+    eventDidMount: function (info) {
+      // 시간도 있는 이벤트에 색상 변경
+      if (!info.event.allDay) {
+        // info.el.style.backgroundColor = "#4CAF50"; // 시간대 이벤트 배경색
+        // info.el.style.color = "#FFFFFF"; // 시간대 이벤트 글자색
+      }
+    },
+    // 상세보기 추후 구현
+    eventClick: function (info) {
+      alert("이벤트 제목: " + info.event.title);
+      // 추가적인 로직을 여기에 작성
+    },
+    displayEventTime: true,
+    displayEventEnd: true,
+    locale: "ko",
   });
+
   calendar.render();
 });
