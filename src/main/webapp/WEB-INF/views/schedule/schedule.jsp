@@ -9,7 +9,10 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       rel="stylesheet"
       href="<%= request.getContextPath() %>/static/schedule/schedule.css"
     />
+
+    <script src="<%= request.getContextPath() %>/static/component/fullcalendar/dist/index.global.js"></script>
   </head>
+
   <body>
     <jsp:include page="/WEB-INF/views/component/top-bar.jsp"></jsp:include>
     <jsp:include
@@ -26,15 +29,15 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           <span id="employee-name">홍길동</span>님의 일정
         </div>
       </div>
-      <div id="calendar-bar">
+      <!-- <div id="calendar-bar">
         <input type="month" id="date-picker" />
-        <button id="today-button">오늘</button>
+        <button id="today-button"></button>
         <button id="left-button"><</button>
         <button id="right-button">></button>
-      </div>
+      </div> -->
 
       <div id="calendar"></div>
     </div>
+    <script src="<%= request.getContextPath() %>/static/schedule/schedule.js"></script>
   </body>
-  <script src="<%= request.getContextPath() %>/static/schedule/schedule.js"></script>
 </html>

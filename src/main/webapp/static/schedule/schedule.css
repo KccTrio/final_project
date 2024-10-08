@@ -23,7 +23,7 @@
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  margin-right: 41px;
+  margin-right: 10px;
 }
 
 #add-schedule-button > span {
@@ -96,3 +96,41 @@
 #right-button {
   margin-left: 6px;
 }
+
+#calendar {
+  /* border: 1px solid black; */
+  width: 100%;
+  height: calc(100% - 7.2rem);
+  padding: 10px;
+}
+
+/*
+
+.fc-dayGridMonth .fc-daygrid-day {
+  background-color: #f9f9f9; 월별 보기 셀 색상 
+}
+
+.fc-timeGridWeek .fc-timegrid-col {
+  background-color: #ffebcc; /* 주별 보기 셀 색상 
+}
+.fc-daygrid-day {
+  /* background-color: #f0f8ff; /* 배경색을 연한 파란색으로 변경 
+}
+
+.fc-toolbar {
+  /* background-color: #6d8dff; 툴바 배경색
+  color: black; /* 툴바 텍스트 색상 
+}
+
+.fc-button {
+  /*background-color: #6d8dff;  버튼 배경색 
+  /*border-color: #6d8dff;  버튼 테두리 색상 
+  color: white; /* 버튼 텍스트 색상 
+}
+
+.fc-event {
+  background-color: #ffcc00; /* 이벤트 배경색 
+  border-color: #ff9900; /* 이벤트 테두리 색상 
+  color: black; /* 이벤트 텍스트 색상 
+}
+*/
