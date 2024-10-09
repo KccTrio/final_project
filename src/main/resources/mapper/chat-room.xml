@@ -36,6 +36,7 @@
                 AND cs.is_read = 0
         WHERE
             pe.employee_id = #{employeeId}
+            AND cr.is_deleted = 0
         GROUP BY
             cr.chat_room_id,
             cr.name,
@@ -109,8 +110,14 @@
 
     <update id="updateChatRoomLastMessage" parameterType="map">
         UPDATE chat_room
-        SET last_chat_id = #{chatId}
-        WHERE chat_room_id = #{chatRoomId}
+            SET last_chat_id = #{chatId}
+            WHERE chat_room_id = #{chatRoomId}
     </update>
+
+    <delete id="deleteChatRoom" parameterType="long">
+        UPDATE chat_room
+            SET is_deleted = 1
+            WHERE chat_room_id = #{chatRoomId}
+    </delete>
 
 </mapper>
