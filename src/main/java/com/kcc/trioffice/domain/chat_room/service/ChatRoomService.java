@@ -138,11 +138,14 @@ public class ChatRoomService {
         //채팅 참여자 조회
         List<ParticipantEmployeeInfo> participantEmployeeInfos = participationEmployeeMapper.getParticipantEmployeeInfoByChatRoomId(chatMessage.getRoomId());
 
+        int unreadCount = 0;
+
         //채팅 상태 생성
         for (ParticipantEmployeeInfo participantEmployeeInfo : participantEmployeeInfos) {
             if (participantEmployeeInfo.getEmployeeId().equals(chatMessage.getSenderId()) || participantEmployeeInfo.getIsEntered()) {
                 chatStatusMapper.saveChatStatusRead(chatMessage.getRoomId(), chatMessage.getChatId(), participantEmployeeInfo.getEmployeeId(), chatMessage.getSenderId());
             } else {
+                unreadCount++;
                 chatStatusMapper.saveChatStatus(chatMessage.getRoomId(), chatMessage.getChatId(), participantEmployeeInfo.getEmployeeId(), chatMessage.getSenderId());
             }
         }
@@ -150,7 +153,7 @@ public class ChatRoomService {
         EmployeeInfo employeeInfo = employeeService.getEmployeeInfo(chatMessage.getSenderId());
 
 
-        ChatMessageInfo chatMessageInfo = ChatMessageInfo.of(employeeInfo, chatMessage, participantEmployeeInfos.size() - 1);
+        ChatMessageInfo chatMessageInfo = ChatMessageInfo.of(employeeInfo, chatMessage, unreadCount);
         return new ChatMessageAndParticipants(chatMessageInfo, participantEmployeeInfos);
     }
 
@@ -160,7 +163,7 @@ public class ChatRoomService {
 
 
     @Transactional
-    public DeleteChatRoom deleteChatRoom(Long chatRoomId, Long employeeId) {
+    public ChatMessageInfoAndPtptEmp deleteChatRoom(Long chatRoomId, Long employeeId) {
         participationEmployeeMapper.deleteParticipationEmployee(chatRoomId, employeeId);
 
         EmployeeInfo employeeInfo = employeeService.getEmployeeInfo(employeeId);
@@ -189,10 +192,7 @@ public class ChatRoomService {
 
         List<ParticipantEmployeeInfo> participantEmployeeInfos = participationEmployeeMapper.getParticipantEmployeeInfoByChatRoomId(chatRoomId);
 
-        return new DeleteChatRoom(participantEmployeeInfos, chatMessageInfo);
+        return new ChatMessageInfoAndPtptEmp(participantEmployeeInfos, chatMessageInfo);
     }
-
-
-
 
 }

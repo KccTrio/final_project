@@ -62,7 +62,13 @@
             FROM chat_status cs
             WHERE cs.chat_id = #{chatId}
               AND cs.is_deleted = 0
-              AND cs.employee_id = #{employeeId}
+    </select>
 
+    <select id="getUnreadMessageId" resultType="long">
+        SELECT chat_id
+            FROM chat_status
+            WHERE chat_room_id = #{chatRoomId}
+                AND employee_id = #{employeeId}
+                AND is_read = 0
     </select>
 </mapper>

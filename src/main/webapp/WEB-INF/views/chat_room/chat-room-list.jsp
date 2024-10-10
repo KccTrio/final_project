@@ -95,7 +95,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row w-100 d-flex justify-content-between">
+                            <div class="row w-100 d-flex justify-content-between align-items-end">
                                 <div class="col-9 no-padding-left">
                                     <div class="chat-room-last-message sub-text">
                                         <p>${chatRoom.lastMessage}</p>
@@ -140,7 +140,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row w-100 d-flex justify-content-between">
+                        <div class="row w-100 d-flex justify-content-between align-items-end">
                             <div class="col-9 no-padding-left">
                                 <div class="chat-room-last-message sub-text">
                                     <p>dd </p>

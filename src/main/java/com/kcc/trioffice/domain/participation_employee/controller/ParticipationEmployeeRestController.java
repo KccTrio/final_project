@@ -1,6 +1,7 @@
 package com.kcc.trioffice.domain.participation_employee.controller;
 
 import com.kcc.trioffice.domain.chat_room.dto.response.ChatMessageInfo;
+import com.kcc.trioffice.domain.chat_room.dto.response.ChatMessageInfoAndPtptEmp;
 import com.kcc.trioffice.domain.employee.dto.response.SearchEmployee;
 import com.kcc.trioffice.domain.participation_employee.dto.request.AddParticipants;
 import com.kcc.trioffice.domain.participation_employee.service.ParticipationEmployeeService;
@@ -35,9 +36,16 @@ public class ParticipationEmployeeRestController {
     public void addChatRoomEmployee(@PathVariable Long chatRoomId,
                                     @RequestBody AddParticipants addParticipants,
                                     @AuthenticationPrincipal PrincipalDetail principalDetail) {
-        ChatMessageInfo chatMessageInfo = participationEmployeeService
+        ChatMessageInfoAndPtptEmp chatMessageInfoAndPtptEmp = participationEmployeeService
                 .addParticipants(chatRoomId, addParticipants.getEmployees(), principalDetail.getEmployeeId());
-        simpMessagingTemplate.convertAndSend("/sub/chat/room/" + chatRoomId, chatMessageInfo);
+
+        chatMessageInfoAndPtptEmp.getParticipantEmployeeInfos().forEach(participantEmployeeInfo -> {
+            simpMessagingTemplate
+                    .convertAndSend("/sub/chatrooms/employees/" + participantEmployeeInfo.getEmployeeId()
+                            , chatMessageInfoAndPtptEmp.getChatMessageInfo());
+        });
+
+        simpMessagingTemplate.convertAndSend("/sub/chat/room/" + chatRoomId, chatMessageInfoAndPtptEmp.getChatMessageInfo());
     }
 
 }

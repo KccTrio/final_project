@@ -3,7 +3,9 @@ package com.kcc.trioffice.domain.chat_status.mapper;
 import com.kcc.trioffice.domain.chat_status.dto.response.ChatStatusInfo;
 import com.kcc.trioffice.domain.chat_status.dto.response.EmoticonStatus;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 @Mapper
@@ -15,4 +17,5 @@ public interface ChatStatusMapper {
     int updateEmoticon(Long chatId, Long employeeId, Long emoticonType, boolean isEmoticon);
     int updateChatStatusRead(Long chatRoomId, Long employeeId);
     Optional<EmoticonStatus> getEmoticonCount(Long chatId, Long employeeId);
+    List<Long> getUnreadMessageId(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId);
 }

@@ -29,12 +29,15 @@ $(document).ready(function() {
     });
 
     function connectChatRoomListSocket() {
+        if (stompClient && stompClient.connected) {
+            console.log("이미 STOMP 클라이언트가 연결되어 있습니다.");
+            return;
+        }
         var sockJs = new SockJS("/stomp/connection");
         stompClient = Stomp.over(sockJs);
 
         stompClient.connect({}, function() {
             console.log("WebSocket 연결 성공");
-
             subscribeToChatRoomList();
         });
     }
@@ -92,14 +95,13 @@ $(document).ready(function() {
                         </div>
                         
                     </div>
-                    <div class="row w-100 d-flex justify-content-between">
+                    <div class="row w-100 d-flex justify-content-between align-items-end">
                         <div class="col-9 no-padding-left">
                             <div class="chat-room-last-message sub-text">
                                 <p>${chatRoom.lastMessage}</p>
                             </div>
                         </div>`
                             + addUnReadMessage(chatRoom) + `
-                        <!-- 필요 시 안 읽은 메시지 수 추가 -->
                     </div>
                 </div>
             </div>`;
@@ -153,6 +155,10 @@ $(document).ready(function() {
 
         connectWebSocket(chatRoomId);
         loadChatRoom(chatRoomId);
+
+        // 채팅방 아이템 클릭 시 클릭한 .chat-room-item의 unreadMessageCount 초기화
+        $(this).find('.unread-count-box').remove();
+
     });
 
     // 메시지 전송 이벤트
@@ -348,6 +354,7 @@ $(document).ready(function() {
 
     function createEmoticonBoxHtml(message) {
         var emoticons = createEmoticonButton(message);
+        console.log(emoticons);
         if (emoticons) {
             return `
             <div class="row d-flex align-items-start emoticon-boxes">
@@ -413,18 +420,29 @@ $(document).ready(function() {
     }
 
     function connectWebSocket(chatRoomId) {
-        if (currentSubscription) {
-            currentSubscription.unsubscribe();
+        if (!stompClient || !stompClient.connected) {
+            console.error("STOMP 클라이언트가 연결되어 있지 않습니다.");
+            return;
         }
 
-        console.log("채팅 웹 소켓 연결 성공");
-        subscribeToChatRoom(chatRoomId);
+        // 이전 구독 해제
+        if (currentSubscription) {
+            try {
+                currentSubscription.unsubscribe();
+                console.log("이전 채팅방 구독을 해제했습니다.");
+            } catch (e) {
+                console.error("구독 해제 중 오류 발생:", e);
+            }
+        }
 
+        subscribeToChatRoom(chatRoomId);
+        console.log("채팅방에 연결되었습니다:", chatRoomId);
         currentChatRoomId = chatRoomId;
     }
 
     function subscribeToChatRoom(chatRoomId) {
         currentSubscription = stompClient.subscribe("/sub/chat/room/" + chatRoomId, function(message) {
+            console.log(message.body);
             var receivedMessage = JSON.parse(message.body);
             if (receivedMessage.chatType === "CHAT") {
                 // 채팅 메시지 처리
@@ -440,6 +458,24 @@ $(document).ready(function() {
                 // 채팅방 나간 참여자 처리
                 $('.emp-count').text(parseInt($('.emp-count').text()) - 1);
                 addEnterMessage(receivedMessage);
+            } else if (receivedMessage.chatType === "READ") {
+                // 읽음 처리
+                console.log('읽음 처리:', receivedMessage);
+                readMessage(receivedMessage);
+            }
+        });
+    }
+
+    function readMessage(receivedMessage) {
+        receivedMessage.unreadMessageIds.forEach(function(messageId) {
+            // unread-count-box 값 가져와서 -1 했을 때 0이되면 삭제
+            // unread-count-box 값 가져와서 -1 했을 때 0이 아니면 -1
+            var unreadCountBox = $('.chat .row[data-message-id="' + messageId + '"] .unread-count-box');
+            var unreadCount = parseInt(unreadCountBox.text());
+            if (unreadCount - 1 === 0) {
+                unreadCountBox.remove();
+            } else {
+                unreadCountBox.html(`<span class="unread-count">${unreadCount - 1}</span>`);
             }
         });
     }
@@ -473,13 +509,15 @@ $(document).ready(function() {
     function updateEmoticon(emoticonMessage) {
 
         $.ajax({
-            url: '/api/chatrooms/' + currentChatRoomId +'/chats/' + currentMessageId + '/emoticon',
+            url: '/api/chatrooms/' + currentChatRoomId +'/chats/' + emoticonMessage.chatId + '/emoticon',
             method: 'GET',
             dataType: 'json',
             success: function(response) {
+                console.log(response);
                 var messageRow = $('.chat .row[data-message-id="' + emoticonMessage.chatId + '"]');
 
                 if (messageRow.length === 0) {
+                    console.error('메시지를 찾을 수 없습니다:', emoticonMessage.chatId);
                     return;
                 }
 
@@ -487,7 +525,6 @@ $(document).ready(function() {
                 messageRow.find('.emoticon-boxes').remove();
 
                 console.log(emoticonMessage.chatterId);
-                console.log(currentEmployeeId);
 
                 // 새로운 이모티콘 박스 생성
                 let emoticonHtml;
@@ -496,6 +533,8 @@ $(document).ready(function() {
                 } else {
                     emoticonHtml = createEmoticonBoxHtml(response);
                 }
+
+                console.log(emoticonHtml);
 
                 // 새로운 이모티콘 박스 DOM에 추가
                 messageRow.find('.col-10').append(emoticonHtml);
@@ -924,7 +963,38 @@ $(document).ready(function() {
         }
     });
 
+    //이모티콘 버튼 클릭 이벤트
+    $('.chat').on('click', '.emoticon-button', function() {
+        currentMessageId = $(this).closest('.row[data-message-id]').data('message-id');
 
+        console.log('이모티콘 버튼 클릭 이벤트 발생');
+        var emoticonType = $(this).data('emoticon-type');
+
+        // active-button 클래스 추가
+        if ($(this).hasClass('active-button')) {
+            $(this).removeClass('active-button');
+        } else {
+            $(this).addClass('active-button');
+        }
+
+        if (stompClient && stompClient.connected) {
+            console.log(emoticonType);
+            console.log()
+            $.ajax({
+                url: '/api/chatrooms/' + currentChatRoomId +'/chats/' + currentMessageId + '/emoticon',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({ emoticonType: emoticonType }),
+                success: function(response) {
+                },
+                error: function(xhr, status, error) {
+                    console.error('이모티콘 추가에 실패했습니다:', error);
+                }
+            });
+        } else {
+            console.error('WebSocket이 연결되어 있지 않습니다.');
+        }
+    });
 
     // 채팅방 목록에서 첫 번째 채팅방 선택
     // var firstChatRoom = $('.chat-room-item').first();
