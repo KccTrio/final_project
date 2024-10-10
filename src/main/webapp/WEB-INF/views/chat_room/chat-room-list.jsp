@@ -179,7 +179,7 @@
             </div>
             <div class="col-4">
                 <div class="chat-room-name">
-                    <p class="group-name">우영두두두두둗두두두두두두</p>
+                    <p class="group-name">우영두</p>
                 </div>
             </div>
             <div
@@ -411,6 +411,7 @@
     <i class="fa-solid fa-face-sad-cry" data-emoticon-type="SAD"></i>
 </div>
 <%@ include file="/WEB-INF/views/chat_room/modal/participant-emp-modal.jsp" %>
+<%@ include file="/WEB-INF/views/chat_room/modal/chat-room-dropdown.jsp" %>
 
 </body>
 

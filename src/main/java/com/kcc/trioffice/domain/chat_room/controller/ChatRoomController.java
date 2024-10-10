@@ -6,6 +6,7 @@ import com.kcc.trioffice.domain.chat_room.service.ChatRoomService;
 import com.kcc.trioffice.global.auth.PrincipalDetail;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,6 +22,8 @@ import java.util.List;
 public class ChatRoomController {
 
     private final ChatRoomService chatRoomService;
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
 
     @GetMapping("/chatrooms")
     public String chatRoomList(Model model,
@@ -40,6 +43,12 @@ public class ChatRoomController {
     public String saveChatRoom(@ModelAttribute ChatRoomCreate chatRoomCreate,
                                @AuthenticationPrincipal PrincipalDetail principalDetail) {
         chatRoomService.createChatRoom(chatRoomCreate, principalDetail.getEmployeeId());
+
+        for (Long employId : chatRoomCreate.getEmployees()) {
+            simpMessagingTemplate
+                    .convertAndSend("/sub/chatrooms/employees/" + employId
+                            , chatRoomCreate);
+        }
 
         return "redirect:/chatrooms";
     }

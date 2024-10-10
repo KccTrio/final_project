@@ -83,8 +83,10 @@
             employee e
                 INNER JOIN participation_employee pe
                     ON e.employee_id = pe.employee_id
+                    AND pe.is_deleted = 0
         WHERE
             pe.chat_room_id = #{chatRoomId}
+            AND e.is_deleted = 0
         ORDER BY
             e.name
     </select>
@@ -98,14 +100,23 @@
                 (
                 SELECT
                     employee_id
-                FROM
-                    participation_employee
-                WHERE
-                    chat_room_id = #{chatRoomId}
-                        AND is_deleted = 0
+                    FROM
+                        participation_employee
+                    WHERE
+                        chat_room_id = #{chatRoomId}
+                            AND is_deleted = 0
                 )
         AND e.is_deleted = 0
         ORDER BY e.name
     </select>
+
+    <update id="deleteParticipationEmployee" parameterType="map">
+        UPDATE participation_employee
+            SET is_deleted = 1
+                , modifier = #{employeeId}
+                , modified_dt = SYSDATE
+            WHERE chat_room_id = #{chatRoomId}
+                AND employee_id = #{employeeId}
+    </update>
 
 </mapper>

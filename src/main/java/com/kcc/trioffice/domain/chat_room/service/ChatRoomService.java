@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -140,7 +141,7 @@ public class ChatRoomService {
         //채팅 상태 생성
         for (ParticipantEmployeeInfo participantEmployeeInfo : participantEmployeeInfos) {
             if (participantEmployeeInfo.getEmployeeId().equals(chatMessage.getSenderId()) || participantEmployeeInfo.getIsEntered()) {
-                chatStatusMapper.saveChatStatusRead(chatMessage.getRoomId(), chatMessage.getChatId(), chatMessage.getSenderId(), chatMessage.getSenderId());
+                chatStatusMapper.saveChatStatusRead(chatMessage.getRoomId(), chatMessage.getChatId(), participantEmployeeInfo.getEmployeeId(), chatMessage.getSenderId());
             } else {
                 chatStatusMapper.saveChatStatus(chatMessage.getRoomId(), chatMessage.getChatId(), participantEmployeeInfo.getEmployeeId(), chatMessage.getSenderId());
             }
@@ -157,6 +158,39 @@ public class ChatRoomService {
         return participationEmployeeMapper.getEmployeeInfoByChatRoomId(chatRoomId);
     }
 
+
+    @Transactional
+    public DeleteChatRoom deleteChatRoom(Long chatRoomId, Long employeeId) {
+        participationEmployeeMapper.deleteParticipationEmployee(chatRoomId, employeeId);
+
+        EmployeeInfo employeeInfo = employeeService.getEmployeeInfo(employeeId);
+        String message = employeeInfo.getName() + "님이 채팅방을 나갔습니다.";
+
+        ChatMessage chatMessage = ChatMessage.builder()
+                .roomId(chatRoomId)
+                .senderId(employeeId)
+                .message(message)
+                .chatType(ChatType.QUIT.getValue())
+                .build();
+
+        chatMapper.saveChatMessage(chatMessage);
+        chatRoomMapper.updateChatRoomLastMessage(chatMessage.getRoomId(), chatMessage.getChatId());
+
+        ChatMessageInfo chatMessageInfo = ChatMessageInfo.builder()
+                .chatTime(LocalDateTime.now())
+                .chatContents(message)
+                .chatId(chatMessage.getChatId())
+                .senderName(employeeInfo.getName())
+                .senderId(employeeId)
+                .chatType(ChatType.QUIT.toString())
+                .roomId(chatRoomId)
+                .build();
+
+
+        List<ParticipantEmployeeInfo> participantEmployeeInfos = participationEmployeeMapper.getParticipantEmployeeInfoByChatRoomId(chatRoomId);
+
+        return new DeleteChatRoom(participantEmployeeInfos, chatMessageInfo);
+    }
 
 
 

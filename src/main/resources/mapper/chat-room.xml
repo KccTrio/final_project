@@ -29,13 +29,18 @@
             ) AS participantCount
         FROM
             chat_room cr
-                INNER JOIN participation_employee pe ON cr.chat_room_id = pe.chat_room_id
-                LEFT JOIN chat cm ON cr.last_chat_id = cm.chat_id
-                LEFT JOIN chat_status cs ON cr.chat_room_id = cs.chat_room_id
+                INNER JOIN participation_employee pe
+                    ON cr.chat_room_id = pe.chat_room_id
+                       AND pe.is_deleted = 0
+                LEFT JOIN chat cm
+                    ON cr.last_chat_id = cm.chat_id
+                LEFT JOIN chat_status cs
+                    ON cr.chat_room_id = cs.chat_room_id
                 AND cs.employee_id = #{employeeId}
                 AND cs.is_read = 0
         WHERE
             pe.employee_id = #{employeeId}
+            AND cr.is_deleted = 0
         GROUP BY
             cr.chat_room_id,
             cr.name,
@@ -55,12 +60,14 @@
                 SELECT COUNT(*)
                 FROM participation_employee pe2
                 WHERE pe2.chat_room_id = cr.chat_room_id
+                    AND pe2.is_deleted = 0
             ) AS participantCount
-        FROM
-            chat_room cr
-                JOIN participation_employee pe ON cr.chat_room_id = pe.chat_room_id
-        WHERE
-            cr.chat_room_id = #{chatRoomId} and pe.employee_id = #{employeeId}
+            FROM chat_room cr
+                JOIN participation_employee pe
+                    ON cr.chat_room_id = pe.chat_room_id
+                       AND pe.is_deleted = 0
+            WHERE
+                cr.chat_room_id = #{chatRoomId} and pe.employee_id = #{employeeId}
     </select>
 
     <select id="getChatInfoByPage" parameterType="map" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ChatInfo">
@@ -95,8 +102,14 @@
             JOIN employee e
                 ON c.writer = e.employee_id
             LEFT JOIN chat_status cs
-                ON c.chat_id = cs.chat_id and cs.is_deleted = 0
-            WHERE c.chatroom_id = #{chatRoomId} and c.is_deleted = 0 and e.is_deleted = 0
+                ON c.chat_id = cs.chat_id AND cs.is_deleted = 0
+            LEFT JOIN participation_employee pe
+                ON c.chatroom_id = pe.chat_room_id
+                    AND pe.is_deleted = 0
+            WHERE c.chatroom_id = #{chatRoomId}
+                AND c.is_deleted = 0
+                AND e.is_deleted = 0
+                AND pe.write_dt <= c.write_dt
             GROUP BY c.chat_id, c.contents, c.chat_type, c.writer, c.write_dt, e.name, e.profile_url
             ORDER BY c.write_dt DESC) inner_query
                 WHERE ROWNUM <= #{offset} + #{limit}
@@ -109,8 +122,14 @@
 
     <update id="updateChatRoomLastMessage" parameterType="map">
         UPDATE chat_room
-        SET last_chat_id = #{chatId}
-        WHERE chat_room_id = #{chatRoomId}
+            SET last_chat_id = #{chatId}
+            WHERE chat_room_id = #{chatRoomId}
     </update>
+
+    <delete id="deleteChatRoom" parameterType="long">
+        UPDATE chat_room
+            SET is_deleted = 1
+            WHERE chat_room_id = #{chatRoomId}
+    </delete>
 
 </mapper>

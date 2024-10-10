@@ -4,12 +4,14 @@ import com.kcc.trioffice.domain.chat_room.dto.request.ChatMessage;
 import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.global.enums.ChatType;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
+@Builder
 public class ChatMessageInfo {
     private Long roomId;
     private Long chatId;
