@@ -212,6 +212,7 @@ $(document).ready(function() {
     function updateChatRoomInfo(data) {
         $('.contents .group-name').text(data.chatRoomName);
         $('.chat-room-profile-image').attr('src', data.chatRoomProfileImageUrl);
+        console.log(data.participantCount)
         $('.emp-count').text(data.participantCount);
     }
 
@@ -256,17 +257,21 @@ $(document).ready(function() {
         previousSenderId = message.senderId;
         var chatRow;
 
+        console.log(message);
+
         if (message.chatType === "ENTER") {
-            chatRow = createEnterMessage(message);
+            console.log('ENTER 메시지');
+            chatRow = createEnterAndQuitMessage(message);
         } else if (message.chatType === "CHAT") {
             if (message.senderId === currentEmployeeId) {
                 chatRow = createMyMessageHtml(message);
             } else {
                 chatRow = createOtherMessageHtml(message, isSameSender);
             }
+        } else if (message.chatType === "QUIT") {
+            //count 감소
+            chatRow = createEnterAndQuitMessage(message);
         }
-
-
 
         return chatRow;
     }
@@ -375,14 +380,14 @@ $(document).ready(function() {
         return count > 0 ? `<span class="unread-count">${count}</span>` : '';
     }
 
-    function createEnterMessage(message) {
+    function createEnterAndQuitMessage(message) {
         return `
         <div class="row chat-one">
                 <div class="col-10">
                     <div class="row">
                         <div class="col-1 d-flex justify-content-end">
                             <div class="add-chat-profile">
-                                <i class="fa-solid fa-user-plus"></i>
+                            ` + getIconByEnterAndQuit(message) + `
                             </div>
                         </div>
                         <div class="col-9">
@@ -397,6 +402,14 @@ $(document).ready(function() {
                     </div>
                 </div>
             </div>`;
+    }
+
+    function getIconByEnterAndQuit(message) {
+        if (message.chatType === "ENTER") {
+            return `<i class="fa-solid fa-user-plus"></i>`;
+        } else if (message.chatType === "QUIT") {
+            return `<i class="fa-solid fa-user-minus"></i>`;
+        }
     }
 
     function connectWebSocket(chatRoomId) {
@@ -421,6 +434,11 @@ $(document).ready(function() {
                 updateEmoticon(receivedMessage);
             } else if (receivedMessage.chatType === "ENTER") {
                 // 채팅방 참여자 처리
+                $('.emp-count').text(parseInt($('.emp-count').text()) + 1);
+                addEnterMessage(receivedMessage);
+            } else if (receivedMessage.chatType === "QUIT") {
+                // 채팅방 나간 참여자 처리
+                $('.emp-count').text(parseInt($('.emp-count').text()) - 1);
                 addEnterMessage(receivedMessage);
             }
         });

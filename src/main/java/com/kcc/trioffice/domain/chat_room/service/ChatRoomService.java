@@ -161,8 +161,8 @@ public class ChatRoomService {
 
     @Transactional
     public DeleteChatRoom deleteChatRoom(Long chatRoomId, Long employeeId) {
-        chatRoomMapper.deleteChatRoom(chatRoomId);
-        //TODO: 채팅방 삭제되면 QUIT 메세지 전송 및 접속중인 채팅방 참여자에게 count 감소
+        participationEmployeeMapper.deleteParticipationEmployee(chatRoomId, employeeId);
+
         EmployeeInfo employeeInfo = employeeService.getEmployeeInfo(employeeId);
         String message = employeeInfo.getName() + "님이 채팅방을 나갔습니다.";
 
@@ -170,7 +170,7 @@ public class ChatRoomService {
                 .roomId(chatRoomId)
                 .senderId(employeeId)
                 .message(message)
-                .chatType(ChatType.EXIT.getValue())
+                .chatType(ChatType.QUIT.getValue())
                 .build();
 
         chatMapper.saveChatMessage(chatMessage);
@@ -182,7 +182,7 @@ public class ChatRoomService {
                 .chatId(chatMessage.getChatId())
                 .senderName(employeeInfo.getName())
                 .senderId(employeeId)
-                .chatType(ChatType.EXIT.toString())
+                .chatType(ChatType.QUIT.toString())
                 .roomId(chatRoomId)
                 .build();
 
