@@ -103,9 +103,13 @@
                 ON c.writer = e.employee_id
             LEFT JOIN chat_status cs
                 ON c.chat_id = cs.chat_id AND cs.is_deleted = 0
+            LEFT JOIN participation_employee pe
+                ON c.chatroom_id = pe.chat_room_id
+                    AND pe.is_deleted = 0
             WHERE c.chatroom_id = #{chatRoomId}
                 AND c.is_deleted = 0
                 AND e.is_deleted = 0
+                AND pe.write_dt <= c.write_dt
             GROUP BY c.chat_id, c.contents, c.chat_type, c.writer, c.write_dt, e.name, e.profile_url
             ORDER BY c.write_dt DESC) inner_query
                 WHERE ROWNUM <= #{offset} + #{limit}
