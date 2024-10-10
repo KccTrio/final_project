@@ -13,9 +13,10 @@
              , e.position
             FROM employee e
             LEFT JOIN department d
-                ON e.dept_id = d.dept_id
+                ON e.dept_id = d.dept_id AND d.is_deleted = 0
             WHERE e.company_id = #{companyId}
                 AND  e.employee_id != #{employeeId}
+                AND e.is_deleted = 0
             ORDER BY
                 e.name
     </select>
@@ -45,6 +46,7 @@
                ,is_deleted as isDeleted
             FROM employee e
             WHERE employee_id = #{employee_id}
+                AND is_deleted = 0
     </select>
 
     <select id="getEmployeeInfoList" parameterType="java.util.List"
@@ -55,6 +57,7 @@
             <foreach item="id" collection="list" open="(" separator="," close=")">
                 #{id}
             </foreach>
+
     </select>
 
     <select id="getEmployeeInfoFindById" parameterType="String"
@@ -88,18 +91,21 @@
         SELECT email
             FROM employee
             WHERE email = #{email}
+                AND is_deleted = 0
     </select>
 
     <select id="getExternalEmail" parameterType="String" resultType="String" >
         SELECT external_email
             FROM employee
             WHERE email = #{email}
+                AND is_deleted = 0
     </select>
 
     <update id="temporaryPassword" parameterType="map" >
         UPDATE employee
             SET password = #{incodingPassword}
             WHERE email = #{email}
+                AND is_deleted = 0
     </update>
 
     <insert id="saveEmployee">
