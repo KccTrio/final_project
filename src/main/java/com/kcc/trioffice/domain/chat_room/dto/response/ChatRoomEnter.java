@@ -7,8 +7,10 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class DeleteChatRoom {
+public class ChatRoomEnter {
 
-    private List<ParticipantEmployeeInfo> participantEmployeeInfos;
-    private ChatMessageInfo chatMessageInfo;
+    private Long roomId;
+    private String chatType;
+    private Long senderId;
+    private List<Long> unreadMessageIds;
 }

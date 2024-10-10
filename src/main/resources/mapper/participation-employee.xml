@@ -119,4 +119,21 @@
                 AND employee_id = #{employeeId}
     </update>
 
+    <update id="updateIsEntered" parameterType="map">
+        UPDATE participation_employee
+            SET is_entered = #{isEntered}
+                , modifier = #{employeeId}
+                , modified_dt = SYSDATE
+            WHERE chat_room_id = #{chatRoomId}
+                AND employee_id = #{employeeId}
+    </update>
+
+    <update id="disconnectChatRoom" parameterType="map">
+        UPDATE participation_employee
+            SET is_entered = 0
+                , modifier = #{employeeId}
+                , modified_dt = SYSDATE
+            WHERE is_entered = 1
+    </update>
+
 </mapper>
