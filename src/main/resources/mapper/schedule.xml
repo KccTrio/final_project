@@ -19,8 +19,8 @@
                                                   where email = #{employeeId}
                                                   )
                       )
-      and started_dt <![CDATA[>]]> #{startDate}
-      and ended_dt <![CDATA[<=]]> #{endDate}
+      and started_dt <![CDATA[>]]> ADD_MONTHS(TO_DATE(#{startDate}, 'YYYY-MM-DD'), -1)
+      and ended_dt <![CDATA[<=]]> ADD_MONTHS(TO_DATE(#{endDate}, 'YYYY-MM-DD'), 1)
   </select>
 
 </mapper>
