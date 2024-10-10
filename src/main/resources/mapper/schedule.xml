@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kcc.trioffice.domain.schedule.mapper.ScheduleMapper">
+
+
+  <select id="getEmployeeSchedules" parameterType="map" resultType="com.kcc.trioffice.domain.schedule.dto.EmployeeSchedules">
+  select name
+      ,started_dt as startedDt
+      ,ended_dt as endedDt
+  from schedule
+  where schedule_id IN (SELECT i.SCHEDULE_INVITE_ID AS scheduleInviteId
+                      from schedule_invite i
+                      where is_participated = 2 and employee_id = (
+                                                  select employee_id
+                                                  from employee
+                                                  where email = #{employeeId}
+                                                  )
+                      )
+      and started_dt <![CDATA[>]]> #{startDate}
+      and ended_dt <![CDATA[<=]]> #{endDate}
+  </select>
+
+</mapper>
