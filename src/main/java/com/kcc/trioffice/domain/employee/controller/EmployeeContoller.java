@@ -27,4 +27,9 @@ public class EmployeeContoller {
     return "user/find-password-done";
   }
 
+  @GetMapping("/")
+  public String defaultPage() {
+    return "redirect:/login";
+  }
+
 }
