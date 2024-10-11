@@ -59,12 +59,19 @@ pageEncoding="UTF-8" %>
     <!-- sweet alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <!-- mobi scroll -->
+    <!-- mobiscroll -->
     <link
       href="<%= request.getContextPath() %>/static/component/mobiscroll/mobiscroll.javascript.min.css"
       rel="stylesheet"
     />
     <script src="<%= request.getContextPath() %>/static/component/mobiscroll/mobiscroll.javascript.min.js"></script>
+
+    <!-- Quill  -->
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
     <style>
       /* 적용방법 */

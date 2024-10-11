@@ -43,24 +43,72 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           <div id="title-add-sche">일정 등록</div>
           <form id="schedule-form">
             <div class="add-sche-text">
-              <label for="schedule-name">일정 이름</label>
+              <div id="add-schedule-name">일정명</div>
               <input
                 type="text"
                 id="schedule-name"
                 name="schedule-name"
+                placeholder="일정명을 입력해주세요."
                 required
               />
             </div>
 
-            <div class="add-sche-text">
-              <label for="start-date">시작 날짜:</label>
-              <input type="text" id="start-date" name="start-date" required />
+            <div class="add-sche-date">
+              <label for="start-date">시작일:</label>
+              <input
+                type="text"
+                placeholder="날짜를 선택해주세요."
+                id="start-date"
+                name="start-date"
+                required
+              />
 
-              <label for="end-date">끝 날짜:</label>
-              <input type="text" id="end-date" name="end-date" required />
+              <label for="end-date" id="end-date-label">종료일:</label>
+              <input
+                type="text"
+                placeholder="날짜를 선택해주세요."
+                id="end-date"
+                name="end-date"
+                required
+              />
             </div>
 
-            <button type="submit">일정 추가</button>
+            <div id="invite">
+              <div id="invite-title">
+                <div id="title-text">인원 초대</div>
+                <input type="text" />
+              </div>
+              <div class="checkbox-group">
+                <label>
+                  <input
+                    type="checkbox"
+                    id="email-alram"
+                    name="email-alram"
+                    class="checkbox"
+                  />
+                  이메일 알림
+                </label>
+
+                <label id="messenger-alram-label">
+                  <input
+                    type="checkbox"
+                    id="messenger-alram"
+                    name="messenger-alram"
+                    class="checkbox"
+                  />
+                  메신저 알림
+                </label>
+              </div>
+            </div>
+
+            <div id="wyswyg">
+              <div id="schedule-contents-title">일정내용</div>
+              <div id="schedule-contents"></div>
+            </div>
+            <div id="add-schedule-modal-buttons">
+              <button type="submit" id="submit-add-schedule">일정 추가</button>
+              <button id="close-button">닫기</button>
+            </div>
           </form>
           <span id="close-button"></span>
         </div>

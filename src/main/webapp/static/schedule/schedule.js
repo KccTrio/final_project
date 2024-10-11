@@ -226,14 +226,59 @@ mobiscroll.datepicker("#start-date", {
   timeFormat: "HH:mm", // 시간 형식
   stepMinute: 5, // 분 단위 증가폭
   returnFormat: "iso8601", // ISO 8601 형식 반환
+  onChange: function (event) {
+    if (event.value) {
+      validateDates();
+    }
+  },
 });
 
 // 끝 날짜와 시간 선택기
-mobiscroll.datepicker("#end-date", {
+var endDatePicker = mobiscroll.datepicker("#end-date", {
   controls: ["datetime"],
   display: "bubble",
   dateFormat: "YYYY-MM-DD",
   timeFormat: "HH:mm",
   stepMinute: 5,
   returnFormat: "iso8601",
+  onChange: function (event) {
+    console.log("종료값을 설정하였습니다");
+    if (event.value) {
+      validateDates();
+    }
+  },
+});
+
+function validateDates() {
+  const startDateInput = document.getElementById("start-date");
+  const endDateInput = document.getElementById("end-date");
+
+  const startDate = new Date(startDateInput.value);
+  const endDate = new Date(endDateInput.value);
+
+  if (endDate < startDate) {
+    endDateInput.value = ""; // 끝 날짜 초기화
+    mobiscroll.getInst(endDateInput).setVal(null); // Mobiscroll에서 끝 날짜 필드 초기화
+    endDatePicker.close();
+
+    Swal.fire({
+      text: "끝 날짜는 시작 날짜보다 커야 합니다.",
+    });
+  }
+}
+
+var quill = new Quill("#schedule-contents", {
+  theme: "snow", // 또는 'bubble'
+  modules: {
+    toolbar: [
+      [{ header: [1, 2, false] }],
+      ["bold", "italic", "underline"],
+      ["link", "image"],
+      ["clean"], // remove formatting button
+    ],
+  },
+  // 에디터의 크기 설정
+  style: {
+    width: "100%", // 원하는 너비
+  },
 });
