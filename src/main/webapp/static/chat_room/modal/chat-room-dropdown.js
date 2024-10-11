@@ -61,8 +61,9 @@ $(document).ready(function(){
             text: "되돌릴 수 없습니다!",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
+            confirmButtonText: "삭제",
+            cancelButtonText: "취소",
             cancelButtonColor: "#d33",
-            confirmButtonText: "Delete"
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({
