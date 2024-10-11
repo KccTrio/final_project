@@ -18,12 +18,12 @@ $(document).ready(function() {
         url: '/api/current-employee',
         method: 'GET',
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             currentEmployeeId = data.employeeId;
 
             connectChatRoomListSocket();
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error('유저 정보를 가져오는 데 실패했습니다:', error);
         }
     });
@@ -36,14 +36,14 @@ $(document).ready(function() {
         var sockJs = new SockJS("/stomp/connection");
         stompClient = Stomp.over(sockJs);
 
-        stompClient.connect({}, function() {
+        stompClient.connect({}, function () {
             console.log("WebSocket 연결 성공");
             subscribeToChatRoomList();
         });
     }
 
     function subscribeToChatRoomList() {
-        stompClient.subscribe("/sub/chatrooms/employees/" + currentEmployeeId, function(message) {
+        stompClient.subscribe("/sub/chatrooms/employees/" + currentEmployeeId, function (message) {
             var receivedMessage = JSON.parse(message.body);
             handleChatRoomListUpdate(receivedMessage);
         });
@@ -56,12 +56,12 @@ $(document).ready(function() {
             url: '/api/chatrooms',
             method: 'GET',
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
                 updateChatRoomList(data);
                 updateDateFormat();
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('채팅방 정보를 가져오는 데 실패했습니다:', error);
             }
         });
@@ -72,7 +72,7 @@ $(document).ready(function() {
         var chatRoomsList = $('.chat-rooms-list');
         chatRoomsList.empty();
 
-        chatRooms.forEach(function(chatRoom) {
+        chatRooms.forEach(function (chatRoom) {
             var chatRoomItem = `
             <div class="row chat-room chat-room-item justify-content-between" data-chat-room-id="${chatRoom.chatRoomId}">
                 <div class="col-3">
@@ -101,7 +101,7 @@ $(document).ready(function() {
                                 <p>${chatRoom.lastMessage}</p>
                             </div>
                         </div>`
-                            + addUnReadMessage(chatRoom) + `
+                + addUnReadMessage(chatRoom) + `
                     </div>
                 </div>
             </div>`;
@@ -134,7 +134,7 @@ $(document).ready(function() {
         console.log(chatRoom.chatRoomId);
         console.log(currentChatRoomId);
         if (chatRoom.chatRoomId == currentChatRoomId) {
-            $('.chat-room-item').each(function() {
+            $('.chat-room-item').each(function () {
                 if ($(this).data('chat-room-id') == chatRoom.chatRoomId) {
                     $(this).addClass('active');
                 } else {
@@ -145,13 +145,13 @@ $(document).ready(function() {
     }
 
     // 채팅방 아이템 클릭 이벤트 등록
-    $('.chat-rooms-list').on('click', '.chat-room-item', function() {
+    $('.chat-rooms-list').on('click', '.chat-room-item', function () {
         console.log('채팅방 클릭 이벤트 발생');
         var chatRoomId = $(this).data('chat-room-id');
 
         $('.chat-room-item').removeClass('active');
         $(this).addClass('active');
-        
+
 
         connectWebSocket(chatRoomId);
         loadChatRoom(chatRoomId);
@@ -163,7 +163,7 @@ $(document).ready(function() {
 
     // 메시지 전송 이벤트
     $('#send').on('click', sendMessage);
-    $('.chat-input').keypress(function(event) {
+    $('.chat-input').keypress(function (event) {
         if (event.keyCode === 13) {
             event.preventDefault();
             sendMessage();
@@ -197,8 +197,8 @@ $(document).ready(function() {
             url: '/api/chatrooms/' + chatRoomId,
             method: 'GET',
             dataType: 'json',
-            data: { offset: offset, limit: limit },
-            success: function(data) {
+            data: {offset: offset, limit: limit},
+            success: function (data) {
                 if (data.chatInfoList.length < limit) {
                     hasMoreData = false; // 모든 데이터 로드 완료
                 }
@@ -209,7 +209,7 @@ $(document).ready(function() {
                 offset += data.chatInfoList.length; // 오프셋 업데이트
                 loading = false;
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('채팅방 데이터를 가져오는 데 실패했습니다:', error);
             }
         });
@@ -227,7 +227,7 @@ $(document).ready(function() {
         chatContainer.empty();
         previousSenderId = null;
 
-        messages.reverse().forEach(function(message) {
+        messages.reverse().forEach(function (message) {
             var chatRow = generateMessageHtml(message);
             chatContainer.prepend(chatRow);
         });
@@ -243,7 +243,7 @@ $(document).ready(function() {
         var oldScrollHeight = chatContainer[0].scrollHeight;
 
         // 메시지를 추가합니다.
-        messages.forEach(function(message) {
+        messages.forEach(function (message) {
             var chatRow = generateMessageHtml(message);
             chatContainer.append(chatRow);
         });
@@ -441,7 +441,7 @@ $(document).ready(function() {
     }
 
     function subscribeToChatRoom(chatRoomId) {
-        currentSubscription = stompClient.subscribe("/sub/chat/room/" + chatRoomId, function(message) {
+        currentSubscription = stompClient.subscribe("/sub/chat/room/" + chatRoomId, function (message) {
             console.log(message.body);
             var receivedMessage = JSON.parse(message.body);
             if (receivedMessage.chatType === "CHAT") {
@@ -467,7 +467,7 @@ $(document).ready(function() {
     }
 
     function readMessage(receivedMessage) {
-        receivedMessage.unreadMessageIds.forEach(function(messageId) {
+        receivedMessage.unreadMessageIds.forEach(function (messageId) {
             // unread-count-box 값 가져와서 -1 했을 때 0이되면 삭제
             // unread-count-box 값 가져와서 -1 했을 때 0이 아니면 -1
             var unreadCountBox = $('.chat .row[data-message-id="' + messageId + '"] .unread-count-box');
@@ -509,10 +509,10 @@ $(document).ready(function() {
     function updateEmoticon(emoticonMessage) {
 
         $.ajax({
-            url: '/api/chatrooms/' + currentChatRoomId +'/chats/' + emoticonMessage.chatId + '/emoticon',
+            url: '/api/chatrooms/' + currentChatRoomId + '/chats/' + emoticonMessage.chatId + '/emoticon',
             method: 'GET',
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
                 console.log(response);
                 var messageRow = $('.chat .row[data-message-id="' + emoticonMessage.chatId + '"]');
 
@@ -539,7 +539,7 @@ $(document).ready(function() {
                 // 새로운 이모티콘 박스 DOM에 추가
                 messageRow.find('.col-10').append(emoticonHtml);
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('이모티콘 추가에 실패했습니다:', error);
             }
         });
@@ -578,42 +578,42 @@ $(document).ready(function() {
     }
 
     function hideEmoticonBox() {
-        timeoutId = setTimeout(function() {
+        timeoutId = setTimeout(function () {
             $('#emoticon-box').hide();
         }, 100);
     }
 
     // 동적 요소에 대한 이벤트 위임
     $('.chat').on({
-        mouseenter: function(event) {
+        mouseenter: function (event) {
             showEmoticonBox(event);
         },
-        mouseleave: function() {
+        mouseleave: function () {
             hideEmoticonBox();
         }
     }, '.chat-content, .my-chat-content');
 
     $('#emoticon-box').hover(
-        function() {
+        function () {
             clearTimeout(timeoutId);
         },
-        function() {
+        function () {
             $(this).hide();
         }
     );
 
-    $('#emoticon-box i').on('click', function() {
+    $('#emoticon-box i').on('click', function () {
         var emoticonType = $(this).data('emoticon-type');
 
         if (currentMessageId) {
             $.ajax({
-                url: '/api/chatrooms/' + currentChatRoomId +'/chats/' + currentMessageId + '/emoticon',
+                url: '/api/chatrooms/' + currentChatRoomId + '/chats/' + currentMessageId + '/emoticon',
                 method: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({ emoticonType: emoticonType }),
-                success: function(response) {
+                data: JSON.stringify({emoticonType: emoticonType}),
+                success: function (response) {
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error('이모티콘 추가에 실패했습니다:', error);
                 }
             });
@@ -637,7 +637,7 @@ $(document).ready(function() {
         var emoticonTypes = ['CHECK', 'HEART', 'THUMBS_UP', 'SMILE', 'SAD'];
         var addContent = '';
 
-        emoticonTypes.forEach(function(type) {
+        emoticonTypes.forEach(function (type) {
 
             var countKey = type.toLowerCase() + 'EmoticonCount';
 
@@ -679,7 +679,7 @@ $(document).ready(function() {
     var addEmpModalVisible = false;
 
     // 모달 이벤트 핸들러 중복 방지
-    $('.emp-count-box').off('click').on('click', function() {
+    $('.emp-count-box').off('click').on('click', function () {
         if (empModalVisible) {
             // 모달이 보이면 숨기기
             empModal.hide();
@@ -702,17 +702,17 @@ $(document).ready(function() {
             url: '/api/chatrooms/' + currentChatRoomId + '/employees',
             type: 'GET',
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 updateEmployeeList(data);
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("데이터를 불러오는 데 실패했습니다:", error);
             }
         });
     });
 
     // 모달 외부 클릭 시 닫기
-    $(window).on('click', function(event) {
+    $(window).on('click', function (event) {
         if (!$(event.target).closest('#emp-modal, .emp-count-box, #add-emp-modal').length && empModalVisible) {
             empModal.hide();
             empModalVisible = false;
@@ -722,10 +722,9 @@ $(document).ready(function() {
     });
 
 
-
     function updateEmployeeList(data) {
         var listElement = $('.emp-list');
-        $.each(data, function(index, employee) {
+        $.each(data, function (index, employee) {
             listElement.append(
                 `<div class="row emp-one d-flex align-items-center">
                 <div class="col-5">
@@ -747,7 +746,7 @@ $(document).ready(function() {
 
     let tagify;
 
-    $('.add-emp-box').off('click').on('click', function() {
+    $('.add-emp-box').off('click').on('click', function () {
 
         if (addEmpModalVisible) {
             // 모달이 보이면 숨기기
@@ -768,11 +767,11 @@ $(document).ready(function() {
             url: 'http://localhost:8081/api/chatrooms/' + currentChatRoomId + '/except-participants',
             method: 'GET',
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 addEmpModal.show();
                 addEmpModalVisible = true;
                 console.log('직원 데이터를 성공적으로 가져왔습니다:', data);
-                whitelist = data.map(function(employee) {
+                whitelist = data.map(function (employee) {
                     return {
                         name: employee.name + '/' + employee.position + '/' + employee.deptName, // 태그에 표시될 내용
                         value: employee.id.toString(), // 직원 ID를 문자열로 변환하여 저장
@@ -789,13 +788,13 @@ $(document).ready(function() {
                     enforceWhitelist: true, // 화이트리스트에서 허용된 태그만 사용
                     whitelist: whitelist, // 화이트 리스트 배열. 화이트 리스트를 등록하면 자동으로 드롭다운 메뉴가 생긴다
                     autogrow: true, // 태그 입력창이 자동으로 늘어난다
-                    originalInputValueFormat: function(valuesArr) {
-                        return valuesArr.map(function(item) {
+                    originalInputValueFormat: function (valuesArr) {
+                        return valuesArr.map(function (item) {
                             return item.value;
                         });
                     },
                     templates: {
-                        tag: function(tagData) {
+                        tag: function (tagData) {
                             return `
                             <tag title="${tagData.name}"
                                 contenteditable='false'
@@ -808,7 +807,7 @@ $(document).ready(function() {
                                 </div>
                             </tag>`;
                         },
-                        dropdownItem: function(tagData) {
+                        dropdownItem: function (tagData) {
                             return `
                             <div ${this.getAttributes(tagData)}
                                 class='tagify__dropdown__item ${tagData.class ? tagData.class : ''}'>
@@ -883,13 +882,13 @@ $(document).ready(function() {
                     tagify.dropdown.hide(); // 드롭다운 제거
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('직원 데이터를 가져오는 데 실패했습니다:', error);
             }
         });
     });
 
-    $('.create-button').on('click', function() {
+    $('.create-button').on('click', function () {
         // input에서 값 가져오기
         var employees = $('input[name="employees[]"]').val();
         // 쉼표로 분리하고 숫자로 변환
@@ -903,20 +902,20 @@ $(document).ready(function() {
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(dataToSend), // JSON 형태로 변환
-            success: function(data) {
+            success: function (data) {
                 console.log('채팅방 참여자 추가에 성공했습니다:', data);
                 empModal.hide();
                 empModalVisible = false;
                 addEmpModal.hide();
                 addEmpModalVisible = false;
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('채팅방 참여자 추가에 실패했습니다:', error);
             }
         });
     });
 
-    $('.cancel-button').on('click', function() {
+    $('.cancel-button').on('click', function () {
         addEmpModal.hide();
         addEmpModalVisible = false
     });
@@ -929,8 +928,8 @@ $(document).ready(function() {
             url: '/api/chatrooms/' + currentChatRoomId,
             method: 'GET',
             dataType: 'json',
-            data: { offset: offset, limit: limit },
-            success: function(data) {
+            data: {offset: offset, limit: limit},
+            success: function (data) {
                 if (data.chatInfoList.length < limit) {
                     hasMoreData = false; // 모든 데이터 로드 완료
                 }
@@ -938,7 +937,7 @@ $(document).ready(function() {
                 addChatContents(data.chatInfoList);
                 loading = false;
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('추가 채팅 데이터 로드 실패:', error);
                 loading = false;
             }
@@ -946,7 +945,7 @@ $(document).ready(function() {
     }
 
     // 스크롤 이벤트 핸들러
-    $('.chat').scroll(function() {
+    $('.chat').scroll(function () {
         var $this = $(this);
         var scrollTop = $this.scrollTop();
         var scrollHeight = $this[0].scrollHeight;
@@ -964,7 +963,7 @@ $(document).ready(function() {
     });
 
     //이모티콘 버튼 클릭 이벤트
-    $('.chat').on('click', '.emoticon-button', function() {
+    $('.chat').on('click', '.emoticon-button', function () {
         currentMessageId = $(this).closest('.row[data-message-id]').data('message-id');
 
         console.log('이모티콘 버튼 클릭 이벤트 발생');
@@ -981,13 +980,13 @@ $(document).ready(function() {
             console.log(emoticonType);
             console.log()
             $.ajax({
-                url: '/api/chatrooms/' + currentChatRoomId +'/chats/' + currentMessageId + '/emoticon',
+                url: '/api/chatrooms/' + currentChatRoomId + '/chats/' + currentMessageId + '/emoticon',
                 method: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({ emoticonType: emoticonType }),
-                success: function(response) {
+                data: JSON.stringify({emoticonType: emoticonType}),
+                success: function (response) {
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error('이모티콘 추가에 실패했습니다:', error);
                 }
             });
@@ -996,9 +995,21 @@ $(document).ready(function() {
         }
     });
 
-    // 채팅방 목록에서 첫 번째 채팅방 선택
-    // var firstChatRoom = $('.chat-room-item').first();
-    // firstChatRoom.trigger('click');
+    var sendFileModalVisible = false;
+
+    // <i class="fa-regular fa-file"></i> 버튼 클릭 시 파일 전송 모달 띄우기
+    $('.fa-file').on('click', function () {
+        $('#send-file-modal').show();
+        sendFileModalVisible = true;
+    });
+
+    // 파일 전송 모달 외부 클릭 시 닫기
+    $(window).on('click', function (event) {
+        if (!$(event.target).closest('#send-file-modal, .fa-file').length && sendFileModalVisible) {
+            $('#send-file-modal').hide();
+            sendFileModalVisible = false;
+        }
+    });
 
 });
 

@@ -539,6 +539,7 @@
 </div>
 <%@ include file="/WEB-INF/views/chat_room/modal/participant-emp-modal.jsp" %>
 <%@ include file="/WEB-INF/views/chat_room/modal/chat-room-dropdown.jsp" %>
+<%@ include file="/WEB-INF/views/chat_room/modal/send-file-modal.jsp" %>
 
 </body>
 
