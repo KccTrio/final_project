@@ -149,3 +149,9 @@
   margin-top: 20px;
   font-size: 25px;
 }
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  font-size: 10px;
+}
