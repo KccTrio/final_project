@@ -71,20 +71,24 @@ function fetchCalendarData() {
     success: function (schedules) {
       console.log("통신 성공");
 
-      // 기존 이벤트 배열을 초기화
+      // 배열 및 캘린더 초기화
       employeeEvents = [];
-      // FullCalendar에서 기존 이벤트 모두 제거
       calendar.removeAllEvents();
 
       schedules.forEach(function (schedule) {
-        console.log("원래 시작시간 : " + schedule.startedDt);
-        console.log("원래 끝시간 : " + schedule.endedDt);
+        // 시간부분
+        var startTime = schedule.startedDt.split(" ")[1];
+        var endTime = schedule.endedDt.split(" ")[1];
         var event = {
           title: schedule.name,
           // ISO 8601 형식으로 변환
           start: formatDateToISO(schedule.startedDt),
           end: formatDateToISO(schedule.endedDt),
         };
+
+        if (startTime === "00:00:00" && endTime === "00:00:00") {
+          event.allDay = true; // allDay 이벤트로 설정
+        }
         employeeEvents.push(event);
         calendar.addEvent(event); // 이벤트를 FullCalendar에 추가
       });
@@ -113,6 +117,21 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
       day: "일",
       list: "목록",
     },
+
+    dayCellContent: function (info) {
+      var number = document.createElement("a");
+      number.classList.add("fc-daygrid-day-number");
+      number.innerHTML = info.dayNumberText.replace("일", "");
+      if (info.view.type === "dayGridMonth") {
+        return {
+          html: number.outerHTML,
+        };
+      }
+      return {
+        domNodes: [],
+      };
+    },
+    selectable: true,
     dayMaxEventRows: true,
     dayMaxEventRows: 3, // 하루에 표시할 최대 이벤트 수
     events: employeeEvents,
