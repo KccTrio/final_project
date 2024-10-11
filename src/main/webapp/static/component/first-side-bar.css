@@ -3,7 +3,7 @@
   border: 1px solid #e4e4e4;
   background-color: #ebebeb;
   width: 4rem;
-  height: 55.7rem;
+  height: 56rem;
   box-shadow: inset 5px 0px 10px #dedede; /* 오른쪽으로 10px 그림자 */
   display: flex;
   flex-direction: column;
@@ -22,7 +22,7 @@
 .date,
 .company,
 .chat-bot,
-.chat {
+#chat {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
@@ -44,8 +44,8 @@
 
 .alram > a:hover .icons i,
 .alram > a:hover .menu-text,
-.chat > a:hover .icons i,
-.chat > a:hover .menu-text,
+#chat > a:hover .icons i,
+#chat > a:hover .menu-text,
 .date > a:hover .icons i,
 .date > a:hover .menu-text,
 .company > a:hover .icons i,

@@ -24,7 +24,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
             <div class="menu-text">알림</div>
           </a>
         </div>
-        <div class="chat">
+        <div id="chat">
           <a href="/chatrooms">
             <div class="icons">
               <i class="fa-regular fa-2x fa-comments"></i>
