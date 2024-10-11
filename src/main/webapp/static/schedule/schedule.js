@@ -68,6 +68,8 @@ function fetchCalendarData() {
 
       // 기존 이벤트 배열을 초기화
       employeeEvents = [];
+      // FullCalendar에서 기존 이벤트 모두 제거
+      calendar.removeAllEvents();
 
       schedules.forEach(function (schedule) {
         console.log("원래 시작시간 : " + schedule.startedDt);
