@@ -44,12 +44,17 @@ function getFirstAndLastDateOfMonth() {
 function formatDateToISO(dateString) {
   // 'YYYY-MM-DD HH:mm:ss' 형식의 문자열을 Date 객체로 변환
   const [datePart, timePart] = dateString.split(" ");
+  const [year, month, day] = datePart.split("-");
+  const [hour, minute, second] = timePart.split(":");
 
-  // 날짜 및 시간 부분을 조합하여 ISO 8601 형식으로 반환
-  const isoDate = new Date(datePart + "T" + timePart).toISOString();
+  // Date 객체를 한국 시간(KST) 기준으로 생성
+  const localDate = new Date(year, month - 1, day, hour, minute, second);
 
-  // ISO 문자열을 그대로 반환 (초까지 포함된 형식)
-  return isoDate.replace(".000Z", ""); // .000Z를 Z로 바꿔서 초까지 포함된 형식으로 변환
+  const isoDate = new Date(
+    localDate.getTime() - localDate.getTimezoneOffset() * 60000
+  ).toISOString();
+
+  return isoDate.replace(".000Z", ""); // 초까지 포함된 형식을 유지
 }
 
 function fetchCalendarData() {
@@ -76,8 +81,9 @@ function fetchCalendarData() {
         console.log("원래 끝시간 : " + schedule.endedDt);
         var event = {
           title: schedule.name,
-          start: formatDateToISO(schedule.startedDt), // ISO 8601 형식으로 변환
-          end: formatDateToISO(schedule.endedDt), // ISO 8601 형식으로 변환
+          // ISO 8601 형식으로 변환
+          start: formatDateToISO(schedule.startedDt),
+          end: formatDateToISO(schedule.endedDt),
         };
         employeeEvents.push(event);
         calendar.addEvent(event); // 이벤트를 FullCalendar에 추가
@@ -107,6 +113,8 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
       day: "일",
       list: "목록",
     },
+    dayMaxEventRows: true,
+    dayMaxEventRows: 3, // 하루에 표시할 최대 이벤트 수
     events: employeeEvents,
 
     eventDidMount: function (info) {
