@@ -1019,7 +1019,10 @@ function updateDateFormat() {
                 hour12: false
             });
         } else {
-            dateElement.textContent = fullDate.toLocaleDateString('ko-KR', {month: '2-digit', day: '2-digit'});
+            dateElement.textContent = fullDate.toLocaleDateString('ko-KR', {
+                month: '2-digit',
+                day: '2-digit'
+            }).replace(/\.\s/g, '-').slice(0, -1);
         }
     });
 }
