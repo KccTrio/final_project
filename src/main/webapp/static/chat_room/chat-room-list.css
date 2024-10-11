@@ -137,13 +137,13 @@
 }
 
 .chat-send-box {
-    width: 78rem;
+    width: 79rem;
     position: absolute;
     bottom: 30px;
 }
 
 .chat-send-box input {
-    width: 100%;
+    width: 95% !important;
     height: 50px;
     border: 1px solid #DDD; /* Standard light grey border */
     padding: 11px 15px; /* Padding inside the input */
@@ -177,11 +177,12 @@
 }
 
 .chat-send-input {
-    width: 100%;
+    width: 95%;
     height: 50px;
     position: relative;
     display: flex;
 }
+
 
 .chat-send-input form {
     width: 90%;
@@ -295,4 +296,31 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.file-box {
+    padding: 10px;
+    background-color: white;
+    border-radius: 10px;
+}
+
+.file-box p {
+    color: black;
+}
+
+.file-box i {
+    color: black;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.tag-box span {
+    color: black;
+    border: 1px solid #0056B3;
+    border-radius: 10px;
+    padding: 3px;
+}
+
+.tag-box {
+    margin-top: 10px;
 }

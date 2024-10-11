@@ -230,6 +230,72 @@
 
 
             <%--전 사람과 같은 채팅일 시--%>
+                <div class="row chat-one">
+                    <div class="col-10">
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <div class="col-9">
+                                <div class="chat-bubble-container d-flex align-items-end">
+                                    <div
+                                            class="chat-content d-flex align-items-center justify-content-center"
+                                    >
+                                        <div class="file-box">
+                                            <div class="row d-flex justify-content-between  align-items-center">
+                                                <div class="col-11">
+                                                    <p>파일명파이라안ㅁ이ㅏㄴ머아ㅣㄴ머아ㅣㄴ.jpg</p>
+                                                    <div class="row">
+                                                        <div class="tag-box">
+                                                            <span class="tag">태그1태그태그</span>
+                                                            <span class="tag">태그2</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-1">
+                                                    <i class="fa-solid fa-download"></i>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+                                    <div class="chat-time">
+                                        24/09/12 오전 9:30
+                                    </div>
+                                    <div class="unread-count-box">
+                                        <span class="unread-count">1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row d-flex align-items-start emoticon-boxes">
+                            <div class="blank">
+                            </div>
+                            <div class="emoticon-box">
+                                <button class="emoticon-button">
+                                    <i class="fa-solid fa-check"></i>
+                                    <span>5</span>
+                                </button>
+                                <button class="emoticon-button active-button">
+                                    <i class="fa-solid fa-heart heart-icon"></i>
+                                    <span>5</span>
+                                </button>
+                                <button class="emoticon-button">
+                                    <i class="fa-solid fa-thumbs-up"></i>
+                                    <span>5</span>
+                                </button>
+                                <button class="emoticon-button">
+                                    <i class="fa-solid fa-face-smile"></i>
+                                    <span>5</span>
+                                </button>
+                                <button class="emoticon-button">
+                                    <i class="fa-solid fa-face-sad-cry"></i>
+                                    <span>5</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
             <div class="row chat-one">
                 <div class="col-10">
                     <div class="row">
@@ -387,14 +453,75 @@
                 </div>
             </div>
 
+            <div class="row d-flex justify-content-end">
+                <div class="col-10">
+                    <div class="row d-flex justify-content-end">
+                        <div class="col-9">
+                            <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
+                                <div class="my-chat-time">
+                                    24/09/12 오전 9:30
+                                </div>
+                                <div
+                                        class="my-chat-content d-flex align-items-center justify-content-center"
+                                >
+                                    <div class="file-box">
+                                        <div class="row d-flex justify-content-between  align-items-center">
+                                            <div class="col-11">
+                                                <p>파일명파이라안ㅁ이ㅏㄴ머아ㅣㄴ머아ㅣㄴ.jpg</p>
+                                                <div class="row">
+                                                    <div class="tag-box">
+                                                        <span class="tag">태그1태그태그</span>
+                                                        <span class="tag">태그2</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-1">
+                                                <i class="fa-solid fa-download"></i>
+                                            </div>
+                                        </div>
 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row d-flex align-items-start justify-content-end emoticon-boxes">
+                        <div class="blank">
+                        </div>
+                        <div class="emoticon-box justify-content-end">
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-check"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button active-button">
+                                <i class="fa-solid fa-heart heart-icon"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-thumbs-up"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-face-smile"></i>
+                                <span>5</span>
+                            </button>
+                            <button class="emoticon-button">
+                                <i class="fa-solid fa-face-sad-cry"></i>
+                                <span>5</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="chat-send-box">
             <div class="container-fluid">
-                <div class="chat-send-input d-flex justify-content-center">
-                    <input type="text" class="chat-input" placeholder="메시지를 입력하세요."/>
-                    <i class="fa-regular fa-file"></i>
-                    <i id="send" class="fa-regular fa-paper-plane"></i>
+                <div class="d-flex justify-content-center">
+                    <div class="chat-send-input d-flex justify-content-center">
+                        <input type="text" class="chat-input" placeholder="메시지를 입력하세요."/>
+                        <i class="fa-regular fa-file"></i>
+                        <i id="send" class="fa-regular fa-paper-plane"></i>
+                    </div>
                 </div>
             </div>
         </div>
