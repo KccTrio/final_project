@@ -118,6 +118,7 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
       list: "목록",
     },
 
+    // 일 빼기
     dayCellContent: function (info) {
       var number = document.createElement("a");
       number.classList.add("fc-daygrid-day-number");
@@ -137,10 +138,13 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
     events: employeeEvents,
 
     eventDidMount: function (info) {
+      info.el.style.cursor = "pointer";
       // 시간도 있는 이벤트에 색상 변경
       if (!info.event.allDay) {
-        info.el.style.backgroundColor = "#4CAF50"; // 시간대 이벤트 배경색
-        info.el.style.color = "#FFFFFF"; // 시간대 이벤트 글자색
+        info.el.style.color = "black"; // 시간대 이벤트 글자색
+      } else {
+        // info.el.style.backgroundColor = "#b4c8bb"; // 시간대 이벤트 배경색
+        info.el.style.border = "0px"; // 시간대 이벤트 배경색
       }
 
       // 이벤트에 우클릭 이벤트 리스너 추가
@@ -170,4 +174,66 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
   });
 
   calendar.render();
+});
+
+// 일정등록 모달
+const addScheduleButton = document.getElementById("add-schedule-button");
+var modalContainer = document.getElementById("add-schedule-container");
+var closeButton = document.getElementById("close-button");
+
+// 버튼 클릭 시 모달 열기
+addScheduleButton.onclick = function () {
+  modalContainer.classList.remove("hidden");
+};
+
+// 모달 닫기 버튼 클릭 시 모달 닫기
+closeButton.onclick = function () {
+  modalContainer.classList.add("hidden");
+};
+
+window.addEventListener("click", function (event) {
+  if (event.target === modalContainer) {
+    modalContainer.classList.add("hidden");
+  }
+});
+
+// 일정 추가 양식 제출 시 이벤트 처리
+document.getElementById("schedule-form").onsubmit = function (event) {
+  event.preventDefault(); // 기본 제출 동작 방지
+
+  // 입력 값 가져오기
+  var scheduleName = document.getElementById("schedule-name").value;
+  var startDate = document.getElementById("start-date").value;
+  var endDate = document.getElementById("end-date").value;
+
+  // 이벤트 추가 로직 (FullCalendar에 추가 등)
+  console.log("일정 추가:", scheduleName, startDate, endDate);
+
+  // 입력 필드 초기화
+  document.getElementById("schedule-form").reset();
+};
+
+// Mobiscroll에 한국어 로케일 설정
+mobiscroll.setOptions({
+  locale: mobiscroll.localeKo,
+});
+
+// 시작 날짜와 시간 선택기
+mobiscroll.datepicker("#start-date", {
+  controls: ["datetime"], // 날짜와 시간 선택
+  display: "bubble", // 팝업 형식 (bubble, inline 등 사용 가능)
+  dateFormat: "YYYY-MM-DD", // 날짜 형식
+  timeFormat: "HH:mm", // 시간 형식
+  stepMinute: 5, // 분 단위 증가폭
+  returnFormat: "iso8601", // ISO 8601 형식 반환
+});
+
+// 끝 날짜와 시간 선택기
+mobiscroll.datepicker("#end-date", {
+  controls: ["datetime"],
+  display: "bubble",
+  dateFormat: "YYYY-MM-DD",
+  timeFormat: "HH:mm",
+  stepMinute: 5,
+  returnFormat: "iso8601",
 });

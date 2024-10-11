@@ -51,11 +51,6 @@ pageEncoding="UTF-8" %>
     />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=One+Mobile+Title:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <link
       href="https://fonts.googleapis.com/css2?family=Nanum+Square:wght@400;700&family=One+Mobile+Title:wght@400;700&display=swap"
       rel="stylesheet"
     />
@@ -63,6 +58,13 @@ pageEncoding="UTF-8" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- sweet alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- mobi scroll -->
+    <link
+      href="<%= request.getContextPath() %>/static/component/mobiscroll/mobiscroll.javascript.min.css"
+      rel="stylesheet"
+    />
+    <script src="<%= request.getContextPath() %>/static/component/mobiscroll/mobiscroll.javascript.min.js"></script>
 
     <style>
       /* 적용방법 */

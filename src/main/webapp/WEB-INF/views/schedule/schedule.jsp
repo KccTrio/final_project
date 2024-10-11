@@ -37,6 +37,34 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       </div> -->
 
       <div id="calendar"></div>
+      <!-- 일정등록 모달 -->
+      <div id="add-schedule-container" class="hidden">
+        <div class="add-schedule-content">
+          <div id="title-add-sche">일정 등록</div>
+          <form id="schedule-form">
+            <div class="add-sche-text">
+              <label for="schedule-name">일정 이름</label>
+              <input
+                type="text"
+                id="schedule-name"
+                name="schedule-name"
+                required
+              />
+            </div>
+
+            <div class="add-sche-text">
+              <label for="start-date">시작 날짜:</label>
+              <input type="text" id="start-date" name="start-date" required />
+
+              <label for="end-date">끝 날짜:</label>
+              <input type="text" id="end-date" name="end-date" required />
+            </div>
+
+            <button type="submit">일정 추가</button>
+          </form>
+          <span id="close-button"></span>
+        </div>
+      </div>
     </div>
     <script src="<%= request.getContextPath() %>/static/schedule/schedule.js"></script>
   </body>
