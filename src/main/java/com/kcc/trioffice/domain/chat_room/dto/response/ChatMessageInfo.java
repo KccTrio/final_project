@@ -8,6 +8,8 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -22,6 +24,7 @@ public class ChatMessageInfo {
     private LocalDateTime chatTime;
     private String chatType;
     private int unreadMessageCount;
+    private List<String> tags;
 
     public static ChatMessageInfo of(EmployeeInfo employeeInfo, ChatMessage chatMessage, int unreadMessageCount) {
         return new ChatMessageInfo(
@@ -33,6 +36,7 @@ public class ChatMessageInfo {
                 chatMessage.getMessage(),
                 LocalDateTime.now(),
                 ChatType.toName(chatMessage.getChatType()),
-                unreadMessageCount);
+                unreadMessageCount,
+                new ArrayList<>());
     }
 }

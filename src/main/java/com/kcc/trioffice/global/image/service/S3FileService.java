@@ -38,7 +38,7 @@ public class S3FileService {
         String contentType = uploadFile.getContentType();
         FileType fileType;
         // 이미지 파일인지 확인
-        if (contentType != null && (contentType.startsWith("image/jpeg") || contentType.startsWith("image/png") || contentType.startsWith("image/gif"))) {
+        if (contentType != null && (contentType.startsWith("image/jpeg") || contentType.startsWith("image/png") || contentType.startsWith("image/gif") || contentType.startsWith("image/svg"))) {
             fileType = FileType.IMAGE;
         } else {
             fileType = FileType.FILE;
@@ -51,7 +51,7 @@ public class S3FileService {
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (AmazonServiceException e) {
-            throw new ServerException("S3 파일 업로드 실패");
+            throw new ServerException(e.getMessage());
         }
 
         String fileUrl = amazonS3Client.getUrl(bucketName, s3UploadFilePath).toString();
