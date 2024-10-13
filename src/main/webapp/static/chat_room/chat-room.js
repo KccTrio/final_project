@@ -9,6 +9,8 @@ var offset = 0; // 현재 로드된 메시지의 수
 var limit = 50; // 한 번에 로드할 메시지 수
 var hasMoreData = true; // 더 로드할 데이터가 있는지 확인
 var loading = false; // AJAX 로드 중복 실행 방지
+let dropzoneInitialized = false;
+let myDropzone = null;
 
 
 $(document).ready(function() {
@@ -277,9 +279,104 @@ $(document).ready(function() {
         } else if (message.chatType === "QUIT") {
             //count 감소
             chatRow = createEnterAndQuitMessage(message);
+        } else if (message.chatType === "FILE") {
+            if (message.senderId === currentEmployeeId) {
+                chatRow = createMyFileMessageHtml(message);
+            } else {
+                chatRow = createOtherFileMessageHtml(message, isSameSender);
+            }
+        } else if (message.chatType === "IMAGE") {
+            if (message.senderId === currentEmployeeId) {
+                chatRow = createMyImageMessageHtml(message);
+            } else {
+                chatRow = createOtherImageMessageHtml(message, isSameSender);
+            }
         }
 
         return chatRow;
+    }
+
+    function createMyImageMessageHtml(message) {
+        return `<div class="row d-flex justify-content-end" data-message-id="${message.chatId}">
+            <div class="col-10">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-9">
+                        <div class="chat-bubble-container d-flex align-items-end justify-content-end">
+                            <div class="unread-count-box">
+                                <span class="unread-count">${createUnreadCountHtml(message.unreadMessageCount)}</span>
+                            </div>
+                            <div class="my-chat-time">
+                                ${formatDate(message.chatTime)}
+                            </div>
+                            <div class="my-chat-content d-flex align-items-center justify-content-center">
+                                <div class="file-box">
+                                    <div class="row d-flex justify-content-between  align-items-center">
+                                        <div class="col-12">
+                                            <img src="${message.chatContents}" alt="사진" class="chat-image"/>
+                                            <div class="row">
+                                                <div class="tag-box">
+                                                    ${createTagBoxHtml(message)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ${createMyEmoticonBoxHtml(message)}
+            </div>
+        </div>`;
+    }
+
+    function createTagBoxHtml(message) {
+        if (!message.tags) {
+            return '';
+        }
+
+        var tagHtml = '<i class="fa-solid fa-tag"></i>';
+        message.tags.forEach(function (tag) {
+            tagHtml += `<span class="tag">${tag}</span>`;
+        });
+        return tagHtml;
+    }
+
+    function createMyFileMessageHtml(message) {
+        return `<div class="row d-flex justify-content-end" data-message-id="${message.chatId}">
+            <div class="col-10">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-9">
+                        <div class="chat-bubble-container d-flex align-items-end justify-content-end">
+                            <div class="unread-count-box">
+                                <span class="unread-count">${createUnreadCountHtml(message.unreadMessageCount)}</span>
+                            </div>
+                            <div class="my-chat-time">
+                                ${formatDate(message.chatTime)}
+                            </div>
+                            <div class="my-chat-content d-flex align-items-center justify-content-center">
+                                <div class="file-box">
+                                    <div class="row d-flex justify-content-between  align-items-center">
+                                        <div class="col-10">
+                                            <p>${message.chatContents}</p>
+                                            <div class="row">
+                                                <div class="tag-box">
+                                                    ${createTagBoxHtml(message)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <i class="fa-solid fa-download"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ${createMyEmoticonBoxHtml(message)}
+            </div>
+        </div>`;
     }
 
     function createMyMessageHtml(message) {
@@ -354,7 +451,6 @@ $(document).ready(function() {
 
     function createEmoticonBoxHtml(message) {
         var emoticons = createEmoticonButton(message);
-        console.log(emoticons);
         if (emoticons) {
             return `
             <div class="row d-flex align-items-start emoticon-boxes">
@@ -444,7 +540,7 @@ $(document).ready(function() {
         currentSubscription = stompClient.subscribe("/sub/chat/room/" + chatRoomId, function (message) {
             console.log(message.body);
             var receivedMessage = JSON.parse(message.body);
-            if (receivedMessage.chatType === "CHAT") {
+            if (receivedMessage.chatType === "CHAT" || receivedMessage.chatType === "FILE" || receivedMessage.chatType === "IMAGE") {
                 // 채팅 메시지 처리
                 addMessage(receivedMessage);
             } else if (receivedMessage.chatType === 'EMOTICON') {
@@ -721,6 +817,24 @@ $(document).ready(function() {
         }
     });
 
+    // $(window).on('click', function(event) {
+    //     var sendFileModal = $('#send-file-modal');
+    //     console.log('Clicked element:', event.target); // 클릭된 요소 로그
+    //     console.log('Closest matching elements:', $(event.target).closest('#send-file-modal, .fa-file, .dropzone, .dz-default, .dz-message, .dz-clickable'));
+    //
+    //     // Check if the click target is outside the modal, the file icon, and any part of the Dropzone.
+    //     if (!$(event.target).closest('#send-file-modal, .fa-file, .dropzone, .dz-default, .dz-message, .dz-clickable, #my-dropzone, .dz-default').length && sendFileModalVisible) {
+    //         console.log('파일 전송 모달을 닫습니다.');
+    //         sendFileModal.hide();
+    //         sendFileModalVisible = false;
+    //     }
+    // });
+
+    // 모달 닫기 버튼 클릭 시 닫기
+    $('.send-cancel-button').on('click', function () {
+        $('#send-file-modal').hide();
+        sendFileModalVisible = false;
+    });
 
     function updateEmployeeList(data) {
         var listElement = $('.emp-list');
@@ -951,10 +1065,6 @@ $(document).ready(function() {
         var scrollHeight = $this[0].scrollHeight;
         var containerHeight = $this.innerHeight();
 
-        console.log('scrollTop:', scrollTop);
-        console.log('scrollHeight:', scrollHeight);
-        console.log('containerHeight:', containerHeight);
-
         // 스크롤 위치가 최상단 근처에 있을 때 데이터 로드
         // flex-direction: column-reverse로 인해 scrollTop이 음수가 되고, 위로 스크롤할수록 더 큰 음수가 됩니다.
         if (-scrollTop + containerHeight >= scrollHeight - 100 && !loading && hasMoreData) {
@@ -997,19 +1107,209 @@ $(document).ready(function() {
 
     var sendFileModalVisible = false;
 
+    var tagify2;
+
     // <i class="fa-regular fa-file"></i> 버튼 클릭 시 파일 전송 모달 띄우기
     $('.fa-file').on('click', function () {
-        $('#send-file-modal').show();
-        sendFileModalVisible = true;
-    });
-
-    // 파일 전송 모달 외부 클릭 시 닫기
-    $(window).on('click', function (event) {
-        if (!$(event.target).closest('#send-file-modal, .fa-file').length && sendFileModalVisible) {
+        if (sendFileModalVisible) {
             $('#send-file-modal').hide();
             sendFileModalVisible = false;
+            return;
         }
+
+        if (!currentChatRoomId) {
+            alert('Please select a chat room first.');
+            return;
+        }
+
+        $('#send-file-modal').show();
+        sendFileModalVisible = true;
+
+
+        if (tagify2) {
+            tagify2.destroy();
+            // 태그 input 초기화
+            document.querySelector('input[name=tag]').value = '';
+        }
+
+
+        let inputElm = document.querySelector('input[name=tag]');
+
+        // 화이트 리스트 : 해당 문자만 태그로 추가 가능
+        let whitelist = ["서류","계획서","제안서","발표자료","ppt"];
+
+        // initialize Tagify
+        tagify2 = new Tagify(inputElm, {
+            enforceWhitelist: false, // 화이트리스트에서 허용된 태그만 사용
+            whitelist: whitelist // 화이트 리스트 배열. 화이트 리스트를 등록하면 자동으로 드롭다운 메뉴가 생긴다
+        })
+
+        // tagify 전용 이벤트 리스터. 참조 : https://github.com/yairEO/tagify#events
+        tagify2.on('add', onAddTag) // 태그가 추가되면
+            .on('remove', onRemoveTag) // 태그가 제거되면
+            .on('input', onInput) // 태그가 입력되고 있을 경우
+            .on('invalid', onInvalidTag) // 허용되지 않는 태그일 경우
+            .on('click', onTagClick) // 해시 태그 블럭을 클릭할 경우
+            .on('focus', onTagifyFocusBlur) // 포커스 될 경우
+            .on('blur', onTagifyFocusBlur) // 반대로 포커스를 잃을 경우
+
+            .on('edit:start', onTagEdit) // 입력된 태그 수정을 할 경우
+
+            .on('dropdown:hide dropdown:show', e => console.log(e.type)) // 드롭다운 메뉴가 사라질경우
+            .on('dropdown:select', onDropdownSelect) // 드롭다운 메뉴에서 아이템을 선택할 경우
+
+
+        // tagify 전용 이벤트 리스너 제거 할떄
+        tagify2.off('add', onAddTag);
+
+
+        // 이벤트 리스너 콜백 메소드
+        function onAddTag(e){
+            console.log("onAddTag: ", e.detail);
+            console.log("original input value: ", inputElm.value)
+        }
+
+        // tag remvoed callback
+        function onRemoveTag(e){
+            console.log("onRemoveTag:", e.detail, "tagify instance value:", tagify.value)
+        }
+
+        function onTagEdit(e){
+            console.log("onTagEdit: ", e.detail);
+        }
+
+        // invalid tag added callback
+        function onInvalidTag(e){
+            console.log("onInvalidTag: ", e.detail);
+        }
+
+        // invalid tag added callback
+        function onTagClick(e){
+            console.log(e.detail);
+            console.log("onTagClick: ", e.detail);
+        }
+
+        function onTagifyFocusBlur(e){
+            console.log(e.type, "event fired")
+        }
+
+        function onDropdownSelect(e){
+            console.log("onDropdownSelect: ", e.detail)
+        }
+
+        function onInput(e){
+            console.log("onInput: ", e.detail);
+
+            tagify2.loading(true) // 태그 입력하는데 우측에 loader 애니메이션 추가
+            tagify2.loading(false) // loader 애니메이션 제거
+
+            tagify2.dropdown.show(e.detail.value); // 드롭다운 메뉴 보여주기
+            tagify2.dropdown.hide(); // // 드롭다운 제거
+        }
+
+        // Ensure the modal content is loaded before initializing
+        setTimeout(function() {
+            initializeDropzone();
+        }, 0); // Using setTimeout to defer execution
     });
+
+    function initializeDropzone() {
+        let dropzoneElement = document.querySelector("div.dropzone");
+        if (!dropzoneElement) {
+            console.error('Dropzone element not found!');
+            return;
+        }
+
+        // Destroy existing instance if any
+        if (dropzoneElement.dropzone) {
+            dropzoneElement.dropzone.destroy();
+        }
+
+        Dropzone.autoDiscover = false;
+
+        // Initialize Dropzone
+        let myDropzone = new Dropzone(dropzoneElement, {
+            url: "/api/chatrooms/" + currentChatRoomId + "/attached-file/send",
+            method: 'post',
+            autoProcessQueue: false,
+            parallelUploads: 100,
+            paramName: 'multipartFiles',
+            uploadMultiple: true,
+            init: function () {
+                const modal = document.getElementById("send-file-modal");
+
+                let sendFileButton = document.querySelector('.send-file-create-button');
+                sendFileButton.addEventListener('click', function () {
+                    console.log('Uploading...');
+                    if (myDropzone.getRejectedFiles().length > 0) {
+                        let files = myDropzone.getRejectedFiles();
+                        console.log('Rejected files:', files);
+                        return;
+                    }
+                    myDropzone.processQueue();
+                });
+
+                this.on('sendingmultiple', function (files, xhr, formData) {
+                    var tags = tagify2.value.map(function(item) { return item.value; });
+                    for (var i = 0; i < tags.length; i++) {
+                        formData.append('tags', tags[i]);
+                    }
+                });
+
+                this.on('successmultiple', function (files, responseText) {
+                    console.log('Upload successful');
+                    modal.style.display = "none";
+                    sendFileModalVisible = false;
+                    myDropzone.removeAllFiles(); // Optional: Clear files
+                });
+
+                this.on('errormultiple', function (files, responseText) {
+                    console.error('Upload failed', responseText);
+                    alert('File upload failed.');
+                });
+            },
+        });
+    }
+
+    // 파일 전송 모달 외부 클릭 시 닫기
+    // $(window).on('click', function (event) {
+    //     if (!$(event.target).closest('#send-file-modal, .fa-file').length && sendFileModalVisible) {
+    //         $('#send-file-modal').hide();
+    //         sendFileModalVisible = false;
+    //     }
+    // });
+
+    //파일 전송 클릭
+    // $('.send-file-create-button').on('click', function () {
+    //
+    //     //파일들 소켓으로 전송
+    //     var files = document.querySelector('input[type="file"]').files;
+    //     var formData = new FormData();
+    //     for (var i = 0; i < files.length; i++) {
+    //         formData.append('multipartFiles', files[i]);
+    //     }
+    //
+    //     //태그도 함께 전송
+    //     var tags = $('input[name="tag"]').val();
+    //     formData.append('tags', tags);
+    //
+    //     $.ajax({
+    //         url: '/api/chatrooms/' + currentChatRoomId + '/attached_file/send',
+    //         method: 'POST',
+    //         contentType: false,
+    //         processData: false,
+    //         data: formData,
+    //         success: function (data) {
+    //             console.log('파일 전송에 성공했습니다:', data);
+    //             $('#send-file-modal').hide();
+    //             sendFileModalVisible = false;
+    //         },
+    //         error: function (xhr, status, error) {
+    //             console.error('파일 전송에 실패했습니다:', error);
+    //         }
+    //     });
+    //
+    // });
 
 });
 
