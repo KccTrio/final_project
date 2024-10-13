@@ -189,6 +189,9 @@ addScheduleButton.onclick = function () {
 // 모달 닫기 버튼 클릭 시 모달 닫기
 closeButton.onclick = function () {
   modalContainer.classList.add("hidden");
+
+  // Quill 에디터 내용 비우기
+  quill.setContents([]);
 };
 
 window.addEventListener("click", function (event) {
@@ -196,22 +199,6 @@ window.addEventListener("click", function (event) {
     modalContainer.classList.add("hidden");
   }
 });
-
-// 일정 추가 양식 제출 시 이벤트 처리
-document.getElementById("schedule-form").onsubmit = function (event) {
-  event.preventDefault(); // 기본 제출 동작 방지
-
-  // 입력 값 가져오기
-  var scheduleName = document.getElementById("schedule-name").value;
-  var startDate = document.getElementById("start-date").value;
-  var endDate = document.getElementById("end-date").value;
-
-  // 이벤트 추가 로직 (FullCalendar에 추가 등)
-  console.log("일정 추가:", scheduleName, startDate, endDate);
-
-  // 입력 필드 초기화
-  document.getElementById("schedule-form").reset();
-};
 
 // Mobiscroll에 한국어 로케일 설정
 mobiscroll.setOptions({
@@ -282,3 +269,26 @@ var quill = new Quill("#schedule-contents", {
     width: "100%", // 원하는 너비
   },
 });
+
+// 일정 추가 양식 제출 시 이벤트 처리
+document.getElementById("schedule-form").onsubmit = function (event) {
+  event.preventDefault(); // 기본 제출 동작 방지
+
+  // 입력 값 가져오기
+  var scheduleName = document.getElementById("schedule-name").value;
+  var startDate = document.getElementById("start-date").value;
+  var endDate = document.getElementById("end-date").value;
+
+  //에디터 내용 가져오기
+  var deltaContent = JSON.stringify(quill.getContents());
+
+  // 값들 확인
+  console.log("일정 추가:", deltaContent, scheduleName, startDate, endDate);
+
+  // 입력 필드 초기화
+  document.getElementById("schedule-form").reset();
+
+  // Delta 포맷으로 에디터 내용 가져오기
+  var deltaContent = JSON.stringify(quill.getContents());
+  quill.setContents([]);
+};
