@@ -51,7 +51,7 @@ s
                     <div class="col-6">
                         <div class="row d-flex justify-content-between">
                             <div class="col-6">
-                                <button type="submit" class="create-button">추가</button>
+                                <button type="submit" class="send-file-create-button">추가</button>
                             </div>
                             <div class="col-6">
                                 <button class="send-cancel-button">취소</button>
@@ -64,11 +64,4 @@ s
     </div>
 </div>
 </body>
-<script>
-    Dropzone.autoDiscover = false; // deprecated 된 옵션. false로 해놓는걸 공식문서에서 명시
-
-    const dropzone = new Dropzone("div.dropzone", {
-        url: "https://httpbin.org/post",
-    });
-</script>
 </html>
