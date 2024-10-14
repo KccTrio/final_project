@@ -296,6 +296,123 @@ $(document).ready(function() {
         return chatRow;
     }
 
+    function createOtherFileMessageHtml(message, isSameSender) {
+        var profileHtml = isSameSender ? `
+            <div class="col-1"></div>` : `
+            <div class="col-1">
+                <div class="chat-profile">
+                    <img src="${message.senderProfileUrl}" />
+                    <div class="status d-flex justify-content-center align-items-center">
+                        <i class="fa-solid fa-check check-icon"></i>
+                    </div>
+                </div>
+            </div>`;
+
+        var nameHtml = isSameSender ? '' : `
+            <div class="row d-flex justify-content-end">
+                <div class="col-11 emp-name d-flex justify-content-start">
+                    <span>${message.senderName}</span>
+                </div>
+            </div>`;
+
+        var emoticonHtml = createEmoticonBoxHtml(message);
+
+        return `
+        <div class="row" data-message-id="${message.chatId}">
+            <div class="col-10">
+                ${nameHtml}
+                <div class="row">
+                    ${profileHtml}
+                    <div class="col-9">
+                        <div class="chat-bubble-container d-flex align-items-end">
+                            <div class="chat-content d-flex align-items-center justify-content-center">
+                                <div class="file-box">
+                                    <div class="row d-flex justify-content-between  align-items-center">
+                                        <div class="col-10">
+                                            <p>${message.chatContents}</p>
+                                            <div class="row">
+                                                <div class="tag-box">
+                                                    ${createTagBoxHtml(message)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <i class="fa-solid fa-download"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-time">
+                                ${formatDate(message.chatTime)}
+                            </div>
+                            <div class="unread-count-box">
+                                    <span class="unread-count">${createUnreadCountHtml(message.unreadMessageCount)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ${emoticonHtml}
+            </div>
+        </div>`;
+    }
+
+    function createOtherImageMessageHtml(message, isSameSender) {
+        var profileHtml = isSameSender ? `
+            <div class="col-1"></div>` : `
+            <div class="col-1">
+                <div class="chat-profile">
+                    <img src="${message.senderProfileUrl}" />
+                    <div class="status d-flex justify-content-center align-items-center">
+                        <i class="fa-solid fa-check check-icon"></i>
+                    </div>
+                </div>
+            </div>`;
+
+        var nameHtml = isSameSender ? '' : `
+            <div class="row d-flex justify-content-end">
+                <div class="col-11 emp-name d-flex justify-content-start">
+                    <span>${message.senderName}</span>
+                </div>
+            </div>`;
+
+        var emoticonHtml = createEmoticonBoxHtml(message);
+
+        return `
+        <div class="row" data-message-id="${message.chatId}">
+            <div class="col-10">
+                ${nameHtml}
+                <div class="row">
+                    ${profileHtml}
+                    <div class="col-9">
+                        <div class="chat-bubble-container d-flex align-items-end">
+                            <div class="chat-content d-flex align-items-center justify-content-center">
+                                <div class="file-box">
+                                    <div class="row d-flex justify-content-between  align-items-center">
+                                        <div class="col-12">
+                                            <img src="${message.chatContents}" alt="사진" class="chat-image"/>
+                                            <div class="row">
+                                                <div class="tag-box">
+                                                    ${createTagBoxHtml(message)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-time">
+                                ${formatDate(message.chatTime)}
+                            </div>
+                            <div class="unread-count-box">
+                                    <span class="unread-count">${createUnreadCountHtml(message.unreadMessageCount)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ${emoticonHtml}
+            </div>
+        </div>`;
+    }
+
     function createMyImageMessageHtml(message) {
         return `<div class="row d-flex justify-content-end" data-message-id="${message.chatId}">
             <div class="col-10">
