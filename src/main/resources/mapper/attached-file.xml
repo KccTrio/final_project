@@ -39,4 +39,16 @@
         )
     </insert>
 
+    <select id="getAttachedFileByChatId" resultType="com.kcc.trioffice.global.image.dto.response.S3UploadFile">
+        SELECT
+            file_name AS fileName,
+            file_url AS fileUrl,
+            filename_extension AS fileExtension,
+            file_volume AS fileSize,
+            file_type AS fileType,
+            file_id AS fileId
+        FROM attached_file
+        WHERE chat_id = #{chatId}
+    </select>
+
 </mapper>

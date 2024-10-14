@@ -6,6 +6,7 @@ import com.kcc.trioffice.global.auth.PrincipalDetail;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -36,4 +37,12 @@ public class AttachedFileRestController {
             simpMessagingTemplate.convertAndSend("/sub/chat/room/" + chatRoomId, chatMessageInfo);
         }
     }
+
+    @GetMapping("/api/chatrooms/{chatRoomId}/chats/{chatId}/attached-file/download")
+    public ResponseEntity<byte[]> downloadAttachedFile(@PathVariable Long chatRoomId,
+                                                       @PathVariable Long chatId,
+                                                       @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        return attachedFileService.downloadAttachedFile(chatRoomId, chatId, principalDetail.getEmployeeId());
+    }
+
 }

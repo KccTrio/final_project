@@ -1428,6 +1428,46 @@ $(document).ready(function() {
     //
     // });
 
+    // 파일 다운로드 버튼 이벤트 리스너
+    $('.chat').on('click', '.fa-download', function() {
+        // 이벤트가 발생한 메시지 ID를 찾습니다.
+        var messageId = $(this).closest('.row[data-message-id]').data('message-id');
+        var chatRoomId = currentChatRoomId; // 현재 채팅방 ID
+
+        // 파일 다운로드 요청
+        $.ajax({
+            url: `/api/chatrooms/${chatRoomId}/chats/${messageId}/attached-file/download`,
+            method: 'GET',
+            xhrFields: {
+                responseType: 'blob' // Important
+            },
+            success: function(response, textStatus, xhr) {
+                // 파일명 추출 (Content-Disposition 헤더에서 추출)
+                var filename = "";
+                var disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) {
+                        filename = matches[1].replace(/['"]/g, '');
+                    }
+                }
+
+                // Blob 객체 생성 후 다운로드
+                var blob = new Blob([response], { type: 'application/octet-stream' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
+            error: function(xhr, status, error) {
+                console.error('파일 다운로드에 실패했습니다:', error);
+            }
+        });
+    });
+
 });
 
 document.addEventListener("DOMContentLoaded", function() {

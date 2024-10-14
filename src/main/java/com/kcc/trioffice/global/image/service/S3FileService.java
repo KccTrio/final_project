@@ -2,21 +2,25 @@ package com.kcc.trioffice.global.image.service;
 
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3Client;
-import com.amazonaws.services.s3.model.CannedAccessControlList;
-import com.amazonaws.services.s3.model.DeleteObjectRequest;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.*;
+import com.amazonaws.util.IOUtils;
 import com.kcc.trioffice.global.enums.FileType;
 import com.kcc.trioffice.global.exception.type.ServerException;
 import com.kcc.trioffice.global.image.S3SaveDir;
 import com.kcc.trioffice.global.image.dto.response.S3UploadFile;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
+import java.net.URLEncoder;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +61,25 @@ public class S3FileService {
         String fileUrl = amazonS3Client.getUrl(bucketName, s3UploadFilePath).toString();
 
         return new S3UploadFile(fileName, fileUrl, fileExtension, size, fileType.getValue(), null);
+    }
+
+    public ResponseEntity<byte[]> download(String fileUrl, String fileName) {
+        try {
+            URI uri = new URI(fileUrl);
+            String key = uri.getPath().substring(uri.getPath().indexOf(bucket) + bucket.length() + 1);
+            S3Object o = amazonS3Client.getObject(new GetObjectRequest(bucket, key));
+            S3ObjectInputStream objectInputStream = ((S3Object) o).getObjectContent();
+            byte[] bytes = IOUtils.toByteArray(objectInputStream);
+
+            String originFileName = URLEncoder.encode(fileName, "UTF-8").replaceAll("\\+", "%20");
+            HttpHeaders httpHeaders = new HttpHeaders();
+            httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            httpHeaders.setContentLength(bytes.length);
+            httpHeaders.setContentDispositionFormData("attachment", originFileName);
+        return new ResponseEntity<>(bytes, httpHeaders, HttpStatus.OK);
+        } catch (Exception e) {
+            throw new ServerException(e.getMessage());
+        }
     }
 
     public void delete(String s3DeleteFilePath, S3SaveDir s3SaveDir) {

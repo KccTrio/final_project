@@ -13,7 +13,7 @@ import com.kcc.trioffice.domain.employee.service.EmployeeService;
 import com.kcc.trioffice.domain.participation_employee.dto.response.PtptEmpInfos;
 import com.kcc.trioffice.domain.participation_employee.mapper.ParticipationEmployeeMapper;
 import com.kcc.trioffice.global.enums.ChatType;
-import com.kcc.trioffice.global.event.PtptEvent;
+import com.kcc.trioffice.global.exception.type.NotFoundException;
 import com.kcc.trioffice.global.image.FilePathUtils;
 import com.kcc.trioffice.global.image.S3SaveDir;
 import com.kcc.trioffice.global.image.dto.response.S3UploadFile;
@@ -21,6 +21,7 @@ import com.kcc.trioffice.global.image.service.S3FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -122,5 +123,11 @@ public class AttachedFileService {
         eventPublisher.publishEvent(new PtptEmpInfos(participantEmployeeInfos));
 
         return chatMessageInfos;
+    }
+
+    public ResponseEntity<byte[]> downloadAttachedFile(Long chatRoomId, Long chatId, Long employeeId) {
+        S3UploadFile s3UploadFile = attachedFileMapper.getAttachedFileByChatId(chatId).orElseThrow(
+                () -> new NotFoundException("해당 파일이 존재하지 않습니다."));
+        return s3FileService.download(s3UploadFile.getFileUrl(), s3UploadFile.getFileName());
     }
 }
