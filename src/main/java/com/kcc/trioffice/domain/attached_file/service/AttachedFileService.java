@@ -10,14 +10,17 @@ import com.kcc.trioffice.domain.chat_room.mapper.ChatRoomMapper;
 import com.kcc.trioffice.domain.chat_status.mapper.ChatStatusMapper;
 import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.service.EmployeeService;
+import com.kcc.trioffice.domain.participation_employee.dto.response.PtptEmpInfos;
 import com.kcc.trioffice.domain.participation_employee.mapper.ParticipationEmployeeMapper;
 import com.kcc.trioffice.global.enums.ChatType;
+import com.kcc.trioffice.global.event.PtptEvent;
 import com.kcc.trioffice.global.image.FilePathUtils;
 import com.kcc.trioffice.global.image.S3SaveDir;
 import com.kcc.trioffice.global.image.dto.response.S3UploadFile;
 import com.kcc.trioffice.global.image.service.S3FileService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,6 +43,7 @@ public class AttachedFileService {
     private final EmployeeService employeeService;
     private final ParticipationEmployeeMapper participationEmployeeMapper;
     private final ChatStatusMapper chatStatusMapper;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public List<ChatMessageInfo> sendAttachedFile(List<MultipartFile> multipartFiles, List<String> tags, Long chatRoomId, Long employeeId) {
@@ -47,6 +51,8 @@ public class AttachedFileService {
         log.info("multipartFiles.size : {}", multipartFiles.size());
 
         List<ChatMessageInfo> chatMessageInfos = new ArrayList<>();
+        List<ParticipantEmployeeInfo> participantEmployeeInfos = participationEmployeeMapper.getParticipantEmployeeInfoByChatRoomId(chatRoomId);
+
 
         for (MultipartFile multipartFile : multipartFiles) {
             log.info("multipartFile: {}", multipartFile);
@@ -70,7 +76,6 @@ public class AttachedFileService {
             }
 
             chatRoomMapper.updateChatRoomLastMessage(chatMessage.getRoomId(), chatMessage.getChatId());
-            List<ParticipantEmployeeInfo> participantEmployeeInfos = participationEmployeeMapper.getParticipantEmployeeInfoByChatRoomId(chatMessage.getRoomId());
 
             int unreadCount = 0;
 
@@ -113,6 +118,9 @@ public class AttachedFileService {
             }
             chatMessageInfos.add(chatMessageInfo);
         }
+
+        eventPublisher.publishEvent(new PtptEmpInfos(participantEmployeeInfos));
+
         return chatMessageInfos;
     }
 }
