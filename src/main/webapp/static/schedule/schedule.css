@@ -155,6 +155,9 @@
 #add-schedule-container.hidden {
   display: none;
 }
+#title-text {
+  margin-top: 5px;
+}
 
 #title-add-sche {
   padding-top: 20px;
@@ -283,4 +286,36 @@
 
 #schedule-contents-title {
   margin-bottom: 5px;
+}
+
+input[name="employees[]"] {
+  width: 300px !important; /* 너비를 고정 */
+  height: 40px !important; /* 높이를 고정 */
+  max-width: 100% !important; /* 최대 너비를 부모 요소에 맞춤 */
+  box-sizing: border-box !important; /* padding과 border를 포함한 크기 설정 */
+}
+
+.tagify {
+  --tag-bg: #41b6ff !important; /* Tagify 태그 배경색 */
+  --tag-text-color: white !important;
+  --tag-hover: #41b7ff !important;
+}
+
+/* Tagify 입력 태그 스타일 */
+.tagify {
+  margin-top: 5px;
+  border-radius: 5px;
+  height: 32px;
+  width: 347px;
+  max-height: 50px;
+  overflow-y: auto;
+  white-space: nowrap;
+  box-shadow: 1.5px 1px #ccc;
+}
+
+/* 태그가 추가된 입력 필드의 스타일 */
+.tagify__input {
+  height: 30px; /* 고정된 높이 */
+  overflow: hidden; /* 넘치는 내용 숨김 */
+  resize: none; /* 크기 조정 불가 */
 }

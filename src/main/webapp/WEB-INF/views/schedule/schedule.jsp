@@ -76,7 +76,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
             <div id="invite">
               <div id="invite-title">
                 <div id="title-text">인원 초대</div>
-                <input type="text" />
+                <input type="text" name="employees[]" />
               </div>
               <div class="checkbox-group">
                 <label>

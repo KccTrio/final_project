@@ -73,6 +73,17 @@ pageEncoding="UTF-8" %>
     />
     <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 
+    <!-- tagify -->
+    <!-- 소스 다운 -->
+    <script src="https://unpkg.com/@yaireo/tagify"></script>
+    <!-- 폴리필 (구버젼 브라우저 지원) -->
+    <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <link
+      href="https://unpkg.com/@yaireo/tagify/dist/tagify.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+
     <style>
       /* 적용방법 */
       .test-font {
