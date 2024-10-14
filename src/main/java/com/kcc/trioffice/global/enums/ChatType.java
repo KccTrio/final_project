@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum ChatType {
-    ENTER(1), CHAT(2), FILE(3), QUIT(4);
+    ENTER(1), CHAT(2), FILE(3), QUIT(4), IMAGE(5);
 
     private final long value;
 
@@ -21,6 +21,8 @@ public enum ChatType {
                 return FILE.value;
             case "QUIT":
                 return QUIT.value;
+            case "IMAGE":
+                return IMAGE.value;
             default:
                 throw new BadRequestException("chatType이 잘못되었습니다.");
         }
@@ -36,8 +38,21 @@ public enum ChatType {
                 return FILE.name();
             case 4:
                 return QUIT.name();
+            case 5:
+                return IMAGE.name();
             default:
                 throw new BadRequestException("chatType이 잘못되었습니다.");
+        }
+    }
+
+    public static Long convertFileType(Long fileType) {
+        switch (fileType.intValue()) {
+            case 1:
+                return IMAGE.value;
+            case 2:
+                return FILE.value;
+            default:
+                throw new BadRequestException("fileType이 잘못되었습니다.");
         }
     }
 }

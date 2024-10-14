@@ -1,0 +1,101 @@
+#send-file-modal {
+    /*display: none;*/
+    position: absolute;
+    z-index: 1050;
+    background-color: white;
+    border: 1px solid #888;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    width: 428px;
+    height: 350px;
+    overflow-y: scroll;
+}
+
+.tagify__tag {
+    background-color: #E5E5E5;
+    border-radius: 10px;
+}
+
+    /* 모달 콘텐츠 */
+.send-file-modal-content {
+    padding: 20px;
+    width: 100%;
+    height: 100%;
+    max-height: 300px;
+}
+
+button {
+    border: none;
+    background-color: #F5F5F5;
+}
+
+.create-chat-title {
+    padding: 0px 15px;
+}
+
+.button-area button {
+    width: 100%;
+    height: 40px;
+    border-radius: 3px;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.button-area {
+    margin-top: 10px;
+    padding-bottom: 20px;
+}
+
+.send-file-create-button {
+    background-color: #0056B3;
+    color: white;
+    border: none;
+}
+
+.send-cancel-button {
+    background-color: #FFFFFF;
+    color: black;
+    border: 1px solid #959595;
+}
+
+.tagify{
+    width: 100%;
+    max-width: 700px;
+}
+
+
+.tagify--outside{
+    border: 0;
+}
+
+.tagify--outside .tagify__input{
+    order: -1;
+    flex: 100%;
+    border: 1px solid var(--tags-border-color);
+    margin-bottom: 1em;
+    transition: .1s;
+}
+
+.tagify--outside .tagify__input:hover{ border-color:var(--tags-hover-border-color); }
+.tagify--outside.tagify--focus .tagify__input{
+    transition:0s;
+    border-color: var(--tags-focus-border-color);
+}
+
+.dropzone-box {
+    margin-top: 10px;
+    height: 150px;
+    overflow-y: scroll;
+}
+
+.input-add-emp-box i {
+    font-size: 30px;
+}
+
+.dropzone-box .col-12 {
+    padding: 0;
+}
+
+.input-add-emp-box .col-11 {
+    padding-right: 0;
+}
