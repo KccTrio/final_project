@@ -1012,7 +1012,7 @@ $(document).ready(function() {
                 console.log('직원 데이터를 성공적으로 가져왔습니다:', whitelist);
 
                 // Tagify 초기화
-                let inputElm = document.querySelector("input[name='employees[]']");
+                let inputElm = document.querySelector("input[name='except-ptpt-employees[]']");
 
                 // initialize Tagify
                 tagify = new Tagify(inputElm, {
@@ -1121,7 +1121,7 @@ $(document).ready(function() {
 
     $('.create-button').on('click', function () {
         // input에서 값 가져오기
-        var employees = $('input[name="employees[]"]').val();
+        var employees = $('input[name="except-ptpt-employees[]"]').val();
         // 쉼표로 분리하고 숫자로 변환
         var employeeIds = employees.split(',').map(Number);
         var dataToSend = {
@@ -1387,6 +1387,209 @@ $(document).ready(function() {
             },
         });
     }
+    let fileTagify;
+
+    $('.file-button').on('click', function () {
+        $('.chat-area').hide()
+        $('.file-area').show();
+        // file-button 상위 div에 active 추가
+        $('.file-button').parent().addClass('active');
+        $('.chat-button').parent().removeClass('active');
+
+        if (fileTagify) {
+            fileTagify.destroy();
+            // 태그 input 초기화
+            document.querySelector('input[name=tags]').value = '';
+        }
+
+
+        let inputElm = document.querySelector('input[name=tags]');
+
+        // 화이트 리스트 : 해당 문자만 태그로 추가 가능
+        let whitelist = ["서류","계획서","제안서","발표자료","ppt"];
+
+        // initialize Tagify
+        fileTagify = new Tagify(inputElm, {
+            enforceWhitelist: false, // 화이트리스트에서 허용된 태그만 사용
+            whitelist: whitelist // 화이트 리스트 배열. 화이트 리스트를 등록하면 자동으로 드롭다운 메뉴가 생긴다
+        })
+
+        fileTagify.on('add', onAddTag) // 태그가 추가되면
+            .on('remove', onRemoveTag) // 태그가 제거되면
+            .on('input', onInput) // 태그가 입력되고 있을 경우
+            .on('invalid', onInvalidTag) // 허용되지 않는 태그일 경우
+            .on('click', onTagClick) // 해시 태그 블럭을 클릭할 경우
+            .on('focus', onTagifyFocusBlur) // 포커스 될 경우
+            .on('blur', onTagifyFocusBlur) // 반대로 포커스를 잃을 경우
+
+            .on('edit:start', onTagEdit) // 입력된 태그 수정을 할 경우
+
+            .on('dropdown:hide dropdown:show', e => console.log(e.type)) // 드롭다운 메뉴가 사라질경우
+            .on('dropdown:select', onDropdownSelect) // 드롭다운 메뉴에서 아이템을 선택할 경우
+
+        function onAddTag(e){
+            console.log("onAddTag: ", e.detail);
+            console.log("original input value: ", inputElm.value)
+            tableBody.innerHTML = '';
+            tableBody.dataset.loading = 'false';
+            fileMoreData = true;
+            loadMoreData();
+        }
+
+        function onRemoveTag(e){
+            console.log("onRemoveTag:", e.detail, "tagify instance value:", inputElm.value);
+            tableBody.innerHTML = '';
+            tableBody.dataset.loading = 'false';
+            fileMoreData = true;
+            loadMoreData();
+        }
+
+        function onTagEdit(e){
+            console.log("onTagEdit: ", e.detail);
+        }
+
+        // invalid tag added callback
+        function onInvalidTag(e){
+            console.log("onInvalidTag: ", e.detail);
+        }
+
+        // invalid tag added callback
+        function onTagClick(e){
+            console.log(e.detail);
+            console.log("onTagClick: ", e.detail);
+        }
+
+        function onTagifyFocusBlur(e){
+            console.log(e.type, "event fired")
+        }
+
+        function onDropdownSelect(e){
+            console.log("onDropdownSelect: ", e.detail)
+        }
+
+        function onInput(e){
+            console.log("onInput: ", e.detail);
+
+            tagify2.loading(true) // 태그 입력하는데 우측에 loader 애니메이션 추가
+            tagify2.loading(false) // loader 애니메이션 제거
+
+            tagify2.dropdown.show(e.detail.value); // 드롭다운 메뉴 보여주기
+            tagify2.dropdown.hide(); // // 드롭다운 제거
+        }
+
+        // file table 초기화
+        let tableBody = document.querySelector('.file-table tbody');
+        tableBody.innerHTML = '';
+        tableBody.dataset.loading = 'false';
+        fileMoreData = true;
+        loadMoreData();
+    });
+
+    let tableBody = document.querySelector('.file-table tbody');
+    document.querySelector('.file-table tbody').addEventListener('scroll', function() {
+        if (tableBody.scrollTop + tableBody.clientHeight >= tableBody.scrollHeight) {
+            // 스크롤이 바닥에 도달했을 때 실행할 코드
+            loadMoreData();
+        }
+    });
+
+    let fileMoreData;
+
+    function loadMoreData() {
+        if (tableBody.dataset.loading === 'true') return;
+        console.log("파일 로드 실행");
+
+        tableBody.dataset.loading = 'true';
+        let searchTags = fileTagify.value.map(tag => tag.value);
+        let fileOffset = tableBody.children.length;
+        $.ajax({
+            url: '/api/chatrooms/' + currentChatRoomId + '/attached-files',
+            method: 'GET',
+            dataType: 'json',
+            data: {offset: fileOffset, limit: 30, tags: searchTags},
+            success: function (data) {
+                console.log(data);
+                if (data.length < limit) {
+                    fileMoreData = false; // 모든 데이터 로드 완료
+                }
+                addFileContents(data);
+
+            },
+            error: function (xhr, status, error) {
+                console.error('채팅방 파일 데이터를 가져오는 데 실패했습니다:', error);
+            }
+        });
+    }
+
+    function addFileContents(data) {
+        data.forEach(function (file) {
+            // 태그 HTML 생성
+            let tagsHTML = '';
+            if (file.tags && file.tags.length > 0) {
+                file.tags.forEach(function(tag) {
+                    tagsHTML += `<span class="tag">${tag}</span> `;
+                });
+            }
+
+            // 테이블 행 생성
+            let tr = document.createElement('tr');
+            tr.setAttribute('data-message-id', file.chatId); // 메시지 ID 저장
+            tr.innerHTML = `
+            <td>${file.fileName}</td>
+            <td>${file.writeDt}</td>
+            <td>${file.sender}</td>
+            <td>${tagsHTML}</td>
+            <td>
+                <i class="fas fa-download"></i>
+            </td>
+        `;
+            tableBody.appendChild(tr);
+        });
+        tableBody.dataset.loading = 'false';
+    }
+
+    $('.file-table').on('click', '.fa-download', function() {
+        // 이벤트가 발생한 메시지 ID를 찾습니다.
+        var messageId = $(this).closest('tr').data('message-id');
+        var chatRoomId = currentChatRoomId; // 현재 채팅방 ID
+
+        // 파일 다운로드 요청
+        $.ajax({
+            url: `/api/chatrooms/${chatRoomId}/chats/${messageId}/attached-file/download`,
+            method: 'GET',
+            xhrFields: {
+                responseType: 'blob' // 바이너리 데이터 수신을 위해 필요합니다.
+            },
+            success: function(response, textStatus, xhr) {
+                // 파일명 추출 (Content-Disposition 헤더에서 추출)
+                var filename = "";
+                var disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) {
+                        filename = decodeURIComponent(matches[1].replace(/['"]/g, ''));
+                    }
+                } else {
+                    // 파일명이 없을 경우 기본값 설정
+                    filename = "downloaded_file";
+                }
+
+                // Blob 객체 생성 후 다운로드
+                var blob = new Blob([response], { type: 'application/octet-stream' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
+            error: function(xhr, status, error) {
+                console.error('파일 다운로드에 실패했습니다:', error);
+            }
+        });
+    });
+
 
     // 파일 전송 모달 외부 클릭 시 닫기
     // $(window).on('click', function (event) {
@@ -1467,6 +1670,32 @@ $(document).ready(function() {
             }
         });
     });
+
+    $('.fa-pen-to-square').on('click', function () {
+        $('.contents').hide();
+        $('.save-contents').show();
+    });
+
+    $('.chat-room-item').on('click', function () {
+        $('.contents').hide();
+        $('.chat-contents').show();
+        $('.chat-area').show();
+        $('.file-area').hide();
+        $('.chat-button').parent().addClass('active');
+        $('.file-button').parent().removeClass('active');
+    });
+
+    $('.chat-button').on('click', function () {
+        $('.contents').hide();
+        $('.chat-contents').show();
+        $('.chat-area').show();
+        $('.file-area').hide();
+        // chat-button 상위 div에 active 추가
+        $('.chat-button').parent().addClass('active');
+        $('.file-button').parent().removeClass('active');
+    })
+
+
 
 });
 

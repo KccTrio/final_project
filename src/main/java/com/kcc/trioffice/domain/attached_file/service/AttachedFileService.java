@@ -1,5 +1,6 @@
 package com.kcc.trioffice.domain.attached_file.service;
 
+import com.kcc.trioffice.domain.attached_file.dto.response.AttachedFileInfo;
 import com.kcc.trioffice.domain.attached_file.mapper.AttachedFileMapper;
 import com.kcc.trioffice.domain.attached_file.mapper.TagMapper;
 import com.kcc.trioffice.domain.chat_room.dto.request.ChatMessage;
@@ -129,5 +130,9 @@ public class AttachedFileService {
         S3UploadFile s3UploadFile = attachedFileMapper.getAttachedFileByChatId(chatId).orElseThrow(
                 () -> new NotFoundException("해당 파일이 존재하지 않습니다."));
         return s3FileService.download(s3UploadFile.getFileUrl(), s3UploadFile.getFileName());
+    }
+
+    public List<AttachedFileInfo> getAttachedFile(Long chatRoomId, Long employeeId, int limit, int offset, List<String> tags) {
+        return attachedFileMapper.getAttachedFile(chatRoomId, limit, offset, tags);
     }
 }
