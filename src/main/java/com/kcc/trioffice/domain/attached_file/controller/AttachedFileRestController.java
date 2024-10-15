@@ -1,5 +1,6 @@
 package com.kcc.trioffice.domain.attached_file.controller;
 
+import com.kcc.trioffice.domain.attached_file.dto.response.AttachedFileInfo;
 import com.kcc.trioffice.domain.attached_file.service.AttachedFileService;
 import com.kcc.trioffice.domain.chat_room.dto.response.ChatMessageInfo;
 import com.kcc.trioffice.global.auth.PrincipalDetail;
@@ -43,6 +44,16 @@ public class AttachedFileRestController {
                                                        @PathVariable Long chatId,
                                                        @AuthenticationPrincipal PrincipalDetail principalDetail) {
         return attachedFileService.downloadAttachedFile(chatRoomId, chatId, principalDetail.getEmployeeId());
+    }
+
+    @GetMapping("/api/chatrooms/{chatRoomId}/attached-files")
+    public ResponseEntity<List<AttachedFileInfo>> getAttachedFile(@PathVariable Long chatRoomId,
+                                             @RequestParam int limit,
+                                             @RequestParam int offset,
+                                             @RequestParam(required = false) List<String> tags,
+                                             @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        List<AttachedFileInfo> attachedFile = attachedFileService.getAttachedFile(chatRoomId, principalDetail.getEmployeeId(), limit, offset, tags);
+        return ResponseEntity.ok(attachedFile);
     }
 
 }

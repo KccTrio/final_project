@@ -322,10 +322,124 @@
     margin-right: 5px;
 }
 
+.tag {
+    color: white;
+    border-radius: 10px;
+    padding: 5px;
+    background: #7AB7FA;
+    margin-right: 5px;
+}
+
 .tag-box i {
     margin-right: 5px;
 }
 
 .tag-box {
     margin-top: 10px;
+}
+
+.file-area {
+    padding: 40px;
+}
+
+.tag-input-area i {
+    font-size: 30px;
+}
+
+.file-table {
+    margin-top: 20px;
+}
+
+/*
+*/
+
+table {
+    border: 1px #a39485 solid;
+    font-size: .9em;
+    box-shadow: 0 2px 5px rgba(0,0,0,.25);
+    width: 100%;
+    border-collapse: collapse;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+th {
+    text-align: center !important;
+}
+
+thead {
+    font-weight: bold;
+    color: #fff;
+    background: #7AB7FA;
+    height: 30px;
+}
+
+td, th {
+    padding: 1em .5em !important;
+    vertical-align: middle !important;
+}
+
+td {
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    background: #fff;
+    text-align: center !important;
+}
+
+.file-table {
+    position: relative;
+}
+
+.file-table table {
+    width: 100%;
+    border-collapse: collapse;
+    overflow: auto;
+}
+.table-container {
+    max-height: 41rem; /* 원하는 높이로 설정 */
+    overflow-y: auto;
+    position: relative;
+}
+
+.table-container thead th {
+    position: sticky;
+    top: 0;
+    background-color: #7AB7FA;
+    color: #fff;
+    z-index: 1;
+}
+
+@media all and (max-width: 768px) {
+
+    table, thead, tbody, th, td, tr {
+        display: block;
+    }
+
+    th {
+        text-align: center;  // 텍스트를 중앙으로 정렬
+        vertical-align: middle;  // 내용을 수직 중앙으로 정렬
+        line-height: 30px;  // 높이에 맞춰 line-height 조정
+    }
+
+    table {
+        position: relative;
+        padding-bottom: 0;
+        border: none;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    }
+
+    thead {
+        float: left;
+        white-space: nowrap;
+    }
+
+    tbody {
+        overflow-x: auto;
+        overflow-y: hidden;
+        position: relative;
+        white-space: nowrap;
+    }
+}
+
+.file-table .fa-download {
+    cursor: pointer;
 }
