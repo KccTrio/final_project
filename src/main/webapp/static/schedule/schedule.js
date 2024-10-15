@@ -187,7 +187,9 @@ addScheduleButton.onclick = function () {
 };
 
 // 모달 닫기 버튼 클릭 시 모달 닫기
-closeButton.onclick = function () {
+closeButton.onclick = function (event) {
+  event.preventDefault(); // 기본 동작 방지
+  event.stopPropagation(); // 이벤트 전파 방지
   modalContainer.classList.add("hidden");
 
   // Quill 에디터 내용 비우기
@@ -269,31 +271,8 @@ var quill = new Quill("#schedule-contents", {
     width: "100%", // 원하는 너비
   },
 });
-
-// 일정 추가 양식 제출 시 이벤트 처리
-document.getElementById("schedule-form").onsubmit = function (event) {
-  event.preventDefault(); // 기본 제출 동작 방지
-
-  // 입력 값 가져오기
-  var scheduleName = document.getElementById("schedule-name").value;
-  var startDate = document.getElementById("start-date").value;
-  var endDate = document.getElementById("end-date").value;
-
-  //에디터 내용 가져오기
-  var deltaContent = JSON.stringify(quill.getContents());
-
-  // 값들 확인
-  console.log("일정 추가:", deltaContent, scheduleName, startDate, endDate);
-
-  // 입력 필드 초기화
-  document.getElementById("schedule-form").reset();
-
-  // Delta 포맷으로 에디터 내용 가져오기
-  var deltaContent = JSON.stringify(quill.getContents());
-  quill.setContents([]);
-};
-
-/* 인원초대를 위한 code*/
+var tagify;
+/* 인원초대를 위한 code   태기파이 */
 $(document).ready(function () {
   // 화이트리스트 초기화
   let whitelist = [];
@@ -318,7 +297,7 @@ $(document).ready(function () {
       let inputElm = document.querySelector("input[name='employees[]']");
 
       // initialize Tagify
-      var tagify = new Tagify(inputElm, {
+      tagify = new Tagify(inputElm, {
         enforceWhitelist: true, // 화이트리스트에서 허용된 태그만 사용
         whitelist: whitelist, // 화이트 리스트 배열. 화이트 리스트를 등록하면 자동으로 드롭다운 메뉴가 생긴다
         autogrow: false, // 태그 입력창이 자동으로 늘어난다
@@ -380,7 +359,9 @@ $(document).ready(function () {
         .on("blur", onTagifyFocusBlur) // 반대로 포커스를 잃을 경우
         .on("edit:start", onTagEdit) // 입력된 태그 수정을 할 경우
         .on("dropdown:hide dropdown:show", (e) => console.log(e.type)) // 드롭다운 메뉴가 사라질경우
-        .on("dropdown:select", onDropdownSelect); // 드롭다운 메뉴에서 아이템을 선택할 경우
+        .on("dropdown:select", function (e) {
+          console.log("Selected employee ID:", e.detail.data.value);
+        });
 
       // 이벤트 리스너 콜백 메소드 정의
       function onAddTag(e) {
@@ -435,3 +416,56 @@ $(document).ready(function () {
 
   // AJAX 호출과 무관한 다른 코드가 있다면 여기에 추가
 });
+
+document.getElementById("schedule-form").onsubmit = function (event) {
+  event.preventDefault(); // 기본 제출 동작 방지
+
+  Swal.fire({
+    title: "일정을 등록하시겠습니까?",
+    showCancelButton: true,
+    confirmButtonText: "저장",
+    cancelButtonText: "닫기",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      // 입력 값 가져오기
+      var scheduleName = document.getElementById("schedule-name").value;
+      var startDate = document.getElementById("start-date").value;
+      var endDate = document.getElementById("end-date").value;
+
+      var selectedEmployeeIds = tagify.value.map(function (tag) {
+        return tag.value;
+      });
+
+      // 주최자 처리는 서버에서
+      var formData = {
+        scheduleName: scheduleName,
+        startDate: startDate,
+        endDate: endDate,
+        employeeIds: selectedEmployeeIds,
+      };
+
+      $.ajax({
+        url: "schedules/save",
+        method: "POST",
+        contentType: "application/json",
+        data: JSON.stringify(formData),
+        success: function (response) {
+          Swal.fire("일정 등록을 성공했습니다.");
+
+          // 입력 필드 초기화
+          document.getElementById("schedule-form").reset();
+          quill.setContents([]); // 에디터 내용 초기화
+        },
+        error: function (xhr, status, error) {
+          Swal.fire({
+            title: "일정 등록에 실패했습니다.",
+            icon: "error",
+          });
+          console.error("일정 추가 실패:", error);
+        },
+      });
+    } else {
+      console.log("일정 등록 취소");
+    }
+  });
+};

@@ -142,7 +142,7 @@ body {
 }
 
 .container-fluid {
-    padding: 0px;
+  padding: 0px;
 }
 
 *::-webkit-scrollbar {
@@ -150,11 +150,11 @@ body {
 }
 
 *::-webkit-scrollbar-thumb {
-  background: #B0B0B0;
+  background: #b0b0b0;
   border-radius: 20px;
 }
 
 *::-webkit-scrollbar-track {
-  background: #EFEFEF;
+  background: #efefef;
   border-radius: 20px;
 }

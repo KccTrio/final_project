@@ -16,7 +16,6 @@ import com.kcc.trioffice.domain.employee.service.EmployeeService;
 import lombok.RequiredArgsConstructor;
 
 @Configuration
-@Transactional
 @RequiredArgsConstructor
 public class InitEmployee implements ApplicationRunner {
 
@@ -24,7 +23,17 @@ public class InitEmployee implements ApplicationRunner {
   private final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
   private final LocalDate tmpBirth = LocalDate.of(1995, 10, 2);
 
+  private String randomName(Long i) {
+    String name = "";
+    String[] nameValue = { "김길동", "나길순", "두사랑", "라호호" };
+    int tmpNum = (int) (i % nameValue.length); // 배열의 길이에 맞추어 나머지 연산
+
+    name = nameValue[tmpNum];
+    return name;
+  }
+
   @Override
+  @Transactional
   public void run(ApplicationArguments args) throws Exception {
     // 사원 3명 생성하는 code
     // for (Long i = (long) 0; i < 3; i++) {
@@ -35,7 +44,7 @@ public class InitEmployee implements ApplicationRunner {
     // .password("1234")
     // .phoneNum("010-1234-222" + i)
     // .externalEmail("exter" + i + "@google.com")
-    // .name("홍길동")
+    // .name(randomName(i))
     // .birth(tmpBirth)
     // .fax("02-222-2222")
     // .location("동측 기둥 " + i + "번자리")

@@ -239,8 +239,8 @@
 }
 
 .checkbox-group {
-  margin-left: 10px;
-  margin-top: 22px;
+  margin-left: 15px;
+  margin-top: 30px;
 }
 
 #messenger-alram-label {
@@ -305,8 +305,8 @@ input[name="employees[]"] {
 .tagify {
   margin-top: 5px;
   border-radius: 5px;
-  height: 32px;
-  width: 347px;
+  height: 40px;
+  width: 350px;
   max-height: 50px;
   overflow-y: auto;
   white-space: nowrap;
@@ -318,4 +318,11 @@ input[name="employees[]"] {
   height: 30px; /* 고정된 높이 */
   overflow: hidden; /* 넘치는 내용 숨김 */
   resize: none; /* 크기 조정 불가 */
+}
+
+.swal2-icon-show {
+  margin: auto !important;
+  border: 5px solid #f27474 !important;
+  border-radius: 100%;
+  margin-top: 20px !important;
 }
