@@ -144,7 +144,6 @@ public class EmployeeService {
     public Optional<List<SearchEmployee>> getAllEmployeesInfo() {
         List<SearchEmployee> employees = employeeMapper.getAllEmployeesInfo();
 
-        
         if (employees.isEmpty()) {
             throw new NotFoundException("등록된 직원이 없습니다.");
         } else {
@@ -152,5 +151,11 @@ public class EmployeeService {
         }
     }
 
+    public EmployeeInfo getEmployeeInfoFindById(String email) {
         
+        return employeeMapper.getEmployeeInfoFindByEmail(email)
+                .orElseThrow(() -> new NotFoundException("해당 직원이 존재하지 않습니다."));
+
+    }
+
 }

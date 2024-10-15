@@ -416,56 +416,72 @@ $(document).ready(function () {
 
   // AJAX 호출과 무관한 다른 코드가 있다면 여기에 추가
 });
-
+// 일정 추가 양식 제출 시 이벤트 처리
 document.getElementById("schedule-form").onsubmit = function (event) {
   event.preventDefault(); // 기본 제출 동작 방지
 
+  // 확인 버튼이 눌렸을 때만 실행
   Swal.fire({
     title: "일정을 등록하시겠습니까?",
     showCancelButton: true,
     confirmButtonText: "저장",
-    cancelButtonText: "닫기",
   }).then((result) => {
     if (result.isConfirmed) {
+      // 사용자가 확인 버튼을 클릭한 경우
       // 입력 값 가져오기
       var scheduleName = document.getElementById("schedule-name").value;
       var startDate = document.getElementById("start-date").value;
       var endDate = document.getElementById("end-date").value;
 
+      // 에디터 내용 가져오기
+      var deltaContent = quill.getContents();
+      var deltaContentJson = JSON.stringify(deltaContent); // JSON 문자열로 변환
+
+      // 선택한 직원 ID 가져오기
       var selectedEmployeeIds = tagify.value.map(function (tag) {
         return tag.value;
       });
 
-      // 주최자 처리는 서버에서
+      // 값들 확인
+      console.log(
+        "일정 추가:",
+        scheduleName,
+        startDate,
+        endDate,
+        selectedEmployeeIds,
+        deltaContentJson
+      );
+
+      // 서버로 전송할 데이터 설정
       var formData = {
         scheduleName: scheduleName,
         startDate: startDate,
         endDate: endDate,
         employeeIds: selectedEmployeeIds,
+        content: deltaContentJson, // 에디터 내용 추가
       };
 
+      // AJAX 호출
       $.ajax({
-        url: "schedules/save",
+        url: "/schedules/save",
         method: "POST",
         contentType: "application/json",
+
         data: JSON.stringify(formData),
         success: function (response) {
-          Swal.fire("일정 등록을 성공했습니다.");
-
+          Swal.fire("일정 등록을 성공했습니다.", "", "success");
           // 입력 필드 초기화
           document.getElementById("schedule-form").reset();
           quill.setContents([]); // 에디터 내용 초기화
         },
         error: function (xhr, status, error) {
           Swal.fire({
-            title: "일정 등록에 실패했습니다.",
             icon: "error",
+            title: "일정 등록을 실패했습니다.",
           });
-          console.error("일정 추가 실패:", error);
+          console.error("Error:", xhr.responseText); // 오류 응답 내용을 콘솔에 출력
         },
       });
-    } else {
-      console.log("일정 등록 취소");
     }
   });
 };

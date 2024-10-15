@@ -26,7 +26,9 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       </div>
       <div id="name-bar">
         <div id="employee-name-location">
-          <span id="employee-name">홍길동</span>님의 일정
+          <security:authorize access="isAuthenticated()">
+            ${name} 님의 일정
+          </security:authorize>
         </div>
       </div>
       <!-- <div id="calendar-bar">
@@ -109,6 +111,11 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
               <button type="submit" id="submit-add-schedule">일정 추가</button>
               <button id="close-button">닫기</button>
             </div>
+            <input
+              type="hidden"
+              name="${_csrf.parameterName}"
+              value="${_csrf.token}"
+            />
           </form>
           <span id="close-button"></span>
         </div>

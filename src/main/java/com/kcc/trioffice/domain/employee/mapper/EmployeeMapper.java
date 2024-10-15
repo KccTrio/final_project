@@ -30,5 +30,8 @@ public interface EmployeeMapper {
     int temporaryPassword(String incodingPassword, String email);
 
     Optional<AdminInfo> getAdminInfo();
+
     List<SearchEmployee> getAllEmployeesInfo();
+
+    Optional<EmployeeInfo> getEmployeeInfoFindByEmail(String email);
 }

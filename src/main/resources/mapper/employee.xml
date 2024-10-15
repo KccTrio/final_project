@@ -64,6 +64,34 @@
                 AND is_deleted = 0
     </select>
 
+    <select id="getEmployeeInfoById" parameterType="String"
+        resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
+           SELECT employee_id as employeeId
+               ,dept_id as deptId
+               ,company_id as companyId
+               ,email
+               ,password
+               ,phone_num as phoneNum
+               ,external_email as externalEmail
+               ,name
+               ,birth
+               ,profile_url as profileUrl
+               ,fax
+               ,location
+               ,is_receive_notification as isReceiveNotification
+               ,position
+               ,status
+               ,status_message as statusMessage
+               ,writer
+               ,write_dt as writeDt
+               ,modifier
+               ,modified_dt as modifiedDt
+               ,is_deleted as isDeleted
+            FROM employee e
+            WHERE email = #{email}
+                AND is_deleted = 0
+    </select>
+
     <select id="getEmployeeInfoList" parameterType="java.util.List"
             resultType="String">
         SELECT name
@@ -75,7 +103,7 @@
 
     </select>
 
-    <select id="getEmployeeInfoFindById" parameterType="String"
+    <select id="getEmployeeInfoFindByEmail" parameterType="String"
             resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
         SELECT employee_id as employeeId
                , dept_id as deptId
