@@ -207,10 +207,10 @@ mobiscroll.setOptions({
   locale: mobiscroll.localeKo,
 });
 
-// 시작 날짜와 시간 선택기
-mobiscroll.datepicker("#start-date", {
-  controls: ["datetime"], // 날짜와 시간 선택
-  display: "bubble", // 팝업 형식 (bubble, inline 등 사용 가능)
+// Mobiscroll 시작 날짜와 시간 선택기
+var startDatePicker = mobiscroll.datepicker("#start-date", {
+  controls: ["datetime"], // 날짜와 시간 또는 날짜만 선택
+  display: "bubble", // 팝업 형식
   dateFormat: "YYYY-MM-DD", // 날짜 형식
   timeFormat: "HH:mm", // 시간 형식
   stepMinute: 5, // 분 단위 증가폭
@@ -222,9 +222,9 @@ mobiscroll.datepicker("#start-date", {
   },
 });
 
-// 끝 날짜와 시간 선택기
+// Mobiscroll 끝 날짜와 시간 선택기
 var endDatePicker = mobiscroll.datepicker("#end-date", {
-  controls: ["datetime"],
+  controls: ["datetime"], // 날짜와 시간 또는 날짜만 선택
   display: "bubble",
   dateFormat: "YYYY-MM-DD",
   timeFormat: "HH:mm",
@@ -236,6 +236,21 @@ var endDatePicker = mobiscroll.datepicker("#end-date", {
       validateDates();
     }
   },
+});
+
+// "하루 종일" 체크박스 이벤트
+document.getElementById("allDayCheck").addEventListener("change", function (e) {
+  const isChecked = e.target.checked;
+
+  if (isChecked) {
+    startDatePicker.setOptions({ controls: ["date"] });
+    endDatePicker.setOptions({ controls: ["date"] });
+    console.log("하루 종일 선택됨");
+  } else {
+    startDatePicker.setOptions({ controls: ["datetime"] });
+    endDatePicker.setOptions({ controls: ["datetime"] });
+    console.log("하루 종일 해제됨");
+  }
 });
 
 function validateDates() {
@@ -271,8 +286,10 @@ var quill = new Quill("#schedule-contents", {
     width: "100%", // 원하는 너비
   },
 });
-var tagify;
+
 /* 인원초대를 위한 code   태기파이 */
+var tagify;
+
 $(document).ready(function () {
   // 화이트리스트 초기화
   let whitelist = [];

@@ -26,6 +26,10 @@
   margin-right: 10px;
 }
 
+#allDayCheck {
+  margin-left: 10px;
+}
+
 #add-schedule-button > span {
   color: white;
 }

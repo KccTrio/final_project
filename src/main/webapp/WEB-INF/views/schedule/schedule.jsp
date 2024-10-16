@@ -73,6 +73,11 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
                 name="end-date"
                 required
               />
+
+              <label
+                ><input type="checkbox" name="allDayCheck" id="allDayCheck" />
+                하루 종일
+              </label>
             </div>
 
             <div id="invite">
