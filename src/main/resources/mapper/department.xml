@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.kcc.trioffice.domain.department.mapper.DepartmentMapper">
+
+    <resultMap id="DepartmentResultMap" type="com.kcc.trioffice.domain.department.dto.response.Department">
+        <id property="deptId" column="deptId"/>
+        <result property="departmentName" column="departmentName"/>
+        <result property="upperDeptId" column="upperDeptId"/>
+        <result property="deptLevel" column="deptLevel"/>
+
+        <!-- 하위 부서 매핑 -->
+        <collection property="subDepartments" ofType="com.kcc.trioffice.domain.department.dto.response.Department" select="getSubDepartmentsByParentId" column="deptId"/>
+
+        <!-- 직원 매핑 -->
+        <collection property="employees" ofType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo" select="getEmployeesByDeptId" column="deptId"/>
+    </resultMap>
+
+    <select id="getDepartmentDetails" resultMap="DepartmentResultMap">
+      SELECT
+        LEVEL AS deptLevel
+        , d.dept_id AS deptId
+        , d.name AS departmentName
+        , d.upper_dept_id AS upperDeptId
+        FROM department d
+        START WITH d.upper_dept_id IS NULL
+        CONNECT BY PRIOR d.dept_id = d.upper_dept_id
+        ORDER BY d.dept_id
+    </select>
+
+    <!-- 하위 부서 조회 쿼리 수정 -->
+    <select id="getSubDepartmentsByParentId" resultType="com.kcc.trioffice.domain.department.dto.response.Department">
+      SELECT
+        d.dept_id AS deptId
+        , d.name AS departmentName
+        , d.upper_dept_id AS upperDeptId
+        , LEVEL AS deptLevel
+        FROM department d
+        WHERE d.upper_dept_id = #{parentId}
+        START WITH d.upper_dept_id = #{parentId}
+        CONNECT BY PRIOR d.dept_id = d.upper_dept_id
+        ORDER BY d.dept_id
+    </select>
+
+    <!-- 직원 조회 쿼리 -->
+    <select id="getEmployeesByDeptId" resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
+        SELECT e.employee_id AS employeeId
+               , e.name AS name
+               , e.position AS position
+          FROM employee e
+          WHERE e.dept_id = #{deptId}
+    </select>
+
+
+
+</mapper>
