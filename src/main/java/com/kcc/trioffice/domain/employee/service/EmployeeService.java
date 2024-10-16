@@ -36,7 +36,6 @@ public class EmployeeService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final EmployeeMapper employeeMapper;
     private final JavaMailSender mailSender;
-    // private final EmployeeInfo employeeInfo = new EmployeeInfo();
 
     // 임시비밀번호 생성
     private String generateTempPassword() {
@@ -138,5 +137,9 @@ public class EmployeeService {
 
     public EmployeeInfo getEmployeeInfo(Long employeeId) {
         return employeeMapper.getEmployeeInfo(employeeId).orElseThrow(() -> new NotFoundException("해당 직원이 존재하지 않습니다."));
+    }
+
+    public EmployeeInfo findById(Long id) {
+        return employeeMapper.getEmployeeInfo(id).orElseThrow(() -> new NotFoundException("사원이 없습니다."));
     }
 }
