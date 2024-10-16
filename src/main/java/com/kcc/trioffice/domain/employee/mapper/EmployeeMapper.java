@@ -34,4 +34,6 @@ public interface EmployeeMapper {
     List<SearchEmployee> getAllEmployeesInfo();
 
     Optional<EmployeeInfo> getEmployeeInfoFindByEmail(String email);
+
+    List<String> getEmployeeEmailforSend(List<String> Ids);
 }

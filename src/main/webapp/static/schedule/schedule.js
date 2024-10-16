@@ -474,6 +474,13 @@ document.getElementById("schedule-form").onsubmit = function (event) {
         selectedEmployeeIds,
         deltaContentJson
       );
+      var emailCheck;
+      const checkedEmailSend = document.getElementById("email-alram");
+      if (checkedEmailSend.checked) {
+        emailCheck = 1;
+      } else {
+        emailCheck = 0;
+      }
 
       // 서버로 전송할 데이터 설정
       var formData = {
@@ -482,6 +489,7 @@ document.getElementById("schedule-form").onsubmit = function (event) {
         endedDt: endDate,
         employeeIds: selectedEmployeeIds,
         contents: deltaContentJson, // 에디터 내용 추가
+        emailCheck: emailCheck,
       };
       // AJAX 호출
       $.ajax({
@@ -491,11 +499,17 @@ document.getElementById("schedule-form").onsubmit = function (event) {
 
         data: JSON.stringify(formData),
         success: function (response) {
-          Swal.fire("일정 등록을 성공했습니다.", "", "success");
-          // 입력 필드 초기화
+          Swal.fire({
+            title: "일정 등록을 성공했습니다.",
+            icon: "success",
+            confirmButtonText: "확인",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = "/schedules";
+            }
+          }); // 입력 필드 초기화
           document.getElementById("schedule-form").reset();
           quill.setContents([]); // 에디터 내용 초기화
-          window.location.href = "/schedules"; // 여기에 리다이렉트할 URL을 입력하세요
         },
         error: function (xhr, status, error) {
           Swal.fire({

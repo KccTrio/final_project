@@ -25,7 +25,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       </div>
       <!-- 검색창 -->
       <div class="search">
-        <input type="text" placeholder="검색어 입력" />
+        <input type="text" placeholder="사원 및 채팅방 검색" />
         <img
           src="https://s3.ap-northeast-2.amazonaws.com/cdn.wecode.co.kr/icon/search.png"
         />

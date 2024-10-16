@@ -3,13 +3,19 @@ package com.kcc.trioffice.domain.schedule.service;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import org.apache.coyote.BadRequestException;
+import org.springframework.mail.MailException;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,6 +27,10 @@ import com.kcc.trioffice.domain.schedule.dto.EmployeeSchedules;
 import com.kcc.trioffice.domain.schedule.dto.SaveSchedule;
 import com.kcc.trioffice.domain.schedule.mapper.ScheduleMapper;
 import com.kcc.trioffice.global.exception.type.NotFoundException;
+
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
+
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +43,7 @@ public class ScheduleService {
 
   private final ScheduleMapper scheduleMapper;
   private final EmployeeMapper employeeMapper;
+  private final JavaMailSender mailSender;
 
   Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 
@@ -50,7 +61,8 @@ public class ScheduleService {
   }
 
   @Transactional
-  public void saveSchedule(String employeeEmail, SaveSchedule saveSchedule) throws BadRequestException, ParseException {
+  public void saveSchedule(String employeeEmail, SaveSchedule saveSchedule)
+      throws BadRequestException, ParseException, MessagingException {
     EmployeeInfo employeeInfo = employeeMapper.getEmployeeInfoFindByEmail(employeeEmail)
         .orElseThrow(() -> new NotFoundException("일치하는 회원이 없습니다."));
 
@@ -92,6 +104,54 @@ public class ScheduleService {
     saveSchedule.setWriter(employeeInfo.getEmployeeId());
     saveSchedule.setModifier(employeeInfo.getEmployeeId());
     saveSchedule.setIsDeleted("0");
+    List<String> employeesEmail = new ArrayList<>();
+
+    // mail을 보내기 위한 검사
+    if (saveSchedule.getEmailCheck() == 1) {
+      List<String> sendEmailEmployeesList = saveSchedule.getEmployeeIds();
+      try {
+        employeesEmail = employeeMapper.getEmployeeEmailforSend(sendEmailEmployeesList);
+      } catch (Exception e) {
+        log.info("회원 이메일 가져오기 실패 : " + e);
+        throw new BadRequestException("회원 이메일 가져오기 실패 ");
+      }
+      for (int i = 0; i < employeesEmail.size(); i++) {
+        System.out.println("회원들의 이메일 : " + employeesEmail.get(i));
+      }
+
+      try {
+        Set<String> uniqueEmails = new HashSet<>(employeesEmail);
+
+        for (String oneEmployeeEmail : uniqueEmails) {
+
+          // 이메일 메시지 설정
+          MimeMessage message = mailSender.createMimeMessage();
+          MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
+
+          helper.setFrom("noreply@kcc.com");
+          helper.setTo(oneEmployeeEmail);
+          helper.setSubject("KCC정보통신 | " + saveSchedule.getName() + " 일정 초대 알림");
+          String htmlContent = "    <div class='email-container'>" +
+              "        <div class='content'>" +
+              "            <h2>안녕하세요,</h2>" +
+              "            <p>귀하는 다음 일정에 초대되었습니다:</p>" +
+              "            <p><strong>일정 제목:</strong> " + saveSchedule.getName() + "</p>" +
+              "            <p><strong>일정 기간:</strong> " + saveSchedule.getStartedDt() + " ~ "
+              + saveSchedule.getEndedDt() + "</p>" +
+              "            <a href='#' class='button'>일정 확인하기</a>" +
+              "        </div><br>" +
+              "        <div class='footer'>" +
+              "            <p>본 알림은 시스템에 의해 자동 생성되었습니다.</p>" +
+              "        </div>" +
+              "    </div>";
+          helper.setText(htmlContent, true);
+
+          mailSender.send(message);
+        }
+      } catch (MailException e) {
+        e.printStackTrace(); // 예외 처리 로직 추가 가능
+      }
+    }
 
     try {
       // saveSchedule 메서드 호출

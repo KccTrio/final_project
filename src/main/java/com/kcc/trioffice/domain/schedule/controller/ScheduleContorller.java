@@ -20,6 +20,7 @@ import com.kcc.trioffice.domain.schedule.dto.EmployeeSchedules;
 import com.kcc.trioffice.domain.schedule.dto.SaveSchedule;
 import com.kcc.trioffice.domain.schedule.service.ScheduleService;
 
+import jakarta.mail.MessagingException;
 import lombok.RequiredArgsConstructor;
 
 @Controller
@@ -38,8 +39,10 @@ public class ScheduleContorller {
 
   @PostMapping("/schedules/save")
   public ResponseEntity<?> saveSchdule(Principal principal,
-      @RequestBody SaveSchedule saveSchedule) throws BadRequestException, ParseException {
+      @RequestBody SaveSchedule saveSchedule) throws BadRequestException, ParseException, MessagingException {
     scheduleService.saveSchedule(principal.getName(), saveSchedule);
+
+    System.out.println("넘어온 이메일체크 값 : " + saveSchedule.getEmailCheck());
     return ResponseEntity.ok("성공");
   }
 

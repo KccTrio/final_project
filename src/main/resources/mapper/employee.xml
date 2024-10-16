@@ -91,6 +91,7 @@
             WHERE email = #{id}
                 AND is_deleted = 0
     </select>
+    
 
     <select id="getEmployeeInfoList" parameterType="java.util.List"
             resultType="String">
@@ -128,6 +129,7 @@
                , is_deleted as isDeleted
             FROM employee
             WHERE email = #{email}
+            AND is_deleted = 0
     </select>
 
     <select id="findByEmail" parameterType="String" resultType="String">
@@ -208,6 +210,17 @@
                             WHERE name = 'ROLE_ADMIN'
                         )
     </select>
+
+<select id="getEmployeeEmailforSend" parameterType="List" resultType="String">
+  SELECT email
+  FROM employee
+  WHERE employee_id IN
+  <foreach collection="Ids" item="id" open="(" separator="," close=")">
+    #{id}
+  </foreach>
+  AND is_deleted = 0
+</select>
+
 
 
 </mapper>
