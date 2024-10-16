@@ -7,24 +7,24 @@
 
     <insert id="saveTag" parameterType="map">
         INSERT INTO tag (
-            tag_id,
-            file_id,
-            name,
-            writer,
-            write_dt,
-            modifier,
-            modified_dt,
-            is_deleted
+          tag_id
+          , file_id
+          , name
+          , writer
+          , write_dt
+          , modifier
+          , modified_dt
+          , is_deleted
         )
         VALUES (
-            SEQ_TAG.NEXTVAL,
-            #{fileId},
-            #{tagName},
-            #{employeeId},
-            SYSDATE,
-            #{employeeId},
-            SYSDATE,
-            0
+          SEQ_TAG.NEXTVAL
+          , #{fileId}
+          , #{tagName}
+          , #{employeeId}
+          , SYSDATE
+          , #{employeeId}
+          , SYSDATE
+          , 0
         )
     </insert>
 

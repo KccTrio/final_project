@@ -7,20 +7,24 @@
 
 
   <select id="getEmployeeSchedules" parameterType="map" resultType="com.kcc.trioffice.domain.schedule.dto.EmployeeSchedules">
-  select name
-      ,started_dt as startedDt
-      ,ended_dt as endedDt
-  from schedule
-  where schedule_id IN (SELECT i.SCHEDULE_INVITE_ID AS scheduleInviteId
-                      from schedule_invite i
-                      where is_participated = 2 and employee_id = (
-                                                  select employee_id
-                                                  from employee
-                                                  where email = #{employeeId}
-                                                  )
-                      )
-      and started_dt <![CDATA[>]]> ADD_MONTHS(TO_DATE(#{startDate}, 'YYYY-MM-DD'), -1)
-      and ended_dt <![CDATA[<=]]> ADD_MONTHS(TO_DATE(#{endDate}, 'YYYY-MM-DD'), 1)
+    SELECT
+      name
+      ,started_dt AS startedDt
+      ,ended_dt AS endedDt
+      FROM schedule
+      WHERE schedule_id
+        IN (
+             SELECT i.SCHEDULE_INVITE_ID AS scheduleInviteId
+               FROM schedule_invite i
+               WHERE is_participated = 2 and employee_id =
+                 (
+                   SELECT employee_id
+                     FROM employee
+                     WHERE email = #{employeeId}
+                 )
+           )
+        AND started_dt <![CDATA[>]]> ADD_MONTHS(TO_DATE(#{startDate}, 'YYYY-MM-DD'), -1)
+        AND ended_dt <![CDATA[<=]]> ADD_MONTHS(TO_DATE(#{endDate}, 'YYYY-MM-DD'), 1)
   </select>
 
 </mapper>
