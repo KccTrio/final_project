@@ -3,6 +3,7 @@ package com.kcc.trioffice.domain.schedule.service;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,16 +54,40 @@ public class ScheduleService {
     EmployeeInfo employeeInfo = employeeMapper.getEmployeeInfoFindByEmail(employeeEmail)
         .orElseThrow(() -> new NotFoundException("일치하는 회원이 없습니다."));
 
-    // 타임스탬프 파라미터로 넘기기
-    String startedDtStr = saveSchedule.getStartedDt(); // "2024-10-15 17:50"
-    String endedDtStr = saveSchedule.getEndedDt(); // "2024-10-15 17:50"
+    // 문자열을 Timestamp로 변환
+    String startedDtStr = saveSchedule.getStartedDt(); // "2024-10-16" 또는 "2024-10-16 17:50"
+    String endedDtStr = saveSchedule.getEndedDt(); // "2024-10-16" 또는 "2024-10-16 17:50"
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    java.util.Date parsedDate1 = dateFormat.parse(startedDtStr);
-    java.util.Date parsedDate2 = dateFormat.parse(endedDtStr);
+    // 시간을 포함한 형식과 날짜만 있는 형식 모두 처리
+    SimpleDateFormat fullDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    SimpleDateFormat shortDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
-    Timestamp startedDt = new Timestamp(parsedDate1.getTime());
-    Timestamp endedDt = new Timestamp(parsedDate2.getTime());
+    java.util.Date parsedDateStart;
+    java.util.Date parsedDateEnd;
+
+    try {
+      if (startedDtStr.length() > 10) {
+        parsedDateStart = fullDateFormat.parse(startedDtStr); // 시간이 포함된 경우
+      } else {
+        parsedDateStart = shortDateFormat.parse(startedDtStr); // 날짜만 있는 경우
+      }
+
+      if (endedDtStr.length() > 10) {
+        parsedDateEnd = fullDateFormat.parse(endedDtStr); // 시간이 포함된 경우
+      } else {
+        parsedDateEnd = shortDateFormat.parse(endedDtStr); // 날짜만 있는 경우
+        // 종료 날짜를 +1일 증가시킴
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(parsedDateEnd);
+        cal.add(Calendar.DATE, 1); // +1일
+        parsedDateEnd = cal.getTime();
+      }
+    } catch (ParseException e) {
+      throw new BadRequestException("잘못된 날짜 형식입니다.");
+    }
+
+    Timestamp startedDt = new Timestamp(parsedDateStart.getTime());
+    Timestamp endedDt = new Timestamp(parsedDateEnd.getTime());
 
     saveSchedule.setWriter(employeeInfo.getEmployeeId());
     saveSchedule.setModifier(employeeInfo.getEmployeeId());
