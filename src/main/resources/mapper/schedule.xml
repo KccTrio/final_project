@@ -46,17 +46,13 @@
 
 
   <insert id="saveScheduleInvite" parameterType="com.kcc.trioffice.domain.schedule.dto.SaveSchedule">
-
+    <foreach collection="employeeIds" item="employeeId" separator=";" open="DECLARE BEGIN" close="; END;">
+        <if test="employeeId != null">
             INSERT INTO schedule_invite 
-            (schedule_id, employee_id, status, writer, created_dt, modifier, modified_dt, is_deleted)
-            VALUES (#{scheduleId}, 
-          <foreach collection="employeeIds" item="employeeId">
-          <if test="employeeId != null">
-            #{employeeId}, 
-           </if>
-          </foreach>    
-            2, #{writer}, sysdate, #{modifier}, sysdate, #{isDeleted})
-        
+            (schedule_invite_id, employee_id, is_participated, writer, created_dt, modifier, modified_dt, is_deleted)
+            VALUES (#{scheduleId}, #{employeeId}, 2, #{writer}, sysdate, #{modifier}, sysdate, #{isDeleted})
+        </if>
+    </foreach>
 </insert>
 
   

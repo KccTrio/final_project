@@ -478,6 +478,7 @@ document.getElementById("schedule-form").onsubmit = function (event) {
           // 입력 필드 초기화
           document.getElementById("schedule-form").reset();
           quill.setContents([]); // 에디터 내용 초기화
+          window.location.href = "/schedules"; // 여기에 리다이렉트할 URL을 입력하세요
         },
         error: function (xhr, status, error) {
           Swal.fire({

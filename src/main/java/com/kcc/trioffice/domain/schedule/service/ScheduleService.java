@@ -52,8 +52,8 @@ public class ScheduleService {
   public void saveSchedule(String employeeEmail, SaveSchedule saveSchedule) throws BadRequestException, ParseException {
     EmployeeInfo employeeInfo = employeeMapper.getEmployeeInfoFindByEmail(employeeEmail)
         .orElseThrow(() -> new NotFoundException("일치하는 회원이 없습니다."));
+
     // 타임스탬프 파라미터로 넘기기
-    // 문자열을 Timestamp로 변환
     String startedDtStr = saveSchedule.getStartedDt(); // "2024-10-15 17:50"
     String endedDtStr = saveSchedule.getEndedDt(); // "2024-10-15 17:50"
 
@@ -65,25 +65,18 @@ public class ScheduleService {
     Timestamp endedDt = new Timestamp(parsedDate2.getTime());
 
     saveSchedule.setWriter(employeeInfo.getEmployeeId());
-    // saveSchedule.setWriteDt(timestamp);
     saveSchedule.setModifier(employeeInfo.getEmployeeId());
-    // saveSchedule.setModifiedDt(timestamp);
     saveSchedule.setIsDeleted("0");
 
     try {
+      // saveSchedule 메서드 호출
       scheduleMapper.saveSchedule(saveSchedule, startedDt, endedDt);
-    } catch (Exception e) {
-      log.info("에러", e);
-      throw new BadRequestException("saveSchedule 중 오류 발생");
-    }
-
-    try {
+      // 이후 saveScheduleInvite 호출
       scheduleMapper.saveScheduleInvite(saveSchedule);
     } catch (Exception e) {
-      log.info("invite에러 : ", e);
-      throw new BadRequestException("saveSchedule invate 중 오류 발생");
+      log.info("에러 발생: ", e);
+      throw new BadRequestException("saveSchedule 또는 saveScheduleInvite 중 오류 발생");
     }
-
   }
 
 }
