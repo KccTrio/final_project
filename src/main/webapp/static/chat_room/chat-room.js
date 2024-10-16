@@ -9,6 +9,8 @@ var offset = 0; // 현재 로드된 메시지의 수
 var limit = 50; // 한 번에 로드할 메시지 수
 var hasMoreData = true; // 더 로드할 데이터가 있는지 확인
 var loading = false; // AJAX 로드 중복 실행 방지
+let dropzoneInitialized = false;
+let myDropzone = null;
 
 
 $(document).ready(function() {
@@ -18,29 +20,32 @@ $(document).ready(function() {
         url: '/api/current-employee',
         method: 'GET',
         dataType: 'json',
-        success: function(data) {
+        success: function (data) {
             currentEmployeeId = data.employeeId;
 
             connectChatRoomListSocket();
         },
-        error: function(xhr, status, error) {
+        error: function (xhr, status, error) {
             console.error('유저 정보를 가져오는 데 실패했습니다:', error);
         }
     });
 
     function connectChatRoomListSocket() {
+        if (stompClient && stompClient.connected) {
+            console.log("이미 STOMP 클라이언트가 연결되어 있습니다.");
+            return;
+        }
         var sockJs = new SockJS("/stomp/connection");
         stompClient = Stomp.over(sockJs);
 
-        stompClient.connect({}, function() {
+        stompClient.connect({}, function () {
             console.log("WebSocket 연결 성공");
-
             subscribeToChatRoomList();
         });
     }
 
     function subscribeToChatRoomList() {
-        stompClient.subscribe("/sub/chatrooms/employees/" + currentEmployeeId, function(message) {
+        stompClient.subscribe("/sub/chatrooms/employees/" + currentEmployeeId, function (message) {
             var receivedMessage = JSON.parse(message.body);
             handleChatRoomListUpdate(receivedMessage);
         });
@@ -53,12 +58,12 @@ $(document).ready(function() {
             url: '/api/chatrooms',
             method: 'GET',
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 console.log(data);
                 updateChatRoomList(data);
                 updateDateFormat();
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('채팅방 정보를 가져오는 데 실패했습니다:', error);
             }
         });
@@ -69,7 +74,7 @@ $(document).ready(function() {
         var chatRoomsList = $('.chat-rooms-list');
         chatRoomsList.empty();
 
-        chatRooms.forEach(function(chatRoom) {
+        chatRooms.forEach(function (chatRoom) {
             var chatRoomItem = `
             <div class="row chat-room chat-room-item justify-content-between" data-chat-room-id="${chatRoom.chatRoomId}">
                 <div class="col-3">
@@ -92,14 +97,13 @@ $(document).ready(function() {
                         </div>
                         
                     </div>
-                    <div class="row w-100 d-flex justify-content-between">
+                    <div class="row w-100 d-flex justify-content-between align-items-end">
                         <div class="col-9 no-padding-left">
                             <div class="chat-room-last-message sub-text">
                                 <p>${chatRoom.lastMessage}</p>
                             </div>
                         </div>`
-                            + addUnReadMessage(chatRoom) + `
-                        <!-- 필요 시 안 읽은 메시지 수 추가 -->
+                + addUnReadMessage(chatRoom) + `
                     </div>
                 </div>
             </div>`;
@@ -132,7 +136,7 @@ $(document).ready(function() {
         console.log(chatRoom.chatRoomId);
         console.log(currentChatRoomId);
         if (chatRoom.chatRoomId == currentChatRoomId) {
-            $('.chat-room-item').each(function() {
+            $('.chat-room-item').each(function () {
                 if ($(this).data('chat-room-id') == chatRoom.chatRoomId) {
                     $(this).addClass('active');
                 } else {
@@ -143,21 +147,25 @@ $(document).ready(function() {
     }
 
     // 채팅방 아이템 클릭 이벤트 등록
-    $('.chat-rooms-list').on('click', '.chat-room-item', function() {
+    $('.chat-rooms-list').on('click', '.chat-room-item', function () {
         console.log('채팅방 클릭 이벤트 발생');
         var chatRoomId = $(this).data('chat-room-id');
 
         $('.chat-room-item').removeClass('active');
         $(this).addClass('active');
-        
+
 
         connectWebSocket(chatRoomId);
         loadChatRoom(chatRoomId);
+
+        // 채팅방 아이템 클릭 시 클릭한 .chat-room-item의 unreadMessageCount 초기화
+        $(this).find('.unread-count-box').remove();
+
     });
 
     // 메시지 전송 이벤트
     $('#send').on('click', sendMessage);
-    $('.chat-input').keypress(function(event) {
+    $('.chat-input').keypress(function (event) {
         if (event.keyCode === 13) {
             event.preventDefault();
             sendMessage();
@@ -191,8 +199,8 @@ $(document).ready(function() {
             url: '/api/chatrooms/' + chatRoomId,
             method: 'GET',
             dataType: 'json',
-            data: { offset: offset, limit: limit },
-            success: function(data) {
+            data: {offset: offset, limit: limit},
+            success: function (data) {
                 if (data.chatInfoList.length < limit) {
                     hasMoreData = false; // 모든 데이터 로드 완료
                 }
@@ -203,7 +211,7 @@ $(document).ready(function() {
                 offset += data.chatInfoList.length; // 오프셋 업데이트
                 loading = false;
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('채팅방 데이터를 가져오는 데 실패했습니다:', error);
             }
         });
@@ -212,6 +220,7 @@ $(document).ready(function() {
     function updateChatRoomInfo(data) {
         $('.contents .group-name').text(data.chatRoomName);
         $('.chat-room-profile-image').attr('src', data.chatRoomProfileImageUrl);
+        console.log(data.participantCount)
         $('.emp-count').text(data.participantCount);
     }
 
@@ -220,7 +229,7 @@ $(document).ready(function() {
         chatContainer.empty();
         previousSenderId = null;
 
-        messages.reverse().forEach(function(message) {
+        messages.reverse().forEach(function (message) {
             var chatRow = generateMessageHtml(message);
             chatContainer.prepend(chatRow);
         });
@@ -236,7 +245,7 @@ $(document).ready(function() {
         var oldScrollHeight = chatContainer[0].scrollHeight;
 
         // 메시지를 추가합니다.
-        messages.forEach(function(message) {
+        messages.forEach(function (message) {
             var chatRow = generateMessageHtml(message);
             chatContainer.append(chatRow);
         });
@@ -256,19 +265,235 @@ $(document).ready(function() {
         previousSenderId = message.senderId;
         var chatRow;
 
+        console.log(message);
+
         if (message.chatType === "ENTER") {
-            chatRow = createEnterMessage(message);
+            console.log('ENTER 메시지');
+            chatRow = createEnterAndQuitMessage(message);
         } else if (message.chatType === "CHAT") {
             if (message.senderId === currentEmployeeId) {
                 chatRow = createMyMessageHtml(message);
             } else {
                 chatRow = createOtherMessageHtml(message, isSameSender);
             }
+        } else if (message.chatType === "QUIT") {
+            //count 감소
+            chatRow = createEnterAndQuitMessage(message);
+        } else if (message.chatType === "FILE") {
+            if (message.senderId === currentEmployeeId) {
+                chatRow = createMyFileMessageHtml(message);
+            } else {
+                chatRow = createOtherFileMessageHtml(message, isSameSender);
+            }
+        } else if (message.chatType === "IMAGE") {
+            if (message.senderId === currentEmployeeId) {
+                chatRow = createMyImageMessageHtml(message);
+            } else {
+                chatRow = createOtherImageMessageHtml(message, isSameSender);
+            }
         }
 
-
-
         return chatRow;
+    }
+
+    function createOtherFileMessageHtml(message, isSameSender) {
+        var profileHtml = isSameSender ? `
+            <div class="col-1"></div>` : `
+            <div class="col-1">
+                <div class="chat-profile">
+                    <img src="${message.senderProfileUrl}" />
+                    <div class="status d-flex justify-content-center align-items-center">
+                        <i class="fa-solid fa-check check-icon"></i>
+                    </div>
+                </div>
+            </div>`;
+
+        var nameHtml = isSameSender ? '' : `
+            <div class="row d-flex justify-content-end">
+                <div class="col-11 emp-name d-flex justify-content-start">
+                    <span>${message.senderName}</span>
+                </div>
+            </div>`;
+
+        var emoticonHtml = createEmoticonBoxHtml(message);
+
+        return `
+        <div class="row" data-message-id="${message.chatId}">
+            <div class="col-10">
+                ${nameHtml}
+                <div class="row">
+                    ${profileHtml}
+                    <div class="col-9">
+                        <div class="chat-bubble-container d-flex align-items-end">
+                            <div class="chat-content d-flex align-items-center justify-content-center">
+                                <div class="file-box">
+                                    <div class="row d-flex justify-content-between  align-items-center">
+                                        <div class="col-10">
+                                            <p>${message.chatContents}</p>
+                                            <div class="row">
+                                                <div class="tag-box">
+                                                    ${createTagBoxHtml(message)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <i class="fa-solid fa-download"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-time">
+                                ${formatDate(message.chatTime)}
+                            </div>
+                            <div class="unread-count-box">
+                                    <span class="unread-count">${createUnreadCountHtml(message.unreadMessageCount)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ${emoticonHtml}
+            </div>
+        </div>`;
+    }
+
+    function createOtherImageMessageHtml(message, isSameSender) {
+        var profileHtml = isSameSender ? `
+            <div class="col-1"></div>` : `
+            <div class="col-1">
+                <div class="chat-profile">
+                    <img src="${message.senderProfileUrl}" />
+                    <div class="status d-flex justify-content-center align-items-center">
+                        <i class="fa-solid fa-check check-icon"></i>
+                    </div>
+                </div>
+            </div>`;
+
+        var nameHtml = isSameSender ? '' : `
+            <div class="row d-flex justify-content-end">
+                <div class="col-11 emp-name d-flex justify-content-start">
+                    <span>${message.senderName}</span>
+                </div>
+            </div>`;
+
+        var emoticonHtml = createEmoticonBoxHtml(message);
+
+        return `
+        <div class="row" data-message-id="${message.chatId}">
+            <div class="col-10">
+                ${nameHtml}
+                <div class="row">
+                    ${profileHtml}
+                    <div class="col-9">
+                        <div class="chat-bubble-container d-flex align-items-end">
+                            <div class="chat-content d-flex align-items-center justify-content-center">
+                                <div class="file-box">
+                                    <div class="row d-flex justify-content-between  align-items-center">
+                                        <div class="col-12">
+                                            <img src="${message.chatContents}" alt="사진" class="chat-image"/>
+                                            <div class="row">
+                                                <div class="tag-box">
+                                                    ${createTagBoxHtml(message)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="chat-time">
+                                ${formatDate(message.chatTime)}
+                            </div>
+                            <div class="unread-count-box">
+                                    <span class="unread-count">${createUnreadCountHtml(message.unreadMessageCount)}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ${emoticonHtml}
+            </div>
+        </div>`;
+    }
+
+    function createMyImageMessageHtml(message) {
+        return `<div class="row d-flex justify-content-end" data-message-id="${message.chatId}">
+            <div class="col-10">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-9">
+                        <div class="chat-bubble-container d-flex align-items-end justify-content-end">
+                            <div class="unread-count-box">
+                                <span class="unread-count">${createUnreadCountHtml(message.unreadMessageCount)}</span>
+                            </div>
+                            <div class="my-chat-time">
+                                ${formatDate(message.chatTime)}
+                            </div>
+                            <div class="my-chat-content d-flex align-items-center justify-content-center">
+                                <div class="file-box">
+                                    <div class="row d-flex justify-content-between  align-items-center">
+                                        <div class="col-12">
+                                            <img src="${message.chatContents}" alt="사진" class="chat-image"/>
+                                            <div class="row">
+                                                <div class="tag-box">
+                                                    ${createTagBoxHtml(message)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ${createMyEmoticonBoxHtml(message)}
+            </div>
+        </div>`;
+    }
+
+    function createTagBoxHtml(message) {
+        if (!message.tags) {
+            return '';
+        }
+
+        var tagHtml = '<i class="fa-solid fa-tag"></i>';
+        message.tags.forEach(function (tag) {
+            tagHtml += `<span class="tag">${tag}</span>`;
+        });
+        return tagHtml;
+    }
+
+    function createMyFileMessageHtml(message) {
+        return `<div class="row d-flex justify-content-end" data-message-id="${message.chatId}">
+            <div class="col-10">
+                <div class="row d-flex justify-content-end">
+                    <div class="col-9">
+                        <div class="chat-bubble-container d-flex align-items-end justify-content-end">
+                            <div class="unread-count-box">
+                                <span class="unread-count">${createUnreadCountHtml(message.unreadMessageCount)}</span>
+                            </div>
+                            <div class="my-chat-time">
+                                ${formatDate(message.chatTime)}
+                            </div>
+                            <div class="my-chat-content d-flex align-items-center justify-content-center">
+                                <div class="file-box">
+                                    <div class="row d-flex justify-content-between  align-items-center">
+                                        <div class="col-10">
+                                            <p>${message.chatContents}</p>
+                                            <div class="row">
+                                                <div class="tag-box">
+                                                    ${createTagBoxHtml(message)}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-2">
+                                            <i class="fa-solid fa-download"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                ${createMyEmoticonBoxHtml(message)}
+            </div>
+        </div>`;
     }
 
     function createMyMessageHtml(message) {
@@ -375,14 +600,14 @@ $(document).ready(function() {
         return count > 0 ? `<span class="unread-count">${count}</span>` : '';
     }
 
-    function createEnterMessage(message) {
+    function createEnterAndQuitMessage(message) {
         return `
         <div class="row chat-one">
                 <div class="col-10">
                     <div class="row">
                         <div class="col-1 d-flex justify-content-end">
                             <div class="add-chat-profile">
-                                <i class="fa-solid fa-user-plus"></i>
+                            ` + getIconByEnterAndQuit(message) + `
                             </div>
                         </div>
                         <div class="col-9">
@@ -399,21 +624,40 @@ $(document).ready(function() {
             </div>`;
     }
 
+    function getIconByEnterAndQuit(message) {
+        if (message.chatType === "ENTER") {
+            return `<i class="fa-solid fa-user-plus"></i>`;
+        } else if (message.chatType === "QUIT") {
+            return `<i class="fa-solid fa-user-minus"></i>`;
+        }
+    }
+
     function connectWebSocket(chatRoomId) {
-        if (currentSubscription) {
-            currentSubscription.unsubscribe();
+        if (!stompClient || !stompClient.connected) {
+            console.error("STOMP 클라이언트가 연결되어 있지 않습니다.");
+            return;
         }
 
-        console.log("채팅 웹 소켓 연결 성공");
-        subscribeToChatRoom(chatRoomId);
+        // 이전 구독 해제
+        if (currentSubscription) {
+            try {
+                currentSubscription.unsubscribe();
+                console.log("이전 채팅방 구독을 해제했습니다.");
+            } catch (e) {
+                console.error("구독 해제 중 오류 발생:", e);
+            }
+        }
 
+        subscribeToChatRoom(chatRoomId);
+        console.log("채팅방에 연결되었습니다:", chatRoomId);
         currentChatRoomId = chatRoomId;
     }
 
     function subscribeToChatRoom(chatRoomId) {
-        currentSubscription = stompClient.subscribe("/sub/chat/room/" + chatRoomId, function(message) {
+        currentSubscription = stompClient.subscribe("/sub/chat/room/" + chatRoomId, function (message) {
+            console.log(message.body);
             var receivedMessage = JSON.parse(message.body);
-            if (receivedMessage.chatType === "CHAT") {
+            if (receivedMessage.chatType === "CHAT" || receivedMessage.chatType === "FILE" || receivedMessage.chatType === "IMAGE") {
                 // 채팅 메시지 처리
                 addMessage(receivedMessage);
             } else if (receivedMessage.chatType === 'EMOTICON') {
@@ -421,7 +665,30 @@ $(document).ready(function() {
                 updateEmoticon(receivedMessage);
             } else if (receivedMessage.chatType === "ENTER") {
                 // 채팅방 참여자 처리
+                $('.emp-count').text(parseInt($('.emp-count').text()) + 1);
                 addEnterMessage(receivedMessage);
+            } else if (receivedMessage.chatType === "QUIT") {
+                // 채팅방 나간 참여자 처리
+                $('.emp-count').text(parseInt($('.emp-count').text()) - 1);
+                addEnterMessage(receivedMessage);
+            } else if (receivedMessage.chatType === "READ") {
+                // 읽음 처리
+                console.log('읽음 처리:', receivedMessage);
+                readMessage(receivedMessage);
+            }
+        });
+    }
+
+    function readMessage(receivedMessage) {
+        receivedMessage.unreadMessageIds.forEach(function (messageId) {
+            // unread-count-box 값 가져와서 -1 했을 때 0이되면 삭제
+            // unread-count-box 값 가져와서 -1 했을 때 0이 아니면 -1
+            var unreadCountBox = $('.chat .row[data-message-id="' + messageId + '"] .unread-count-box');
+            var unreadCount = parseInt(unreadCountBox.text());
+            if (unreadCount - 1 === 0) {
+                unreadCountBox.remove();
+            } else {
+                unreadCountBox.html(`<span class="unread-count">${unreadCount - 1}</span>`);
             }
         });
     }
@@ -455,13 +722,15 @@ $(document).ready(function() {
     function updateEmoticon(emoticonMessage) {
 
         $.ajax({
-            url: '/api/chatrooms/' + currentChatRoomId +'/chats/' + currentMessageId + '/emoticon',
+            url: '/api/chatrooms/' + currentChatRoomId + '/chats/' + emoticonMessage.chatId + '/emoticon',
             method: 'GET',
             dataType: 'json',
-            success: function(response) {
+            success: function (response) {
+                console.log(response);
                 var messageRow = $('.chat .row[data-message-id="' + emoticonMessage.chatId + '"]');
 
                 if (messageRow.length === 0) {
+                    console.error('메시지를 찾을 수 없습니다:', emoticonMessage.chatId);
                     return;
                 }
 
@@ -469,7 +738,6 @@ $(document).ready(function() {
                 messageRow.find('.emoticon-boxes').remove();
 
                 console.log(emoticonMessage.chatterId);
-                console.log(currentEmployeeId);
 
                 // 새로운 이모티콘 박스 생성
                 let emoticonHtml;
@@ -479,10 +747,12 @@ $(document).ready(function() {
                     emoticonHtml = createEmoticonBoxHtml(response);
                 }
 
+                console.log(emoticonHtml);
+
                 // 새로운 이모티콘 박스 DOM에 추가
                 messageRow.find('.col-10').append(emoticonHtml);
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('이모티콘 추가에 실패했습니다:', error);
             }
         });
@@ -521,42 +791,42 @@ $(document).ready(function() {
     }
 
     function hideEmoticonBox() {
-        timeoutId = setTimeout(function() {
+        timeoutId = setTimeout(function () {
             $('#emoticon-box').hide();
         }, 100);
     }
 
     // 동적 요소에 대한 이벤트 위임
     $('.chat').on({
-        mouseenter: function(event) {
+        mouseenter: function (event) {
             showEmoticonBox(event);
         },
-        mouseleave: function() {
+        mouseleave: function () {
             hideEmoticonBox();
         }
     }, '.chat-content, .my-chat-content');
 
     $('#emoticon-box').hover(
-        function() {
+        function () {
             clearTimeout(timeoutId);
         },
-        function() {
+        function () {
             $(this).hide();
         }
     );
 
-    $('#emoticon-box i').on('click', function() {
+    $('#emoticon-box i').on('click', function () {
         var emoticonType = $(this).data('emoticon-type');
 
         if (currentMessageId) {
             $.ajax({
-                url: '/api/chatrooms/' + currentChatRoomId +'/chats/' + currentMessageId + '/emoticon',
+                url: '/api/chatrooms/' + currentChatRoomId + '/chats/' + currentMessageId + '/emoticon',
                 method: 'POST',
                 contentType: 'application/json',
-                data: JSON.stringify({ emoticonType: emoticonType }),
-                success: function(response) {
+                data: JSON.stringify({emoticonType: emoticonType}),
+                success: function (response) {
                 },
-                error: function(xhr, status, error) {
+                error: function (xhr, status, error) {
                     console.error('이모티콘 추가에 실패했습니다:', error);
                 }
             });
@@ -580,7 +850,7 @@ $(document).ready(function() {
         var emoticonTypes = ['CHECK', 'HEART', 'THUMBS_UP', 'SMILE', 'SAD'];
         var addContent = '';
 
-        emoticonTypes.forEach(function(type) {
+        emoticonTypes.forEach(function (type) {
 
             var countKey = type.toLowerCase() + 'EmoticonCount';
 
@@ -622,7 +892,7 @@ $(document).ready(function() {
     var addEmpModalVisible = false;
 
     // 모달 이벤트 핸들러 중복 방지
-    $('.emp-count-box').off('click').on('click', function() {
+    $('.emp-count-box').off('click').on('click', function () {
         if (empModalVisible) {
             // 모달이 보이면 숨기기
             empModal.hide();
@@ -645,17 +915,17 @@ $(document).ready(function() {
             url: '/api/chatrooms/' + currentChatRoomId + '/employees',
             type: 'GET',
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 updateEmployeeList(data);
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error("데이터를 불러오는 데 실패했습니다:", error);
             }
         });
     });
 
     // 모달 외부 클릭 시 닫기
-    $(window).on('click', function(event) {
+    $(window).on('click', function (event) {
         if (!$(event.target).closest('#emp-modal, .emp-count-box, #add-emp-modal').length && empModalVisible) {
             empModal.hide();
             empModalVisible = false;
@@ -664,11 +934,28 @@ $(document).ready(function() {
         }
     });
 
+    // $(window).on('click', function(event) {
+    //     var sendFileModal = $('#send-file-modal');
+    //     console.log('Clicked element:', event.target); // 클릭된 요소 로그
+    //     console.log('Closest matching elements:', $(event.target).closest('#send-file-modal, .fa-file, .dropzone, .dz-default, .dz-message, .dz-clickable'));
+    //
+    //     // Check if the click target is outside the modal, the file icon, and any part of the Dropzone.
+    //     if (!$(event.target).closest('#send-file-modal, .fa-file, .dropzone, .dz-default, .dz-message, .dz-clickable, #my-dropzone, .dz-default').length && sendFileModalVisible) {
+    //         console.log('파일 전송 모달을 닫습니다.');
+    //         sendFileModal.hide();
+    //         sendFileModalVisible = false;
+    //     }
+    // });
 
+    // 모달 닫기 버튼 클릭 시 닫기
+    $('.send-cancel-button').on('click', function () {
+        $('#send-file-modal').hide();
+        sendFileModalVisible = false;
+    });
 
     function updateEmployeeList(data) {
         var listElement = $('.emp-list');
-        $.each(data, function(index, employee) {
+        $.each(data, function (index, employee) {
             listElement.append(
                 `<div class="row emp-one d-flex align-items-center">
                 <div class="col-5">
@@ -690,7 +977,7 @@ $(document).ready(function() {
 
     let tagify;
 
-    $('.add-emp-box').off('click').on('click', function() {
+    $('.add-emp-box').off('click').on('click', function () {
 
         if (addEmpModalVisible) {
             // 모달이 보이면 숨기기
@@ -711,11 +998,11 @@ $(document).ready(function() {
             url: 'http://localhost:8081/api/chatrooms/' + currentChatRoomId + '/except-participants',
             method: 'GET',
             dataType: 'json',
-            success: function(data) {
+            success: function (data) {
                 addEmpModal.show();
                 addEmpModalVisible = true;
                 console.log('직원 데이터를 성공적으로 가져왔습니다:', data);
-                whitelist = data.map(function(employee) {
+                whitelist = data.map(function (employee) {
                     return {
                         name: employee.name + '/' + employee.position + '/' + employee.deptName, // 태그에 표시될 내용
                         value: employee.id.toString(), // 직원 ID를 문자열로 변환하여 저장
@@ -725,20 +1012,20 @@ $(document).ready(function() {
                 console.log('직원 데이터를 성공적으로 가져왔습니다:', whitelist);
 
                 // Tagify 초기화
-                let inputElm = document.querySelector("input[name='employees[]']");
+                let inputElm = document.querySelector("input[name='except-ptpt-employees[]']");
 
                 // initialize Tagify
                 tagify = new Tagify(inputElm, {
                     enforceWhitelist: true, // 화이트리스트에서 허용된 태그만 사용
                     whitelist: whitelist, // 화이트 리스트 배열. 화이트 리스트를 등록하면 자동으로 드롭다운 메뉴가 생긴다
                     autogrow: true, // 태그 입력창이 자동으로 늘어난다
-                    originalInputValueFormat: function(valuesArr) {
-                        return valuesArr.map(function(item) {
+                    originalInputValueFormat: function (valuesArr) {
+                        return valuesArr.map(function (item) {
                             return item.value;
                         });
                     },
                     templates: {
-                        tag: function(tagData) {
+                        tag: function (tagData) {
                             return `
                             <tag title="${tagData.name}"
                                 contenteditable='false'
@@ -751,7 +1038,7 @@ $(document).ready(function() {
                                 </div>
                             </tag>`;
                         },
-                        dropdownItem: function(tagData) {
+                        dropdownItem: function (tagData) {
                             return `
                             <div ${this.getAttributes(tagData)}
                                 class='tagify__dropdown__item ${tagData.class ? tagData.class : ''}'>
@@ -826,15 +1113,15 @@ $(document).ready(function() {
                     tagify.dropdown.hide(); // 드롭다운 제거
                 }
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('직원 데이터를 가져오는 데 실패했습니다:', error);
             }
         });
     });
 
-    $('.create-button').on('click', function() {
+    $('.create-button').on('click', function () {
         // input에서 값 가져오기
-        var employees = $('input[name="employees[]"]').val();
+        var employees = $('input[name="except-ptpt-employees[]"]').val();
         // 쉼표로 분리하고 숫자로 변환
         var employeeIds = employees.split(',').map(Number);
         var dataToSend = {
@@ -846,20 +1133,20 @@ $(document).ready(function() {
             method: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(dataToSend), // JSON 형태로 변환
-            success: function(data) {
+            success: function (data) {
                 console.log('채팅방 참여자 추가에 성공했습니다:', data);
                 empModal.hide();
                 empModalVisible = false;
                 addEmpModal.hide();
                 addEmpModalVisible = false;
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('채팅방 참여자 추가에 실패했습니다:', error);
             }
         });
     });
 
-    $('.cancel-button').on('click', function() {
+    $('.cancel-button').on('click', function () {
         addEmpModal.hide();
         addEmpModalVisible = false
     });
@@ -872,8 +1159,8 @@ $(document).ready(function() {
             url: '/api/chatrooms/' + currentChatRoomId,
             method: 'GET',
             dataType: 'json',
-            data: { offset: offset, limit: limit },
-            success: function(data) {
+            data: {offset: offset, limit: limit},
+            success: function (data) {
                 if (data.chatInfoList.length < limit) {
                     hasMoreData = false; // 모든 데이터 로드 완료
                 }
@@ -881,7 +1168,7 @@ $(document).ready(function() {
                 addChatContents(data.chatInfoList);
                 loading = false;
             },
-            error: function(xhr, status, error) {
+            error: function (xhr, status, error) {
                 console.error('추가 채팅 데이터 로드 실패:', error);
                 loading = false;
             }
@@ -889,15 +1176,11 @@ $(document).ready(function() {
     }
 
     // 스크롤 이벤트 핸들러
-    $('.chat').scroll(function() {
+    $('.chat').scroll(function () {
         var $this = $(this);
         var scrollTop = $this.scrollTop();
         var scrollHeight = $this[0].scrollHeight;
         var containerHeight = $this.innerHeight();
-
-        console.log('scrollTop:', scrollTop);
-        console.log('scrollHeight:', scrollHeight);
-        console.log('containerHeight:', containerHeight);
 
         // 스크롤 위치가 최상단 근처에 있을 때 데이터 로드
         // flex-direction: column-reverse로 인해 scrollTop이 음수가 되고, 위로 스크롤할수록 더 큰 음수가 됩니다.
@@ -906,11 +1189,513 @@ $(document).ready(function() {
         }
     });
 
+    //이모티콘 버튼 클릭 이벤트
+    $('.chat').on('click', '.emoticon-button', function () {
+        currentMessageId = $(this).closest('.row[data-message-id]').data('message-id');
+
+        console.log('이모티콘 버튼 클릭 이벤트 발생');
+        var emoticonType = $(this).data('emoticon-type');
+
+        // active-button 클래스 추가
+        if ($(this).hasClass('active-button')) {
+            $(this).removeClass('active-button');
+        } else {
+            $(this).addClass('active-button');
+        }
+
+        if (stompClient && stompClient.connected) {
+            console.log(emoticonType);
+            console.log()
+            $.ajax({
+                url: '/api/chatrooms/' + currentChatRoomId + '/chats/' + currentMessageId + '/emoticon',
+                method: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({emoticonType: emoticonType}),
+                success: function (response) {
+                },
+                error: function (xhr, status, error) {
+                    console.error('이모티콘 추가에 실패했습니다:', error);
+                }
+            });
+        } else {
+            console.error('WebSocket이 연결되어 있지 않습니다.');
+        }
+    });
+
+    var sendFileModalVisible = false;
+
+    var tagify2;
+
+    // <i class="fa-regular fa-file"></i> 버튼 클릭 시 파일 전송 모달 띄우기
+    $('.fa-file').on('click', function () {
+        if (sendFileModalVisible) {
+            $('#send-file-modal').hide();
+            sendFileModalVisible = false;
+            return;
+        }
+
+        if (!currentChatRoomId) {
+            alert('Please select a chat room first.');
+            return;
+        }
+
+        $('#send-file-modal').show();
+        sendFileModalVisible = true;
 
 
-    // 채팅방 목록에서 첫 번째 채팅방 선택
-    // var firstChatRoom = $('.chat-room-item').first();
-    // firstChatRoom.trigger('click');
+        if (tagify2) {
+            tagify2.destroy();
+            // 태그 input 초기화
+            document.querySelector('input[name=tag]').value = '';
+        }
+
+
+        let inputElm = document.querySelector('input[name=tag]');
+
+        // 화이트 리스트 : 해당 문자만 태그로 추가 가능
+        let whitelist = ["서류","계획서","제안서","발표자료","ppt"];
+
+        // initialize Tagify
+        tagify2 = new Tagify(inputElm, {
+            enforceWhitelist: false, // 화이트리스트에서 허용된 태그만 사용
+            whitelist: whitelist // 화이트 리스트 배열. 화이트 리스트를 등록하면 자동으로 드롭다운 메뉴가 생긴다
+        })
+
+        // tagify 전용 이벤트 리스터. 참조 : https://github.com/yairEO/tagify#events
+        tagify2.on('add', onAddTag) // 태그가 추가되면
+            .on('remove', onRemoveTag) // 태그가 제거되면
+            .on('input', onInput) // 태그가 입력되고 있을 경우
+            .on('invalid', onInvalidTag) // 허용되지 않는 태그일 경우
+            .on('click', onTagClick) // 해시 태그 블럭을 클릭할 경우
+            .on('focus', onTagifyFocusBlur) // 포커스 될 경우
+            .on('blur', onTagifyFocusBlur) // 반대로 포커스를 잃을 경우
+
+            .on('edit:start', onTagEdit) // 입력된 태그 수정을 할 경우
+
+            .on('dropdown:hide dropdown:show', e => console.log(e.type)) // 드롭다운 메뉴가 사라질경우
+            .on('dropdown:select', onDropdownSelect) // 드롭다운 메뉴에서 아이템을 선택할 경우
+
+
+        // tagify 전용 이벤트 리스너 제거 할떄
+        tagify2.off('add', onAddTag);
+
+
+        // 이벤트 리스너 콜백 메소드
+        function onAddTag(e){
+            console.log("onAddTag: ", e.detail);
+            console.log("original input value: ", inputElm.value)
+        }
+
+        // tag remvoed callback
+        function onRemoveTag(e){
+            console.log("onRemoveTag:", e.detail, "tagify instance value:", tagify.value)
+        }
+
+        function onTagEdit(e){
+            console.log("onTagEdit: ", e.detail);
+        }
+
+        // invalid tag added callback
+        function onInvalidTag(e){
+            console.log("onInvalidTag: ", e.detail);
+        }
+
+        // invalid tag added callback
+        function onTagClick(e){
+            console.log(e.detail);
+            console.log("onTagClick: ", e.detail);
+        }
+
+        function onTagifyFocusBlur(e){
+            console.log(e.type, "event fired")
+        }
+
+        function onDropdownSelect(e){
+            console.log("onDropdownSelect: ", e.detail)
+        }
+
+        function onInput(e){
+            console.log("onInput: ", e.detail);
+
+            tagify2.loading(true) // 태그 입력하는데 우측에 loader 애니메이션 추가
+            tagify2.loading(false) // loader 애니메이션 제거
+
+            tagify2.dropdown.show(e.detail.value); // 드롭다운 메뉴 보여주기
+            tagify2.dropdown.hide(); // // 드롭다운 제거
+        }
+
+        // Ensure the modal content is loaded before initializing
+        setTimeout(function() {
+            initializeDropzone();
+        }, 0); // Using setTimeout to defer execution
+    });
+
+    function initializeDropzone() {
+        let dropzoneElement = document.querySelector("div.dropzone");
+        if (!dropzoneElement) {
+            console.error('Dropzone element not found!');
+            return;
+        }
+
+        // Destroy existing instance if any
+        if (dropzoneElement.dropzone) {
+            dropzoneElement.dropzone.destroy();
+        }
+
+        Dropzone.autoDiscover = false;
+
+        // Initialize Dropzone
+        let myDropzone = new Dropzone(dropzoneElement, {
+            url: "/api/chatrooms/" + currentChatRoomId + "/attached-file/send",
+            method: 'post',
+            autoProcessQueue: false,
+            parallelUploads: 100,
+            paramName: 'multipartFiles',
+            uploadMultiple: true,
+            init: function () {
+                const modal = document.getElementById("send-file-modal");
+
+                let sendFileButton = document.querySelector('.send-file-create-button');
+                sendFileButton.addEventListener('click', function () {
+                    console.log('Uploading...');
+                    if (myDropzone.getRejectedFiles().length > 0) {
+                        let files = myDropzone.getRejectedFiles();
+                        console.log('Rejected files:', files);
+                        return;
+                    }
+                    myDropzone.processQueue();
+                });
+
+                this.on('sendingmultiple', function (files, xhr, formData) {
+                    var tags = tagify2.value.map(function(item) { return item.value; });
+                    for (var i = 0; i < tags.length; i++) {
+                        formData.append('tags', tags[i]);
+                    }
+                });
+
+                this.on('successmultiple', function (files, responseText) {
+                    console.log('Upload successful');
+                    modal.style.display = "none";
+                    sendFileModalVisible = false;
+                    myDropzone.removeAllFiles(); // Optional: Clear files
+                });
+
+                this.on('errormultiple', function (files, responseText) {
+                    console.error('Upload failed', responseText);
+                    alert('File upload failed.');
+                });
+            },
+        });
+    }
+    let fileTagify;
+
+    $('.file-button').on('click', function () {
+        $('.chat-area').hide()
+        $('.file-area').show();
+        // file-button 상위 div에 active 추가
+        $('.file-button').parent().addClass('active');
+        $('.chat-button').parent().removeClass('active');
+
+        if (fileTagify) {
+            fileTagify.destroy();
+            // 태그 input 초기화
+            document.querySelector('input[name=tags]').value = '';
+        }
+
+
+        let inputElm = document.querySelector('input[name=tags]');
+
+        // 화이트 리스트 : 해당 문자만 태그로 추가 가능
+        let whitelist = ["서류","계획서","제안서","발표자료","ppt"];
+
+        // initialize Tagify
+        fileTagify = new Tagify(inputElm, {
+            enforceWhitelist: false, // 화이트리스트에서 허용된 태그만 사용
+            whitelist: whitelist // 화이트 리스트 배열. 화이트 리스트를 등록하면 자동으로 드롭다운 메뉴가 생긴다
+        })
+
+        fileTagify.on('add', onAddTag) // 태그가 추가되면
+            .on('remove', onRemoveTag) // 태그가 제거되면
+            .on('input', onInput) // 태그가 입력되고 있을 경우
+            .on('invalid', onInvalidTag) // 허용되지 않는 태그일 경우
+            .on('click', onTagClick) // 해시 태그 블럭을 클릭할 경우
+            .on('focus', onTagifyFocusBlur) // 포커스 될 경우
+            .on('blur', onTagifyFocusBlur) // 반대로 포커스를 잃을 경우
+
+            .on('edit:start', onTagEdit) // 입력된 태그 수정을 할 경우
+
+            .on('dropdown:hide dropdown:show', e => console.log(e.type)) // 드롭다운 메뉴가 사라질경우
+            .on('dropdown:select', onDropdownSelect) // 드롭다운 메뉴에서 아이템을 선택할 경우
+
+        function onAddTag(e){
+            console.log("onAddTag: ", e.detail);
+            console.log("original input value: ", inputElm.value)
+            tableBody.innerHTML = '';
+            tableBody.dataset.loading = 'false';
+            fileMoreData = true;
+            loadMoreData();
+        }
+
+        function onRemoveTag(e){
+            console.log("onRemoveTag:", e.detail, "tagify instance value:", inputElm.value);
+            tableBody.innerHTML = '';
+            tableBody.dataset.loading = 'false';
+            fileMoreData = true;
+            loadMoreData();
+        }
+
+        function onTagEdit(e){
+            console.log("onTagEdit: ", e.detail);
+        }
+
+        // invalid tag added callback
+        function onInvalidTag(e){
+            console.log("onInvalidTag: ", e.detail);
+        }
+
+        // invalid tag added callback
+        function onTagClick(e){
+            console.log(e.detail);
+            console.log("onTagClick: ", e.detail);
+        }
+
+        function onTagifyFocusBlur(e){
+            console.log(e.type, "event fired")
+        }
+
+        function onDropdownSelect(e){
+            console.log("onDropdownSelect: ", e.detail)
+        }
+
+        function onInput(e){
+            console.log("onInput: ", e.detail);
+
+            tagify2.loading(true) // 태그 입력하는데 우측에 loader 애니메이션 추가
+            tagify2.loading(false) // loader 애니메이션 제거
+
+            tagify2.dropdown.show(e.detail.value); // 드롭다운 메뉴 보여주기
+            tagify2.dropdown.hide(); // // 드롭다운 제거
+        }
+
+        // file table 초기화
+        let tableBody = document.querySelector('.file-table tbody');
+        tableBody.innerHTML = '';
+        tableBody.dataset.loading = 'false';
+        fileMoreData = true;
+        loadMoreData();
+    });
+
+    let tableBody = document.querySelector('.file-table tbody');
+    document.querySelector('.file-table tbody').addEventListener('scroll', function() {
+        if (tableBody.scrollTop + tableBody.clientHeight >= tableBody.scrollHeight) {
+            // 스크롤이 바닥에 도달했을 때 실행할 코드
+            loadMoreData();
+        }
+    });
+
+    let fileMoreData;
+
+    function loadMoreData() {
+        if (tableBody.dataset.loading === 'true') return;
+        console.log("파일 로드 실행");
+
+        tableBody.dataset.loading = 'true';
+        let searchTags = fileTagify.value.map(tag => tag.value);
+        let fileOffset = tableBody.children.length;
+        $.ajax({
+            url: '/api/chatrooms/' + currentChatRoomId + '/attached-files',
+            method: 'GET',
+            dataType: 'json',
+            data: {offset: fileOffset, limit: 30, tags: searchTags},
+            success: function (data) {
+                console.log(data);
+                if (data.length < limit) {
+                    fileMoreData = false; // 모든 데이터 로드 완료
+                }
+                addFileContents(data);
+
+            },
+            error: function (xhr, status, error) {
+                console.error('채팅방 파일 데이터를 가져오는 데 실패했습니다:', error);
+            }
+        });
+    }
+
+    function addFileContents(data) {
+        data.forEach(function (file) {
+            // 태그 HTML 생성
+            let tagsHTML = '';
+            if (file.tags && file.tags.length > 0) {
+                file.tags.forEach(function(tag) {
+                    tagsHTML += `<span class="tag">${tag}</span> `;
+                });
+            }
+
+            // 테이블 행 생성
+            let tr = document.createElement('tr');
+            tr.setAttribute('data-message-id', file.chatId); // 메시지 ID 저장
+            tr.innerHTML = `
+            <td>${file.fileName}</td>
+            <td>${file.writeDt}</td>
+            <td>${file.sender}</td>
+            <td>${tagsHTML}</td>
+            <td>
+                <i class="fas fa-download"></i>
+            </td>
+        `;
+            tableBody.appendChild(tr);
+        });
+        tableBody.dataset.loading = 'false';
+    }
+
+    $('.file-table').on('click', '.fa-download', function() {
+        // 이벤트가 발생한 메시지 ID를 찾습니다.
+        var messageId = $(this).closest('tr').data('message-id');
+        var chatRoomId = currentChatRoomId; // 현재 채팅방 ID
+
+        // 파일 다운로드 요청
+        $.ajax({
+            url: `/api/chatrooms/${chatRoomId}/chats/${messageId}/attached-file/download`,
+            method: 'GET',
+            xhrFields: {
+                responseType: 'blob' // 바이너리 데이터 수신을 위해 필요합니다.
+            },
+            success: function(response, textStatus, xhr) {
+                // 파일명 추출 (Content-Disposition 헤더에서 추출)
+                var filename = "";
+                var disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) {
+                        filename = decodeURIComponent(matches[1].replace(/['"]/g, ''));
+                    }
+                } else {
+                    // 파일명이 없을 경우 기본값 설정
+                    filename = "downloaded_file";
+                }
+
+                // Blob 객체 생성 후 다운로드
+                var blob = new Blob([response], { type: 'application/octet-stream' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
+            error: function(xhr, status, error) {
+                console.error('파일 다운로드에 실패했습니다:', error);
+            }
+        });
+    });
+
+
+    // 파일 전송 모달 외부 클릭 시 닫기
+    // $(window).on('click', function (event) {
+    //     if (!$(event.target).closest('#send-file-modal, .fa-file').length && sendFileModalVisible) {
+    //         $('#send-file-modal').hide();
+    //         sendFileModalVisible = false;
+    //     }
+    // });
+
+    //파일 전송 클릭
+    // $('.send-file-create-button').on('click', function () {
+    //
+    //     //파일들 소켓으로 전송
+    //     var files = document.querySelector('input[type="file"]').files;
+    //     var formData = new FormData();
+    //     for (var i = 0; i < files.length; i++) {
+    //         formData.append('multipartFiles', files[i]);
+    //     }
+    //
+    //     //태그도 함께 전송
+    //     var tags = $('input[name="tag"]').val();
+    //     formData.append('tags', tags);
+    //
+    //     $.ajax({
+    //         url: '/api/chatrooms/' + currentChatRoomId + '/attached_file/send',
+    //         method: 'POST',
+    //         contentType: false,
+    //         processData: false,
+    //         data: formData,
+    //         success: function (data) {
+    //             console.log('파일 전송에 성공했습니다:', data);
+    //             $('#send-file-modal').hide();
+    //             sendFileModalVisible = false;
+    //         },
+    //         error: function (xhr, status, error) {
+    //             console.error('파일 전송에 실패했습니다:', error);
+    //         }
+    //     });
+    //
+    // });
+
+    // 파일 다운로드 버튼 이벤트 리스너
+    $('.chat').on('click', '.fa-download', function() {
+        // 이벤트가 발생한 메시지 ID를 찾습니다.
+        var messageId = $(this).closest('.row[data-message-id]').data('message-id');
+        var chatRoomId = currentChatRoomId; // 현재 채팅방 ID
+
+        // 파일 다운로드 요청
+        $.ajax({
+            url: `/api/chatrooms/${chatRoomId}/chats/${messageId}/attached-file/download`,
+            method: 'GET',
+            xhrFields: {
+                responseType: 'blob' // Important
+            },
+            success: function(response, textStatus, xhr) {
+                // 파일명 추출 (Content-Disposition 헤더에서 추출)
+                var filename = "";
+                var disposition = xhr.getResponseHeader('Content-Disposition');
+                if (disposition && disposition.indexOf('attachment') !== -1) {
+                    var filenameRegex = /filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/;
+                    var matches = filenameRegex.exec(disposition);
+                    if (matches != null && matches[1]) {
+                        filename = matches[1].replace(/['"]/g, '');
+                    }
+                }
+
+                // Blob 객체 생성 후 다운로드
+                var blob = new Blob([response], { type: 'application/octet-stream' });
+                var link = document.createElement('a');
+                link.href = window.URL.createObjectURL(blob);
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            },
+            error: function(xhr, status, error) {
+                console.error('파일 다운로드에 실패했습니다:', error);
+            }
+        });
+    });
+
+    $('.fa-pen-to-square').on('click', function () {
+        $('.contents').hide();
+        $('.save-contents').show();
+    });
+
+    $('.chat-room-item').on('click', function () {
+        $('.contents').hide();
+        $('.chat-contents').show();
+        $('.chat-area').show();
+        $('.file-area').hide();
+        $('.chat-button').parent().addClass('active');
+        $('.file-button').parent().removeClass('active');
+    });
+
+    $('.chat-button').on('click', function () {
+        $('.contents').hide();
+        $('.chat-contents').show();
+        $('.chat-area').show();
+        $('.file-area').hide();
+        // chat-button 상위 div에 active 추가
+        $('.chat-button').parent().addClass('active');
+        $('.file-button').parent().removeClass('active');
+    })
+
+
 
 });
 
@@ -931,7 +1716,10 @@ function updateDateFormat() {
                 hour12: false
             });
         } else {
-            dateElement.textContent = fullDate.toLocaleDateString('ko-KR', {month: '2-digit', day: '2-digit'});
+            dateElement.textContent = fullDate.toLocaleDateString('ko-KR', {
+                month: '2-digit',
+                day: '2-digit'
+            }).replace(/\.\s/g, '-').slice(0, -1);
         }
     });
 }

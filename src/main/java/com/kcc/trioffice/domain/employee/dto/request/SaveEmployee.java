@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 
-import org.eclipse.tags.shaded.org.apache.xpath.operations.Bool;
 
 import lombok.Builder;
 import lombok.Data;

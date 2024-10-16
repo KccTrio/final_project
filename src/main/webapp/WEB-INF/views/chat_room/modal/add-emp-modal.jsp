@@ -25,7 +25,7 @@ s
         <div class="input-add-emp-box">
             <div class="row add-emp-input-box">
                 <div class="col-12">
-                    <input name="employees[]"
+                    <input name="except-ptpt-employees[]"
                            placeholder="사용자를 추가해주세요."
                            class='tagify--outside' placeholder='write some tags'
                            autofocus

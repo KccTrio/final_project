@@ -46,6 +46,13 @@
     border-radius: 70%;
 }
 
+.chat-image {
+    width: 250px;
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+}
+
 
 
 .status {
@@ -121,6 +128,7 @@
     overflow: hidden;
     text-overflow: ellipsis;
     flex: 1; /* 남은 공간을 차지하도록 설정 */
+    max-width: 395px;
 }
 
 .chat-room-last-message p {

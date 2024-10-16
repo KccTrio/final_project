@@ -16,5 +16,8 @@ public interface ParticipationEmployeeMapper {
     List<ParticipantEmployeeInfo> getParticipantEmployeeInfoByChatRoomId(@Param("chatRoomId") Long chatRoomId);
     List<EmployeeInfo> getEmployeeInfoByChatRoomId(@Param("chatRoomId") Long chatRoomId);
     List<SearchEmployee> getEmployeeByChatRoomIdExceptParticipants(@Param("companyId") Long companyId, @Param("chatRoomId") Long chatRoomId);
+    int deleteParticipationEmployee(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId);
+    int updateIsEntered(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId, @Param("isEntered") boolean isEntered);
+    int disconnectChatRoom(Long employeeId);
 
 }
