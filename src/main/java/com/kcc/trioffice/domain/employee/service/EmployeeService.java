@@ -108,7 +108,7 @@ public class EmployeeService {
                         + "</div>"
                         + "<p>보안을 위해 로그인 후 비밀번호를 반드시 변경해 주시기 바랍니다.</p>"
                         + "<br>"
-                        + "<p style='font-size: 12px; color: #777;'>감사합니다.</p>"
+                        + "<p>감사합니다.</p>"
                         + "</div>";
                 helper.setText(htmlContent, true);
 
@@ -151,8 +151,8 @@ public class EmployeeService {
         }
     }
 
-    public EmployeeInfo getEmployeeInfoFindById(String email) {
-        
+    public EmployeeInfo getEmployeeInfoFindByEmail(String email) {
+
         return employeeMapper.getEmployeeInfoFindByEmail(email)
                 .orElseThrow(() -> new NotFoundException("해당 직원이 존재하지 않습니다."));
 

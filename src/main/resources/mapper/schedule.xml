@@ -3,6 +3,7 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+
 <mapper namespace="com.kcc.trioffice.domain.schedule.mapper.ScheduleMapper">
 
 
@@ -23,4 +24,40 @@
       and ended_dt <![CDATA[<=]]> ADD_MONTHS(TO_DATE(#{endDate}, 'YYYY-MM-DD'), 1)
   </select>
 
+ <insert id="saveSchedule" parameterType="map" >
+    <selectKey keyProperty="saveSchedule.scheduleId" resultType="long" order="BEFORE">
+        SELECT seq_schedule.nextval FROM dual
+    </selectKey>
+    INSERT INTO schedule 
+    (schedule_id, name, started_dt, ended_dt, contents, writer, created_dt, modifier, modifed_dt, is_deleted)
+    VALUES (#{saveSchedule.scheduleId}, 
+            #{saveSchedule.name}, 
+            #{startedDt}, 
+            #{endedDt}, 
+            #{saveSchedule.contents}, 
+            #{saveSchedule.writer}, 
+            sysdate, 
+            #{saveSchedule.modifier}, 
+            sysdate, 
+            #{saveSchedule.isDeleted})
+  </insert>
+
+
+
+
+  <insert id="saveScheduleInvite" parameterType="com.kcc.trioffice.domain.schedule.dto.SaveSchedule">
+
+            INSERT INTO schedule_invite 
+            (schedule_id, employee_id, status, writer, created_dt, modifier, modified_dt, is_deleted)
+            VALUES (#{scheduleId}, 
+          <foreach collection="employeeIds" item="employeeId">
+          <if test="employeeId != null">
+            #{employeeId}, 
+           </if>
+          </foreach>    
+            2, #{writer}, sysdate, #{modifier}, sysdate, #{isDeleted})
+        
+</insert>
+
+  
 </mapper>

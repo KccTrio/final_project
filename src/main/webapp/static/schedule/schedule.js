@@ -255,7 +255,7 @@ function validateDates() {
     });
   }
 }
-
+var inviteEmployee = 0;
 var quill = new Quill("#schedule-contents", {
   theme: "snow", // 또는 'bubble'
   modules: {
@@ -367,6 +367,9 @@ $(document).ready(function () {
       function onAddTag(e) {
         console.log("onAddTag: ", e.detail);
         console.log("original input value: ", inputElm.value);
+        inviteEmployee++;
+        const inviteCount = document.getElementById("count");
+        inviteCount.innerText = inviteEmployee; // innerText로 값 설정
       }
 
       function onRemoveTag(e) {
@@ -376,6 +379,9 @@ $(document).ready(function () {
           "tagify instance value:",
           tagify.value
         );
+        inviteEmployee--;
+        const inviteCount = document.getElementById("count");
+        inviteCount.innerText = inviteEmployee; // innerText로 값 설정
       }
 
       function onTagEdit(e) {
@@ -454,13 +460,12 @@ document.getElementById("schedule-form").onsubmit = function (event) {
 
       // 서버로 전송할 데이터 설정
       var formData = {
-        scheduleName: scheduleName,
-        startDate: startDate,
-        endDate: endDate,
+        name: scheduleName,
+        startedDt: startDate,
+        endedDt: endDate,
         employeeIds: selectedEmployeeIds,
-        content: deltaContentJson, // 에디터 내용 추가
+        contents: deltaContentJson, // 에디터 내용 추가
       };
-
       // AJAX 호출
       $.ajax({
         url: "/schedules/save",

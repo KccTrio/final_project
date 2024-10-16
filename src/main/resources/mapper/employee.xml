@@ -64,7 +64,7 @@
                 AND is_deleted = 0
     </select>
 
-    <select id="getEmployeeInfoById" parameterType="String"
+    <select id="getEmployeeInfoFindById" parameterType="String"
         resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
            SELECT employee_id as employeeId
                ,dept_id as deptId
@@ -88,7 +88,7 @@
                ,modified_dt as modifiedDt
                ,is_deleted as isDeleted
             FROM employee e
-            WHERE email = #{email}
+            WHERE email = #{id}
                 AND is_deleted = 0
     </select>
 
@@ -127,7 +127,7 @@
                , modified_dt as modifiedDt
                , is_deleted as isDeleted
             FROM employee
-            WHERE email = #{id}
+            WHERE email = #{email}
     </select>
 
     <select id="findByEmail" parameterType="String" resultType="String">

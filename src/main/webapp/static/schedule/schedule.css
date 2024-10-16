@@ -156,6 +156,7 @@
   display: none;
 }
 #title-text {
+  display: flex;
   margin-top: 5px;
 }
 
@@ -325,4 +326,13 @@ input[name="employees[]"] {
   border: 5px solid #f27474 !important;
   border-radius: 100%;
   margin-top: 20px !important;
+}
+
+#count-employees {
+  /* border: 1px solid black; */
+  width: 30px;
+  /* height: 10px; */
+  display: flex;
+  justify-content: center;
+  margin-left: 5px;
 }
