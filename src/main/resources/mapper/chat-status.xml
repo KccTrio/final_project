@@ -16,12 +16,12 @@
     </insert>
     
     <select id="getChatStatusByChatIdAndEmployeeId" parameterType="map" resultType="com.kcc.trioffice.domain.chat_status.dto.response.ChatStatusInfo">
-      SELECT chat_room_id as chatRoomId
-             , employee_id as employeeId
-             , chat_id as chatId
-             , is_read as isRead
-             , emoticon_type as emoticonType
-             , is_emoticon as isEmoticon
+      SELECT chat_room_id
+             , employee_id
+             , chat_id
+             , is_read
+             , emoticon_type
+             , is_emoticon
         FROM chat_status
         WHERE chat_id = #{chatId}
           AND employee_id = #{employeeId}

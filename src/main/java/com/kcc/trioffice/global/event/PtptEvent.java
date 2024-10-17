@@ -1,5 +1,7 @@
 package com.kcc.trioffice.global.event;
 
+import com.kcc.trioffice.domain.chat_room.dto.response.ChatDelete;
+import com.kcc.trioffice.domain.chat_room.dto.response.ChatDetailInfo;
 import com.kcc.trioffice.domain.chat_room.dto.response.ChatRoomEnter;
 import com.kcc.trioffice.domain.chat_room.dto.response.ParticipantEmployeeInfo;
 import com.kcc.trioffice.domain.participation_employee.dto.response.PtptEmpInfos;
@@ -31,5 +33,10 @@ public class PtptEvent {
                     .convertAndSend("/sub/chatrooms/employees/" + participantEmployeeInfo.getEmployeeId()
                             , participantEmployeeInfo);
         });
+    }
+
+    @EventListener
+    public void handleChatRoomDeleteEvent(ChatDelete chatDelete) {
+        simpMessagingTemplate.convertAndSend("/sub/chat/room/" + chatDelete.getRoomId(), chatDelete);
     }
 }

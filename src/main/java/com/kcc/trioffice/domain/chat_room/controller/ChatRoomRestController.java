@@ -57,4 +57,10 @@ public class ChatRoomRestController {
 
     }
 
+    @DeleteMapping("/chats/{chatId}")
+    public void deleteChat(@PathVariable Long chatId,
+                           @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        chatRoomService.deleteChat(chatId, principalDetail.getEmployeeId());
+    }
+
 }

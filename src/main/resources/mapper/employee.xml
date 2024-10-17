@@ -22,28 +22,28 @@
 
     <select id="getEmployeeInfo" parameterType="Long"
             resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
-      SELECT employee_id as employeeId
-             ,dept_id as deptId
-             ,company_id as companyId
-             ,email
-             ,password
-             ,phone_num as phoneNum
-             ,external_email as externalEmail
-             ,name
-             ,birth
-             ,profile_url as profileUrl
-             ,fax
-             ,location
-             ,is_receive_notification as isReceiveNotification
-             ,position
-             ,status
-             ,status_message as statusMessage
-             ,fcm_token as fcmToken
-             ,writer
-             ,write_dt as writeDt
-             ,modifier
-             ,modified_dt as modifiedDt
-             ,is_deleted as isDeleted
+      SELECT employee_id
+             , dept_id
+             , company_id
+             , email
+             , password
+             , phone_num
+             , external_email
+             , name
+             , birth
+             , profile_url
+             , fax
+             , location
+             , is_receive_notification
+             , position
+             , status
+             , status_message
+             , fcm_token
+             , writer
+             , write_dt
+             , modifier
+             , modified_dt
+             , is_deleted
         FROM employee e
         WHERE employee_id = #{employee_id}
           AND is_deleted = 0
@@ -51,27 +51,27 @@
 
     <select id="getEmployeeInfoList" parameterType="java.util.List"
             resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
-      SELECT employee_id as employeeId
-             ,dept_id as deptId
-             ,company_id as companyId
+      SELECT employee_id
+             ,dept_id
+             ,company_id
              ,email
              ,password
-             ,phone_num as phoneNum
-             ,external_email as externalEmail
+             ,phone_num
+             ,external_email
              ,name
              ,birth
-             ,profile_url as profileUrl
+             ,profile_url
              ,fax
              ,location
-             ,is_receive_notification as isReceiveNotification
+             ,is_receive_notification
              ,position
              ,status
-             ,status_message as statusMessage
-             ,fcm_token as fcmToken
+             ,status_message
+             ,fcm_token
              ,writer
-             ,write_dt as writeDt
+             ,write_dt
              ,modifier
-             ,modified_dt as modifiedDt
+             ,modified_dt
              ,is_deleted as isDeleted
         FROM employee
         WHERE employee_id IN
@@ -83,27 +83,27 @@
 
     <select id="getEmployeeInfoFindById" parameterType="String"
             resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
-      SELECT employee_id as employeeId
-             , dept_id as deptId
-             , company_id as companyId
+      SELECT employee_id
+             , dept_id
+             , company_id
              , email
              , password
-             , phone_num as phoneNum
-             , external_email as externalEmail
+             , phone_num
+             , external_email
              , name
              , birth
-             , profile_url as profileUrl
+             , profile_url
              , fax
              , location
-             , is_receive_notification as isReceiveNotification
+             , is_receive_notification
              , position
              , status
-             , status_message as statusMessage
+             , status_message
              , writer
-             , write_dt as writeDt
+             , write_dt
              , modifier
-             , modified_dt as modifiedDt
-             , is_deleted as isDeleted
+             , modified_dt
+             , is_deleted
         FROM employee
         WHERE email = #{id}
     </select>
@@ -179,7 +179,7 @@
 
     <select id="getAdminInfo" resultType="com.kcc.trioffice.domain.employee.dto.response.AdminInfo">
     SELECT name
-           , phone_num AS phoneNum
+           , phone_num
       FROM employee
       WHERE employee_id =
         (

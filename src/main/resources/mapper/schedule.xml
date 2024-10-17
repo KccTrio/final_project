@@ -9,8 +9,8 @@
   <select id="getEmployeeSchedules" parameterType="map" resultType="com.kcc.trioffice.domain.schedule.dto.EmployeeSchedules">
     SELECT
       name
-      ,started_dt AS startedDt
-      ,ended_dt AS endedDt
+      ,started_dt
+      ,ended_dt
       FROM schedule
       WHERE schedule_id
         IN (

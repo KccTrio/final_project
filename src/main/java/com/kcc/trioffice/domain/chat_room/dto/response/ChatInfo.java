@@ -30,6 +30,7 @@ public class ChatInfo {
     private Boolean isClickedSadEmoticon;
     private int unreadMessageCount;
     private List<String> tags;
+    private Boolean isDeleted;
 
     public void setChatType(Long chatType) {
         this.chatType = ChatType.toName(chatType);
