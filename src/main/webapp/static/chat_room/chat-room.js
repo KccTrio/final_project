@@ -154,6 +154,12 @@ $(document).ready(function() {
         $('.chat-room-item').removeClass('active');
         $(this).addClass('active');
 
+        $('.chat-area').show();
+        $('.file-area').hide();
+        $('.chat-button').addClass('active');
+        $('.file-button').removeClass('active');
+
+        offset = 0;
 
         connectWebSocket(chatRoomId);
         loadChatRoom(chatRoomId);
@@ -675,8 +681,30 @@ $(document).ready(function() {
                 // 읽음 처리
                 console.log('읽음 처리:', receivedMessage);
                 readMessage(receivedMessage);
+            } else if (receivedMessage.chatType === "DELETE") {
+                // 삭제 처리
+                console.log('삭제 처리:', receivedMessage);
+                deleteMessage(receivedMessage);
             }
         });
+    }
+
+    function deleteMessage(receivedMessage) {
+        // receivedMessage.chatId 값으로 해당 메시지 contents를 삭제된 메세지입니다. 로 변경
+        var messageRow = $('.chat .row[data-message-id="' + receivedMessage.chatId + '"]');
+        if (messageRow.length === 0) {
+            return;
+        }
+        if (receivedMessage.senderId === currentEmployeeId) {
+            var myChatContent = messageRow.find('.my-chat-content');
+            myChatContent.empty(); // 기존 내용을 비움
+            myChatContent.append('<p>삭제된 메세지입니다.</p>');
+        } else {
+            var chatContent = messageRow.find('.chat-content');
+            chatContent.empty(); // 기존 내용을 비움
+            chatContent.append('<p>삭제된 메세지입니다.</p>');
+        }
+        messageRow.find('.emoticon-box .emoticon-button').remove();
     }
 
     function readMessage(receivedMessage) {
