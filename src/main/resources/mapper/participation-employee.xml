@@ -161,26 +161,26 @@
     <select id="getFcmTokenByChatRoomId" resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
       SELECT
         e.employee_id as employeeId
-        , e.dept_id as deptId
-        , e.company_id as companyId
+        , e.dept_id
+        , e.company_id
         , e.email
         , e.password
-        , e.phone_num as phoneNum
-        , e.external_email as externalEmail
+        , e.phone_num
+        , e.external_email
         , e.name
         , e.birth
-        , e.profile_url as profileUrl
+        , e.profile_url
         , e.fax
         , e.location
-        , e.is_receive_notification as isReceiveNotification
+        , e.is_receive_notification
         , e.position
         , e.status
-        , e.status_message as statusMessage
+        , e.status_message
         , e.writer
-        , e.write_dt as writeDt
+        , e.write_dt
         , e.modifier
-        , e.modified_dt as modifiedDt
-        , e.is_deleted as isDeleted
+        , e.modified_dt
+        , e.is_deleted
         FROM employee e
         INNER JOIN participation_employee pe
           ON e.employee_id = pe.employee_id

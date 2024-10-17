@@ -56,8 +56,8 @@
       SELECT * FROM (
         SELECT sub.*, ROWNUM rnum FROM (
           SELECT
-            af.chat_id AS chatId
-            , af.file_name AS fileName
+            af.chat_id
+            , af.file_name
             , TO_CHAR(af.write_dt, 'YYYY-MM-DD HH24:MI:SS') AS writeDt
             , e.name AS sender
             , t.tags AS tags
