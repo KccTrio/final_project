@@ -19,5 +19,6 @@ public interface ParticipationEmployeeMapper {
     int deleteParticipationEmployee(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId);
     int updateIsEntered(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId, @Param("isEntered") boolean isEntered);
     int disconnectChatRoom(Long employeeId);
-
+    List<EmployeeInfo> getPtptEmpInfoByChatIdExceptOneself(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId);
+    List<EmployeeInfo> getFcmTokenByChatRoomId(@Param("chatRoomId") Long chatRoomId);
 }

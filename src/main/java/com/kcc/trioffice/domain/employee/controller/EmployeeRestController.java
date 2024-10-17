@@ -1,5 +1,6 @@
 package com.kcc.trioffice.domain.employee.controller;
 
+import com.kcc.trioffice.domain.employee.dto.request.SaveFcmToken;
 import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.dto.response.SearchEmployee;
 import com.kcc.trioffice.domain.employee.service.EmployeeService;
@@ -58,10 +59,9 @@ public class EmployeeRestController {
         return ResponseEntity.ok(adminInfo);
     }
 
-    @GetMapping("/employees/{id}")
-    public ResponseEntity<EmployeeInfo> getEmployeeById(@PathVariable Long id) {
-        EmployeeInfo employee = employeeService.findById(id);
-        return ResponseEntity.ok(employee);
+    @PostMapping("/employees/fcm-token")
+    public void saveFcmToken(@RequestBody SaveFcmToken saveFcmToken, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        employeeService.saveFcmToken(saveFcmToken, principalDetail.getEmployeeId());
     }
 
 }

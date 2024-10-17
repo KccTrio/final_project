@@ -68,6 +68,9 @@ pageEncoding="UTF-8" %>
     <!-- sweet alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <%--  FCM  --%>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-messaging.js"></script>
     <style>
       /* 적용방법 */
       .test-font {
