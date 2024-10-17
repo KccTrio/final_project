@@ -10,7 +10,7 @@
           SELECT SEQ_CHAT.NEXTVAL FROM DUAL
       </selectKey>
       INSERT INTO chat (
-          , chat_id
+          chat_id
           , chatroom_id
           , contents
           , chat_type

@@ -49,10 +49,10 @@
           , file_id AS fileId
           FROM attached_file
           WHERE chat_id = #{chatId}
+            AND is_deleted = 0
     </select>
 
     <select id="getAttachedFile" resultType="com.kcc.trioffice.domain.attached_file.dto.response.AttachedFileInfo">
-      <![CDATA[
       SELECT * FROM (
         SELECT sub.*, ROWNUM rnum FROM (
           SELECT
@@ -75,20 +75,15 @@
                 GROUP BY file_id
               ) t ON af.file_id = t.file_id
             WHERE c.chatroom_id = #{chatRoomId}
-      ]]>
         <if test="tags != null and tags.size() != 0">
-      <![CDATA[
               AND EXISTS (
                 SELECT 1 FROM tag t2
                   WHERE t2.file_id = af.file_id
                     AND t2.name IN
-                ]]>
             <foreach item="tag" collection="tags" open="(" separator="," close=")">
                 #{tag}
             </foreach>
-      <![CDATA[
                 )
-      ]]>
         </if>
       <![CDATA[
             ORDER BY
