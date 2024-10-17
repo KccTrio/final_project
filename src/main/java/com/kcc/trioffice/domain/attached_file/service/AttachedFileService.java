@@ -8,6 +8,7 @@ import com.kcc.trioffice.domain.chat_room.dto.response.ChatMessageInfo;
 import com.kcc.trioffice.domain.chat_room.dto.response.ParticipantEmployeeInfo;
 import com.kcc.trioffice.domain.chat_room.mapper.ChatMapper;
 import com.kcc.trioffice.domain.chat_room.mapper.ChatRoomMapper;
+import com.kcc.trioffice.domain.chat_room.service.ChatRoomService;
 import com.kcc.trioffice.domain.chat_status.mapper.ChatStatusMapper;
 import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.service.EmployeeService;
@@ -46,6 +47,7 @@ public class AttachedFileService {
     private final ParticipationEmployeeMapper participationEmployeeMapper;
     private final ChatStatusMapper chatStatusMapper;
     private final ApplicationEventPublisher eventPublisher;
+    private final ChatRoomService chatRoomService;
 
     @Transactional
     public List<ChatMessageInfo> sendAttachedFile(List<MultipartFile> multipartFiles, List<String> tags, Long chatRoomId, Long employeeId) {
@@ -71,14 +73,8 @@ public class AttachedFileService {
             chatMapper.saveChatMessage(chatMessage);
 
             attachedFileMapper.saveAttachedFile(chatMessage.getChatId(), employeeId, s3UploadFile);
-            if (tags != null) {
-                tags.forEach(
-                        tag -> tagMapper.saveTag(s3UploadFile.getFileId(), tag, employeeId)
-                );
-            }
-
+            saveTag(tags, employeeId, s3UploadFile);
             chatRoomMapper.updateChatRoomLastMessage(chatMessage.getRoomId(), chatMessage.getChatId());
-
             int unreadCount = 0;
 
             //채팅 상태 생성
@@ -121,9 +117,18 @@ public class AttachedFileService {
             chatMessageInfos.add(chatMessageInfo);
         }
 
+        String chatRoomName = chatRoomService.handleChatRoomName(chatRoomId, employeeId);
+        chatRoomService.sendChatMessageFcm(chatRoomId, chatRoomName, employeeInfo.getProfileUrl(), "파일을 전송했습니다.");
         eventPublisher.publishEvent(new PtptEmpInfos(participantEmployeeInfos));
-
         return chatMessageInfos;
+    }
+
+    private void saveTag(List<String> tags, Long employeeId, S3UploadFile s3UploadFile) {
+        if (tags != null) {
+            tags.forEach(
+                    tag -> tagMapper.saveTag(s3UploadFile.getFileId(), tag, employeeId)
+            );
+        }
     }
 
     public ResponseEntity<byte[]> downloadAttachedFile(Long chatRoomId, Long chatId, Long employeeId) {
