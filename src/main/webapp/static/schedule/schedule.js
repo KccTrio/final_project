@@ -61,6 +61,7 @@ function fetchCalendarData() {
   var dateData = getFirstAndLastDateOfMonth();
   console.log(dateData);
   //일정조회 ajax
+  //일정조회 ajax
   $.ajax({
     url: "/api/schedules/calendar",
     method: "GET",
@@ -157,6 +158,11 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
         "data-schedule-id",
         info.event.extendedProps.scheduleId
       );
+      // data-schedule-id 속성 추가
+      info.el.setAttribute(
+        "data-schedule-id",
+        info.event.extendedProps.scheduleId
+      );
 
       // 이벤트에 우클릭 이벤트 리스너 추가
       info.el.addEventListener("contextmenu", function (event) {
@@ -191,6 +197,15 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
       });
 
       detailContainer.classList.remove("hidden");
+      const detailTitle = document.getElementById("detail-title");
+      const detailStartDate = document.getElementById("start-date-detail");
+      const detailEndDate = document.getElementById("end-date-detail");
+
+      detailTitle.innerText = info.event.title;
+      detailStartDate.value = formatDateTime(info.event.startStr);
+      detailEndDate.value = formatDateTime(info.event.endStr);
+
+      detailContainer.classList.remove("hidden");
     },
 
     displayEventTime: true,
@@ -209,6 +224,22 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
 
   calendar.render();
 });
+
+function formatDateTime(dateTimeStr) {
+  // 날짜와 시간 구분자 'T'의 위치 찾기
+  let tIndex = dateTimeStr.indexOf("T");
+
+  // 날짜만 있는 경우
+  if (tIndex === -1) {
+    return dateTimeStr; // 'T'가 없으면 그대로 반환
+  }
+
+  // 'T'를 기준으로 문자열을 나눔
+  let datePart = dateTimeStr.slice(0, tIndex); // 날짜 부분
+  let timePart = dateTimeStr.slice(tIndex + 1, tIndex + 6); // 시간 부분 (HH:MM까지)
+
+  return datePart + " " + timePart; // 날짜와 시간 부분을 공백으로 구분해서 반환
+}
 
 function formatDateTime(dateTimeStr) {
   // 날짜와 시간 구분자 'T'의 위치 찾기
@@ -556,6 +587,7 @@ document.getElementById("schedule-form").onsubmit = function (event) {
         contents: deltaContentJson, // 에디터 내용 추가
         emailCheck: emailCheck,
       };
+      // 일정등록  AJAX
       // 일정등록  AJAX
       $.ajax({
         url: "/schedules/save",
