@@ -35,14 +35,24 @@
 
     <select id="getChatDetailInfo" parameterType="map" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ChatDetailInfo">
       SELECT
-        chat_id AS chatId
-        , chatroom_id AS chatroomId
+        chat_id
+        , chatroom_id
         , contents
-        , chat_type AS chatType
+        , chat_type
         , writer AS senderId
       FROM
         chat
       WHERE
         chat_id = #{chatId}
     </select>
+
+    <update id="deleteChatMessage" parameterType="map">
+      UPDATE chat
+        SET
+          is_deleted = 1
+          , modifier = #{employeeId}
+          , modified_dt = SYSDATE
+        WHERE
+          chat_id = #{chatId}
+    </update>
 </mapper>

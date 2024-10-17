@@ -16,7 +16,7 @@
 
     <select id="getChatRoomListByEmployeeId" parameterType="long" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ChatRoomInfo">
       SELECT
-        cr.chat_room_id AS chatRoomId
+        cr.chat_room_id
         , cr.name AS chatRoomName
         , pe.chat_room_profile_url AS chatRoomProfileImageUrl
         , cm.contents AS lastMessage
@@ -51,7 +51,7 @@
 
     <select id="getChatRoomInfo" parameterType="map" resultType="ChatRoomDetailInfo">
       SELECT
-        cr.chat_room_id AS chatRoomId
+        cr.chat_room_id
         , cr.name AS chatRoomName
         , pe.chat_room_profile_url AS chatRoomProfileImageUrl
         , (
@@ -77,13 +77,13 @@
             inner_query.*, ROWNUM AS rnum
             FROM (
               SELECT
-                c.chat_id AS chatId
+                c.chat_id
                 , CASE
                     WHEN c.chat_type = 5 THEN af.file_url     -- 이미지: file_url 사용
                     WHEN c.chat_type = 3 THEN af.file_name    -- 파일: file_name 사용
                     ELSE c.contents                           -- 기타: contents 사용
                     END AS chatContents
-                , c.chat_type AS chatType
+                , c.chat_type
                 , c.writer AS senderId
                 , c.write_dt AS chatTime
                 , e.name AS senderName
@@ -202,6 +202,7 @@
                        WHERE af2.chat_id = c.chat_id
                          AND af2.is_deleted = 0
                   ) AS tags
+                , c.is_deleted AS isDeleted
                 FROM chat c
                 JOIN employee e
                   ON c.writer = e.employee_id
@@ -216,7 +217,6 @@
                           AND pe.employee_id = #{employeeId}
                           AND pe.is_deleted = 0
                     )
-                  AND c.is_deleted = 0
                   AND e.is_deleted = 0
                 ORDER BY c.write_dt DESC
                 ) inner_query

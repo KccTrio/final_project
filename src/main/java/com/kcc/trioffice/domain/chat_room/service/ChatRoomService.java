@@ -16,6 +16,7 @@ import com.kcc.trioffice.global.enums.ChatType;
 import com.kcc.trioffice.global.exception.type.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,6 +36,7 @@ public class ChatRoomService {
     private final ChatStatusMapper chatStatusMapper;
     private final EmployeeMapper employeeMapper;
     private final FcmService fcmService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Transactional
     public void createChatRoom(ChatRoomCreate chatRoomCreate, Long employeeId) {
@@ -117,6 +119,14 @@ public class ChatRoomService {
         List<EmployeeInfo> employeeInfos = participationEmployeeMapper.getEmployeeByChatRoomIdExceptOneSelf(chatRoomId, employeeId);
 
         List<ChatInfo> chatInfos = chatRoomMapper.getChatInfoByPage(chatRoomId, employeeId, chatRoomDetailInfo.getParticipantCount(), limit, offset);
+
+        chatInfos.forEach(c -> {
+            if (c.getIsDeleted()) {
+                c.setChatContents("삭제된 메시지입니다.");
+                c.setChatType(ChatType.CHAT.getValue());
+            }
+        });
+
         chatRoomDetailInfo.setChatInfoList(chatInfos);
 
         if (chatRoomDetailInfo.getParticipantCount() <= 2) {
@@ -235,6 +245,21 @@ public class ChatRoomService {
         List<ParticipantEmployeeInfo> participantEmployeeInfos = participationEmployeeMapper.getParticipantEmployeeInfoByChatRoomId(chatRoomId);
 
         return new ChatMessageInfoAndPtptEmp(participantEmployeeInfos, chatMessageInfo);
+    }
+
+    @Transactional
+    public void deleteChat(Long chatId, Long employeeId) {
+        ChatDetailInfo chatDetailInfo = chatMapper
+                .getChatDetailInfo(chatId).orElseThrow(() -> new NotFoundException("채팅이 존재하지 않습니다."));
+        if (chatDetailInfo.getSenderId().equals(employeeId)) {
+            chatMapper.deleteChatMessage(chatId, employeeId);
+        } else {
+            throw new RuntimeException("채팅 삭제 권한이 없습니다.");
+        }
+
+        ChatDelete chatDelete = new ChatDelete(chatDetailInfo.getChatroomId(), "DELETE", chatDetailInfo.getSenderId(), chatId);
+
+        eventPublisher.publishEvent(chatDelete);
     }
 
 }
