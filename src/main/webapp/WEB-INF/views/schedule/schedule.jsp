@@ -128,6 +128,46 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           <span id="close-button"></span>
         </div>
       </div>
+      <div id="detail-container" class="hidden">
+        <div id="detail-contents">
+          <div id="detail-inner">
+            <div id="detail-title">우리은행 통합 뱅킹 솔루션 주간회의</div>
+
+            <div class="detail-dates">
+              <label for="start-date">시작일:</label>
+              <input
+                type="text"
+                value="2024-10-02"
+                id="start-date-detail"
+                name="start-date"
+                readonly
+              />
+
+              <label for="end-date" id="end-date-label">종료일:</label>
+              <input
+                type="text"
+                id="end-date-detail"
+                value="2024-10-02"
+                name="end-date"
+                readonly
+              />
+            </div>
+            <div class="add-people">
+              <div id="add-people-text">참석 인원</div>
+              <div id="add-people-table"></div>
+            </div>
+            <div class="detail-text">
+              <div id="detail-text-title" data-schduleid="1">일정 내용</div>
+              <div id="detail-text-contents"></div>
+            </div>
+            <div id="detail-buttons">
+              <button id="detail-modify" class="hidden">일정 수정</button>
+              <button id="detail-delete">일정 삭제</button>
+              <button id="detail-close">닫기</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <script src="<%= request.getContextPath() %>/static/schedule/schedule.js"></script>
   </body>

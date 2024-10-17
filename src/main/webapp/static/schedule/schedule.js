@@ -60,6 +60,7 @@ function formatDateToISO(dateString) {
 function fetchCalendarData() {
   var dateData = getFirstAndLastDateOfMonth();
   console.log(dateData);
+  //일정조회 ajax
   $.ajax({
     url: "/api/schedules/calendar",
     method: "GET",
@@ -84,7 +85,12 @@ function fetchCalendarData() {
           // ISO 8601 형식으로 변환
           start: formatDateToISO(schedule.startedDt),
           end: formatDateToISO(schedule.endedDt),
+          extendedProps: {
+            // 추가 정보를 담기 - 스케줄의 각 id의 고유한 번호
+            scheduleId: schedule.scheduleId,
+          },
         };
+        console.log("가져온 scheduleId : " + schedule.scheduleId);
 
         if (startTime === "00:00:00" && endTime === "00:00:00") {
           event.allDay = true; // allDay 이벤트로 설정
@@ -146,6 +152,11 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
         // info.el.style.backgroundColor = "#b4c8bb"; // 시간대 이벤트 배경색
         info.el.style.border = "0px"; // 시간대 이벤트 배경색
       }
+      // data-schedule-id 속성 추가
+      info.el.setAttribute(
+        "data-schedule-id",
+        info.event.extendedProps.scheduleId
+      );
 
       // 이벤트에 우클릭 이벤트 리스너 추가
       info.el.addEventListener("contextmenu", function (event) {
@@ -153,10 +164,33 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
         alert("이벤트를 우클릭했습니다: " + info.event.title);
       });
     },
-    // 상세보기 추후 구현
+    // 상세보기 구현
     eventClick: function (info) {
-      alert("이벤트 제목: " + info.event.title);
-      // 추가적인 로직을 여기에 작성
+      const detailTitle = document.getElementById("detail-title");
+      const detailStartDate = document.getElementById("start-date-detail");
+      const detailEndDate = document.getElementById("end-date-detail");
+
+      detailTitle.innerText = info.event.title;
+      detailStartDate.value = formatDateTime(info.event.startStr);
+      detailEndDate.value = formatDateTime(info.event.endStr);
+
+      //해당 일정에 schduleId ajax 통신 내용, 참여인원 status가져오기
+      const scheduleId = info.event.extendedProps.scheduleId;
+
+      $.ajax({
+        type: "GET",
+        url: "/api/schedules/detail",
+        dataType: "json",
+        data: {
+          scheduleId: scheduleId,
+        },
+        success: function (scheduleDetail) {
+          console("일정 상세 조회 성공 :");
+        },
+        error: function () {},
+      });
+
+      detailContainer.classList.remove("hidden");
     },
 
     displayEventTime: true,
@@ -175,6 +209,22 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
 
   calendar.render();
 });
+
+function formatDateTime(dateTimeStr) {
+  // 날짜와 시간 구분자 'T'의 위치 찾기
+  let tIndex = dateTimeStr.indexOf("T");
+
+  // 날짜만 있는 경우
+  if (tIndex === -1) {
+    return dateTimeStr; // 'T'가 없으면 그대로 반환
+  }
+
+  // 'T'를 기준으로 문자열을 나눔
+  let datePart = dateTimeStr.slice(0, tIndex); // 날짜 부분
+  let timePart = dateTimeStr.slice(tIndex + 1, tIndex + 6); // 시간 부분 (HH:MM까지)
+
+  return datePart + " " + timePart; // 날짜와 시간 부분을 공백으로 구분해서 반환
+}
 
 // 일정등록 모달
 const addScheduleButton = document.getElementById("add-schedule-button");
@@ -199,6 +249,21 @@ closeButton.onclick = function (event) {
 window.addEventListener("click", function (event) {
   if (event.target === modalContainer) {
     modalContainer.classList.add("hidden");
+  }
+});
+
+// 일정 상세 모달
+var detailContainer = document.getElementById("detail-container");
+var detailCloseButton = document.getElementById("detail-close");
+
+// 모달 닫기 버튼 클릭 시 모달 닫기
+detailCloseButton.onclick = function () {
+  detailContainer.classList.add("hidden");
+};
+
+window.addEventListener("click", function (event) {
+  if (event.target === detailContainer) {
+    detailContainer.classList.add("hidden");
   }
 });
 
@@ -491,7 +556,7 @@ document.getElementById("schedule-form").onsubmit = function (event) {
         contents: deltaContentJson, // 에디터 내용 추가
         emailCheck: emailCheck,
       };
-      // AJAX 호출
+      // 일정등록  AJAX
       $.ajax({
         url: "/schedules/save",
         method: "POST",

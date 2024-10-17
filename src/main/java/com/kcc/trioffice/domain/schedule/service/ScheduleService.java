@@ -25,6 +25,7 @@ import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.mapper.EmployeeMapper;
 import com.kcc.trioffice.domain.schedule.dto.EmployeeSchedules;
 import com.kcc.trioffice.domain.schedule.dto.SaveSchedule;
+import com.kcc.trioffice.domain.schedule.dto.ScheduleDetail;
 import com.kcc.trioffice.domain.schedule.mapper.ScheduleMapper;
 import com.kcc.trioffice.global.exception.type.NotFoundException;
 
@@ -131,19 +132,27 @@ public class ScheduleService {
           helper.setFrom("noreply@kcc.com");
           helper.setTo(oneEmployeeEmail);
           helper.setSubject("KCC정보통신 | " + saveSchedule.getName() + " 일정 초대 알림");
-          String htmlContent = "    <div class='email-container'>" +
-              "        <div class='content'>" +
-              "            <h2>안녕하세요,</h2>" +
-              "            <p>귀하는 다음 일정에 초대되었습니다:</p>" +
-              "            <p><strong>일정 제목:</strong> " + saveSchedule.getName() + "</p>" +
-              "            <p><strong>일정 기간:</strong> " + saveSchedule.getStartedDt() + " ~ "
-              + saveSchedule.getEndedDt() + "</p>" +
-              "            <a href='#' class='button'>일정 확인하기</a>" +
-              "        </div><br>" +
-              "        <div class='footer'>" +
-              "            <p>본 알림은 시스템에 의해 자동 생성되었습니다.</p>" +
-              "        </div>" +
-              "    </div>";
+          String htmlContent = "<div class='email-container' style='max-width: 600px; margin: 20px auto; background-color: #ffffff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);'>"
+              +
+              "<div class='header' style='background-color: #0056b3; color: #ffffff; padding: 20px; text-align: center; border-top-left-radius: 8px; border-top-right-radius: 8px; font-size: 24px;'>"
+              +
+              "    일정 초대" +
+              "</div>" +
+              "<div class='content' style='padding: 20px; line-height: 1.6;'>" +
+              "    <h2 style='color: #333333;'>안녕하세요,</h2>" +
+              "    <p>귀하는 다음 일정에 초대되었습니다:</p>" +
+              "    <p><strong>일정 제목:</strong> " + saveSchedule.getName() + "</p>" +
+              "    <p><strong>일정 기간:</strong> " + saveSchedule.getStartedDt() + " ~ " + saveSchedule.getEndedDt()
+              + "</p>" +
+              "    <a href='#' class='button' style='display: inline-block; padding: 10px 20px; margin-top: 20px; background-color: #0056b3; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold;'>일정 확인하기</a>"
+              +
+              "</div>" +
+              "<div class='footer' style='text-align: center; padding: 10px; font-size: 12px; color: #999999; border-top: 1px solid #dddddd; margin-top: 20px;'>"
+              +
+              "    <p>본 알림은 시스템에 의해 자동 생성되었습니다.</p>" +
+              "</div>" +
+              "</div>";
+
           helper.setText(htmlContent, true);
 
           mailSender.send(message);
@@ -162,6 +171,35 @@ public class ScheduleService {
       log.info("에러 발생: ", e);
       throw new BadRequestException("saveSchedule 또는 saveScheduleInvite 중 오류 발생");
     }
+  }
+
+  public ScheduleDetail getScheduleDetail(String scheduleId, Long employeeId) {
+    // 스케줄의 내용과 생성자
+    ScheduleDetail scheduleDetail = scheduleMapper.getScheduleDetail(scheduleId)
+        .orElseThrow(() -> new NotFoundException("일정 상세 정보를 가져올 수 없습니다."));
+
+    System.out.println("현재 로그인 객체의 아이디 : " + employeeId);
+    // 스케줄이 본인 것인지 check
+    if (employeeId == scheduleDetail.getWriter()) {
+      scheduleDetail.setIsMySchedule(1);
+      // System.out.println("현재 스케줄은 로그인 객체의 것입니다.");
+    } else {
+      scheduleDetail.setIsMySchedule(0);
+    }
+
+    // int count = scheduleDetail.getScheduleDetailEmployees().size();
+
+    // for (int i = 0; i < count; i++) {
+    // System.out.println("현재 초대된 회원은 " +
+    // scheduleDetail.getScheduleDetailEmployees().get(i).getEmployeeName());
+    // }
+    // System.out.println("상세 일정 : " + scheduleDetail.getContents() +
+    // scheduleDetail.getWriter());
+
+    // 초대된 회원의 정보
+    // scheduleDetail.setScheduleDetailEmployees(scheduleMapper.getInviteEmployee);
+
+    return scheduleDetail;
   }
 
 }

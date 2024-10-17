@@ -1,16 +1,10 @@
 package com.kcc.trioffice.domain.schedule.dto;
 
-import java.sql.Timestamp;
-import java.util.List;
-
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
 
 @Data
-
 public class EmployeeSchedules extends ComponentDto {
-
+  private Long scheduleId;
   private String name;
   private String startedDt;
   private String endedDt;
