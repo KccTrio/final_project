@@ -127,4 +127,66 @@
         WHERE is_entered = 1
     </update>
 
+    <select id="getPtptEmpInfoByChatIdExceptOneself" resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
+      SELECT
+        e.employee_id as employeeId
+        , e.dept_id as deptId
+        , e.company_id as companyId
+        , e.email
+        , e.password
+        , e.phone_num as phoneNum
+        , e.external_email as externalEmail
+        , e.name
+        , e.birth
+        , e.profile_url as profileUrl
+        , e.fax
+        , e.location
+        , e.is_receive_notification as isReceiveNotification
+        , e.position
+        , e.status
+        , e.status_message as statusMessage
+        , e.writer
+        , e.write_dt as writeDt
+        , e.modifier
+        , e.modified_dt as modifiedDt
+        , e.is_deleted as isDeleted
+        FROM employee e
+        INNER JOIN participation_employee pe
+          ON e.employee_id = pe.employee_id
+            AND pe.is_deleted = 0
+        WHERE pe.chat_room_id = #{chatRoomId}
+          AND e.employee_id != #{employeeId}
+    </select>
+
+    <select id="getFcmTokenByChatRoomId" resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
+      SELECT
+        e.employee_id as employeeId
+        , e.dept_id as deptId
+        , e.company_id as companyId
+        , e.email
+        , e.password
+        , e.phone_num as phoneNum
+        , e.external_email as externalEmail
+        , e.name
+        , e.birth
+        , e.profile_url as profileUrl
+        , e.fax
+        , e.location
+        , e.is_receive_notification as isReceiveNotification
+        , e.position
+        , e.status
+        , e.status_message as statusMessage
+        , e.writer
+        , e.write_dt as writeDt
+        , e.modifier
+        , e.modified_dt as modifiedDt
+        , e.is_deleted as isDeleted
+        FROM employee e
+        INNER JOIN participation_employee pe
+          ON e.employee_id = pe.employee_id
+        WHERE pe.chat_room_id = #{chatRoomId}
+          AND pe.is_entered != 1
+          AND e.fcm_token IS NOT NULL
+          AND e.is_deleted = 0
+    </select>
 </mapper>

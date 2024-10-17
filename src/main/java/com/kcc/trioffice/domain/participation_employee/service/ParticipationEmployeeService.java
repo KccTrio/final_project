@@ -36,7 +36,8 @@ public class ParticipationEmployeeService {
 
     @Transactional
     public ChatMessageInfoAndPtptEmp addParticipants(Long chatRoomId, List<Long> employees, Long employeeId) {
-        List<String> employeeNames = employeeMapper.getEmployeeInfoList(employees);
+        List<EmployeeInfo> employeeInfoList = employeeMapper.getEmployeeInfoList(employees);
+        List<String> employeeNames = employeeInfoList.stream().map(EmployeeInfo::getName).toList();
         EmployeeInfo employeeInfo = employeeMapper.getEmployeeInfo(employeeId).orElseThrow(() -> new NotFoundException("해당 직원이 존재하지 않습니다."));
 
         String message =  employeeInfo.getName() + "님이 " + String.join(", ", employeeNames) + "님을 초대하였습니다.";

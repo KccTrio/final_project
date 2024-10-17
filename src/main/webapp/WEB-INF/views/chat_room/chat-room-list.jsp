@@ -4,6 +4,8 @@
         prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ include file="/WEB-INF/views/component/lib.jsp" %>
+<%@ include file="/WEB-INF/views/component/firebase-config.jsp" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -38,6 +40,30 @@
             rel="stylesheet"
             type="text/css"
     />
+
+    <script>
+        messaging.requestPermission()
+            .then(function () {
+                return messaging.getToken();
+            })
+            .then(async function (token) {
+                localStorage.setItem('Fcmtoken', token);
+            });
+        console.log(localStorage.getItem('Fcmtoken'));
+
+        $.ajax({
+            url: '/api/employees/fcm-token',
+            method: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({fcmToken: localStorage.getItem('Fcmtoken')}),
+            success: function (data) {
+                console.log('FCM을 저장하는데에 성공했습니다.');
+            },
+            error: function (xhr, status, error) {
+                console.error('FCM을 저장하는데에 실패했습니다.:', error);
+            }
+        });
+    </script>
 
     <title>Insert title here</title>
 </head>
@@ -660,7 +686,7 @@
                     <div class="col-11">
                         <input
                                 name="tags"
-                                placeholder="태그를 추가해주세요."
+                                placeholder="태그로 검색해보세요."
                                 value=""
                                 data-blacklist=".NET,PHP"
                                 autofocus

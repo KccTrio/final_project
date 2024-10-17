@@ -22,10 +22,12 @@ public class EmployeeInfo implements Serializable {
     private String position;
     private String status;
     private String statusMessage;
+    private String fcmToken;
     private Long writer;
     private String writeDt;
     private Long modifier;
     private String modifiedDt;
     private String isDeleted;
+
 
 }

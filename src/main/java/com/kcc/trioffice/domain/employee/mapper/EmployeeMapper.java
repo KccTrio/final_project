@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface EmployeeMapper {
     Optional<EmployeeInfo> getEmployeeInfo(Long employeeId);
     List<SearchEmployee> getEmployeeByCompanyIdExceptOneSelf(@Param("companyId") Long companyId, @Param("employeeId") Long employeeId);
-    List<String> getEmployeeInfoList(List<Long> employees);
+    List<EmployeeInfo> getEmployeeInfoList(List<Long> employees);
 
     int saveEmployee(SaveEmployee saveEmployee);
 
@@ -27,4 +27,6 @@ public interface EmployeeMapper {
     int temporaryPassword(String incodingPassword, String email);
 
     Optional<AdminInfo> getAdminInfo();
+
+    int saveFcmToken(@Param("employeeId") Long employeeId, @Param("fcmToken") String fcmToken);
 }
