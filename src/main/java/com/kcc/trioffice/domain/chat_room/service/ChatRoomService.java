@@ -262,4 +262,22 @@ public class ChatRoomService {
         eventPublisher.publishEvent(chatDelete);
     }
 
+    @Transactional
+    public void favoriteChatRoom(Long chatRoomId, Long employeeId) {
+
+        ParticipantEmployeeInfo participantEmployeeInfo = participationEmployeeMapper
+                .getPtptptEmpInfo(chatRoomId, employeeId).orElseThrow(() -> new NotFoundException("참여자가 아닙니다."));
+        if (participantEmployeeInfo.getIsFavorited()) {
+            participationEmployeeMapper.favoriteChatRoom(chatRoomId, employeeId, false);
+        } else {
+            participationEmployeeMapper.favoriteChatRoom(chatRoomId, employeeId, true);
+        }
+    }
+
+    public List<ChatRoomInfo> getFavoriteChatRoom(Long employeeId) {
+        List<ChatRoomInfo> favoriteChatRooms = chatRoomMapper.getFavoriteChatRooms(employeeId);
+        setChatRoomNameAndProfile(employeeId, favoriteChatRooms);
+        return favoriteChatRooms;
+    }
+
 }

@@ -189,4 +189,26 @@
           AND e.fcm_token IS NOT NULL
           AND e.is_deleted = 0
     </select>
+
+  <select id="getPtptptEmpInfo" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ParticipantEmployeeInfo">
+    SELECT
+      chat_room_id
+      , employee_id
+      , is_favorited
+      , chat_room_profile_url
+      , is_entered
+      FROM participation_employee
+      WHERE chat_room_id = #{chatRoomId}
+        AND employee_id = #{employeeId}
+        AND is_deleted = 0
+  </select>
+
+  <update id="favoriteChatRoom" parameterType="map">
+    UPDATE participation_employee
+      SET is_favorited = #{isFavorited}
+          , modifier = #{employeeId}
+          , modified_dt = SYSDATE
+      WHERE chat_room_id = #{chatRoomId}
+        AND employee_id = #{employeeId}
+  </update>
 </mapper>
