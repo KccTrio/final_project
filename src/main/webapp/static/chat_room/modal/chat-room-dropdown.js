@@ -39,6 +39,22 @@ $(document).ready(function(){
         var chatRoomId = $(this).data("chat-room-id");
         $("#chatRoomId").val(chatRoomId);
 
+        console.log("is-favorited:", $(this).data("is-favorited"));
+        var isFavorited = $(this).data("is-favorited");
+        $("#isFavorited").val(isFavorited);
+
+        if(isFavorited == true) {
+            // i태그 클래스 변경
+            $("#favorButton i").removeClass("fa-regular");
+            $("#favorButton i").addClass("fa-solid");
+            $("#favorButton span").text("즐겨찾기 해제");
+        } else {
+            // i태그 클래스 변경
+            $("#favorButton i").removeClass("fa-solid");
+            $("#favorButton i").addClass("fa-regular");
+            $("#favorButton span").text("즐겨찾기");
+        }
+
         //Display contextmenu:
         $(".contextmenu").css({
             "left": posLeft,
@@ -75,6 +91,43 @@ $(document).ready(function(){
                 setTimeout(function() {
                     deleteChatRoom(chatRoomId);
                 }, 2000);
+            }
+        })
+    });
+
+    $(".contextmenu").on("click", "#favorButton", function(){
+        var chatRoomId = $("#chatRoomId").val(); // 숨겨진 input에서 채팅방 ID 가져오기
+
+        let text;
+        let buttonText;
+        // 즐겨찾기가 되어있는 경우
+        // chatRoomId를 이용하여 is-favorited를 가져와서 text와 buttonText를 변경
+
+        let isFavorited = $("#isFavorited").val();
+
+        if(isFavorited == "true") {
+            text = "즐겨찾기를 해제하시겠습니까?";
+            buttonText = "즐겨찾기 해제";
+        } else {
+            text = "즐겨찾기를 등록하시겠습니까?";
+            buttonText = "즐겨찾기 등록";
+        }
+
+        Swal.fire({
+            title: "즐겨찾기",
+            text: text,
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: buttonText,
+            cancelButtonText: "취소",
+            cancelButtonColor: "#d33",
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: "즐겨찾기",
+                    text: "완료되었습니다.",
+                });
+                favorChatRoom(chatRoomId);
             }
         })
     });
@@ -179,6 +232,26 @@ function deleteChat(chatId) {
         },
         error: function(error) {
             console.error("Error deleting chat:", error);
+        }
+    })
+}
+
+function favorChatRoom(chatRoomId) {
+    // 채팅방 즐겨찾기 로직 구현 필요
+    $.ajax({
+        type: 'POST',
+        url: '/api/chatrooms/' + chatRoomId + '/favorite',
+        success: function(response) {
+            console.log("Chat favorited successfully:", response);
+            // 즐겨찾기 삭제 시 즐겨찾기 탭에 있다면 채팅방 목록 다시 불러오기
+            if (!$('.favor-box').hasClass('inactive-box')) {
+                //채팅목록에서 chatRoomId를 가진 채팅방을 찾아서 목록창에서 제거
+                var chatRoom = $(".chat-room-item[data-chat-room-id=" + chatRoomId + "]");
+                chatRoom.remove();
+            }
+        },
+        error: function(error) {
+            console.error("Error favoriting chat:", error);
         }
     })
 }

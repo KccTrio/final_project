@@ -88,7 +88,7 @@
             </div>
             <div class="row chat-room-type">
                 <div class="col-6 selection-box">
-                    <div class="d-flex justify-content-center chat-room-selection">
+                    <div class="d-flex justify-content-center selection">
                         <p>목록</p>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
             <div class="chat-rooms-list">
                 <c:forEach items="${chatRoomList}"
                            var="chatRoom">
-                    <div class="row chat-room chat-room-item justify-content-between" data-chat-room-id="${chatRoom.chatRoomId}">
+                    <div class="row chat-room chat-room-item justify-content-between" data-chat-room-id="${chatRoom.chatRoomId}" data-is-favorited="${chatRoom.isFavorited}">
                         <div class="col-3">
                             <div class="profile">
                                 <img
