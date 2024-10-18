@@ -27,6 +27,7 @@
               FROM participation_employee pe2
               WHERE pe2.chat_room_id = cr.chat_room_id
           ) AS participantCount
+        , pe.is_favorited
         FROM chat_room cr
         INNER JOIN participation_employee pe
           ON cr.chat_room_id = pe.chat_room_id
@@ -45,6 +46,7 @@
           , pe.chat_room_profile_url
           , cm.contents
           , cm.write_dt
+          , pe.is_favorited
         ORDER BY
           cm.write_dt DESC
     </select>
@@ -239,5 +241,44 @@
         SET is_deleted = 1
         WHERE chat_room_id = #{chatRoomId}
     </delete>
+
+  <select id="getFavoriteChatRooms" parameterType="long" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ChatRoomInfo">
+    SELECT
+      cr.chat_room_id
+      , cr.name AS chatRoomName
+      , pe.chat_room_profile_url AS chatRoomProfileImageUrl
+      , cm.contents AS lastMessage
+      , cm.write_dt AS lastMessageTime
+      , COUNT(CASE WHEN cs.is_read = 0 THEN 1 END) AS unreadMessageCount
+      , (
+          SELECT COUNT(1)
+          FROM participation_employee pe2
+          WHERE pe2.chat_room_id = cr.chat_room_id
+        ) AS participantCount
+      , pe.is_favorited
+      FROM chat_room cr
+      INNER JOIN participation_employee pe
+        ON cr.chat_room_id = pe.chat_room_id
+          AND pe.is_deleted = 0
+      LEFT JOIN chat cm
+        ON cr.last_chat_id = cm.chat_id
+      LEFT JOIN chat_status cs
+        ON cr.chat_room_id = cs.chat_room_id
+        AND cs.employee_id = #{employeeId}
+        AND cs.is_read = 0
+      WHERE pe.employee_id = #{employeeId}
+        AND pe.is_favorited = 1
+        AND cr.is_deleted = 0
+        AND pe.is_deleted = 0
+      GROUP BY
+        cr.chat_room_id
+        , cr.name
+        , pe.chat_room_profile_url
+        , cm.contents
+        , cm.write_dt
+        , pe.is_favorited
+      ORDER BY cm.write_dt DESC
+  </select>
+
 
 </mapper>

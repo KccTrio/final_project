@@ -23,10 +23,11 @@
     <li id="favorButton">
         <a href="#">
         <i class="fa-regular fa-star"></i>
-        즐겨찾기 등록/취소
+        <span>즐겨찾기 등록/취소</span>
         </a>
     </li>
-    <input type="hidden" id="chatRoomId" value="">
+    <input type="hidden" id="chatRoomId" value=""/>
+    <input type="hidden" id="isFavorited" value=""/>
 </ul>
 </body>
 </html>

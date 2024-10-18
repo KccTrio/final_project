@@ -1,5 +1,6 @@
 package com.kcc.trioffice.domain.chat_room.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 import java.sql.Timestamp;
@@ -14,4 +15,10 @@ public class ChatRoomInfo {
     private Timestamp lastMessageTime;
     private int unreadMessageCount;
     private int participantCount;
+    @JsonProperty("isFavorited")
+    private boolean isFavorited;
+
+    public boolean getIsFavorited() {
+        return isFavorited;
+    }
 }

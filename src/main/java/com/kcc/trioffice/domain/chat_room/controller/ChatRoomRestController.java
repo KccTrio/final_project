@@ -10,6 +10,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 
 @RestController
@@ -61,6 +62,18 @@ public class ChatRoomRestController {
     public void deleteChat(@PathVariable Long chatId,
                            @AuthenticationPrincipal PrincipalDetail principalDetail) {
         chatRoomService.deleteChat(chatId, principalDetail.getEmployeeId());
+    }
+
+    @PostMapping("/{chatRoomId}/favorite")
+    public void favoriteChatRoom(@PathVariable Long chatRoomId,
+                                 @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        chatRoomService.favoriteChatRoom(chatRoomId, principalDetail.getEmployeeId());
+    }
+
+    @GetMapping("/favorite")
+    public ResponseEntity<List<ChatRoomInfo>> getFavoriteChatRoom(@AuthenticationPrincipal PrincipalDetail principalDetail) {
+        List<ChatRoomInfo> favoriteChatRoom = chatRoomService.getFavoriteChatRoom(principalDetail.getEmployeeId());
+        return ResponseEntity.ok(favoriteChatRoom);
     }
 
 }

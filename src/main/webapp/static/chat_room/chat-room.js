@@ -47,11 +47,11 @@ $(document).ready(function() {
     function subscribeToChatRoomList() {
         stompClient.subscribe("/sub/chatrooms/employees/" + currentEmployeeId, function (message) {
             var receivedMessage = JSON.parse(message.body);
-            handleChatRoomListUpdate(receivedMessage);
+            $('.favor-box').hasClass('inactive-box') ? handleChatRoomListUpdate() : handleFavorChatRoomListUpdate();
         });
     }
 
-    function handleChatRoomListUpdate(receivedMessage) {
+    function handleChatRoomListUpdate() {
 
         // ajax 요청을 통해 채팅방 정보 가져오기
         $.ajax({
@@ -76,7 +76,7 @@ $(document).ready(function() {
 
         chatRooms.forEach(function (chatRoom) {
             var chatRoomItem = `
-            <div class="row chat-room chat-room-item justify-content-between" data-chat-room-id="${chatRoom.chatRoomId}">
+            <div class="row chat-room chat-room-item justify-content-between" data-chat-room-id="${chatRoom.chatRoomId}" data-is-favorited="${chatRoom.isFavorited}">
                 <div class="col-3">
                     <div class="profile">
                         <img src="${chatRoom.chatRoomProfileImageUrl}" />
@@ -268,7 +268,9 @@ $(document).ready(function() {
 
     function generateMessageHtml(message) {
         var isSameSender = (message.senderId === previousSenderId);
-        previousSenderId = message.senderId;
+        if (message.chatType === "CHAT" || message.chatType === "FILE" || message.chatType === "IMAGE") {
+            previousSenderId = message.senderId;
+        }
         var chatRow;
 
         console.log(message);
@@ -1618,47 +1620,6 @@ $(document).ready(function() {
         });
     });
 
-
-    // 파일 전송 모달 외부 클릭 시 닫기
-    // $(window).on('click', function (event) {
-    //     if (!$(event.target).closest('#send-file-modal, .fa-file').length && sendFileModalVisible) {
-    //         $('#send-file-modal').hide();
-    //         sendFileModalVisible = false;
-    //     }
-    // });
-
-    //파일 전송 클릭
-    // $('.send-file-create-button').on('click', function () {
-    //
-    //     //파일들 소켓으로 전송
-    //     var files = document.querySelector('input[type="file"]').files;
-    //     var formData = new FormData();
-    //     for (var i = 0; i < files.length; i++) {
-    //         formData.append('multipartFiles', files[i]);
-    //     }
-    //
-    //     //태그도 함께 전송
-    //     var tags = $('input[name="tag"]').val();
-    //     formData.append('tags', tags);
-    //
-    //     $.ajax({
-    //         url: '/api/chatrooms/' + currentChatRoomId + '/attached_file/send',
-    //         method: 'POST',
-    //         contentType: false,
-    //         processData: false,
-    //         data: formData,
-    //         success: function (data) {
-    //             console.log('파일 전송에 성공했습니다:', data);
-    //             $('#send-file-modal').hide();
-    //             sendFileModalVisible = false;
-    //         },
-    //         error: function (xhr, status, error) {
-    //             console.error('파일 전송에 실패했습니다:', error);
-    //         }
-    //     });
-    //
-    // });
-
     // 파일 다운로드 버튼 이벤트 리스너
     $('.chat').on('click', '.fa-download', function() {
         // 이벤트가 발생한 메시지 ID를 찾습니다.
@@ -1723,6 +1684,37 @@ $(document).ready(function() {
         $('.file-button').parent().removeClass('active');
     })
 
+    $('.favor-box').on('click', function () {
+        if ($(this).hasClass('inactive-box')) {
+            $(this).removeClass('inactive-box');
+            $('.selection-box').addClass('inactive-box');
+        }
+        handleFavorChatRoomListUpdate();
+    });
+
+    $('.selection-box').on('click', function () {
+        if ($(this).hasClass('inactive-box')) {
+            $(this).removeClass('inactive-box');
+            $('.favor-box').addClass('inactive-box');
+        }
+        handleChatRoomListUpdate();
+    });
+
+    function handleFavorChatRoomListUpdate() {
+        $.ajax({
+            url: '/api/chatrooms/favorite',
+            method: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                console.log(data);
+                updateChatRoomList(data);
+                updateDateFormat();
+            },
+            error: function (xhr, status, error) {
+                console.error('채팅방 정보를 가져오는 데 실패했습니다:', error);
+            }
+        });
+    }
 
 
 });
