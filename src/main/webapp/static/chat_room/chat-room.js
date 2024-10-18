@@ -159,7 +159,6 @@ $(document).ready(function() {
         $('.chat-button').addClass('active');
         $('.file-button').removeClass('active');
 
-        offset = 0;
 
         connectWebSocket(chatRoomId);
         loadChatRoom(chatRoomId);
@@ -200,6 +199,7 @@ $(document).ready(function() {
     function loadChatRoom(chatRoomId) {
         offset = 0;
         limit = 50;
+        hasMoreData = true;
 
         $.ajax({
             url: '/api/chatrooms/' + chatRoomId,
