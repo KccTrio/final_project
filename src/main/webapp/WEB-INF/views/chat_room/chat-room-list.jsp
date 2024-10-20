@@ -40,6 +40,7 @@
             rel="stylesheet"
             type="text/css"
     />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
         messaging.requestPermission()
@@ -284,7 +285,7 @@
                     <a href="#" class="file-button">파일</a>
                 </div>
                 <div>
-                    <a href="#">사진</a>
+                    <a href="#" class="image-button">사진</a>
                 </div>
             </div>
             <div class="col-3"></div>
@@ -297,373 +298,8 @@
                 </div>
             </div>
         </div>
-        <div class="chat-area">
+        <div class="chat-area" style="display: none;">
             <div class="chat">
-                <%-- 채팅 인원 추가 --%>
-                <div class="row chat-one">
-                    <div class="col-10">
-                        <div class="row">
-                            <div class="col-1 d-flex justify-content-end">
-                                <div class="add-chat-profile">
-                                    <i class="fa-solid fa-user-plus"></i>
-                                </div>
-                            </div>
-                            <div class="col-9">
-                                <div class="chat-bubble-container d-flex align-items-end">
-                                    <div
-                                            class="d-flex align-items-center justify-content-center"
-                                    >
-                                        <p>우영두님이 우영두님을 초대하셨습니다.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-
-                <%--전 사람과 같은 채팅일 시--%>
-                <div class="row chat-one">
-                    <div class="col-10">
-                        <div class="row">
-                            <div class="col-1"></div>
-                            <div class="col-9">
-                                <div class="chat-bubble-container d-flex align-items-end">
-                                    <div
-                                            class="chat-content d-flex align-items-center justify-content-center"
-                                    >
-                                        <div class="file-box">
-                                            <div class="row d-flex justify-content-between  align-items-center">
-                                                <div class="col-11">
-                                                    <p>파일명파이라안ㅁ이ㅏㄴ머아ㅣㄴ머아ㅣㄴ.jpg</p>
-                                                    <div class="row">
-                                                        <div class="tag-box">
-                                                            <span class="tag">태그1태그태그</span>
-                                                            <span class="tag">태그2</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-1">
-                                                    <i class="fa-solid fa-download"></i>
-                                                </div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                    <div class="chat-time">
-                                        24/09/12 오전 9:30
-                                    </div>
-                                    <div class="unread-count-box">
-                                        <span class="unread-count">1</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row d-flex align-items-start emoticon-boxes">
-                            <div class="blank">
-                            </div>
-                            <div class="emoticon-box">
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-check"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button active-button">
-                                    <i class="fa-solid fa-heart heart-icon"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-thumbs-up"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-smile"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-sad-cry"></i>
-                                    <span>5</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row chat-one">
-                    <div class="col-10">
-                        <div class="row">
-                            <div class="col-1"></div>
-                            <div class="col-9">
-                                <div class="chat-bubble-container d-flex align-items-end">
-                                    <div
-                                            class="chat-content d-flex align-items-center justify-content-center"
-                                    >
-                                        <p>안녕하세요. 신입 사원입니다람쥐.</p>
-                                    </div>
-                                    <div class="chat-time">
-                                        24/09/12 오전 9:30
-                                    </div>
-                                    <div class="unread-count-box">
-                                        <span class="unread-count">1</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row d-flex align-items-start emoticon-boxes">
-                            <div class="blank">
-                            </div>
-                            <div class="emoticon-box">
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-check"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button active-button">
-                                    <i class="fa-solid fa-heart heart-icon"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-thumbs-up"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-smile"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-sad-cry"></i>
-                                    <span>5</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-10">
-                        <div class="row d-flex justify-content-end">
-                            <div class="col-11 emp-name d-flex justify-content-start">
-                                <span>우 영두</span>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-1">
-                                <div class="chat-profile">
-                                    <img
-                                            src="https://e7.pngegg.com/pngimages/1/723/png-clipart-graphy-business-portrait-business-people-public-relations.png"
-                                    />
-                                    <div
-                                            class="status d-flex justify-content-center align-items-center"
-                                    >
-                                        <i class="fa-solid fa-check check-icon"></i>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-9">
-                                <div class="emoticon-chat-bubble-container d-flex align-items-end">
-                                    <div
-                                            class="chat-content d-flex align-items-center justify-content-center"
-                                    >
-                                        <p>안녕하세요. 신입 사원입니다.</p>
-                                    </div>
-                                    <div class="chat-time">
-                                        24/09/12 오전 9:30
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row d-flex align-items-start emoticon-boxes">
-                            <div class="blank">
-                            </div>
-                            <div class="emoticon-box">
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-check"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button active-button">
-                                    <i class="fa-solid fa-heart heart-icon"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-thumbs-up"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-smile"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-sad-cry"></i>
-                                    <span>5</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <%--내 채팅일 시--%>
-                <div class="row d-flex justify-content-end">
-                    <div class="col-10">
-                        <div class="row d-flex justify-content-end">
-                            <div class="col-9">
-                                <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                    <div class="my-chat-time">
-                                        24/09/12 오전 9:30
-                                    </div>
-                                    <div
-                                            class="my-chat-content d-flex align-items-center justify-content-center"
-                                    >
-                                        <p>안녕하세요. 신입 사원입니다.</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row d-flex align-items-start justify-content-end emoticon-boxes">
-                            <div class="blank">
-                            </div>
-                            <div class="emoticon-box justify-content-end">
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-check"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button active-button">
-                                    <i class="fa-solid fa-heart heart-icon"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-thumbs-up"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-smile"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-sad-cry"></i>
-                                    <span>5</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row d-flex justify-content-end">
-                    <div class="col-10">
-                        <div class="row d-flex justify-content-end">
-                            <div class="col-9">
-                                <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                    <div class="my-chat-time">
-                                        24/09/12 오전 9:30
-                                    </div>
-                                    <div
-                                            class="my-chat-content d-flex align-items-center justify-content-center"
-                                    >
-                                        <div class="file-box">
-                                            <div class="row d-flex justify-content-between  align-items-center">
-                                                <div class="col-11">
-                                                    <p>파일명파이라안ㅁ이ㅏㄴ머아ㅣㄴ머아ㅣㄴ.jpg</p>
-                                                    <div class="row">
-                                                        <div class="tag-box">
-                                                            <span class="tag">태그1태그태그</span>
-                                                            <span class="tag">태그2</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="col-1">
-                                                    <i class="fa-solid fa-download"></i>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row d-flex align-items-start justify-content-end emoticon-boxes">
-                            <div class="blank">
-                            </div>
-                            <div class="emoticon-box justify-content-end">
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-check"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button active-button">
-                                    <i class="fa-solid fa-heart heart-icon"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-thumbs-up"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-smile"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-sad-cry"></i>
-                                    <span>5</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <%-- 사진 일 때 --%>
-                <div class="row d-flex justify-content-end">
-                    <div class="col-10">
-                        <div class="row d-flex justify-content-end">
-                            <div class="col-9">
-                                <div class="chat-bubble-container d-flex align-items-end d-flex justify-content-end">
-                                    <div class="my-chat-time">
-                                        24/09/12 오전 9:30
-                                    </div>
-                                    <div
-                                            class="my-chat-content d-flex align-items-center justify-content-center"
-                                    >
-                                        <div class="file-box">
-                                            <div class="row d-flex justify-content-between  align-items-center">
-                                                <div class="col-10">
-                                                    <img src="https://s3.ap-northeast-2.amazonaws.com/dootrio-bucket/chat/ellipsis-solid_b3ba5156-abee-4334-a2c7-3fc4b8bc972c.svg" alt="사진" class="chat-image"/>
-                                                    <div class="row">
-                                                        <div class="tag-box">
-                                                            <i class="fa-solid fa-tag"></i>
-                                                            <span class="tag">태그1태그태그</span>
-                                                            <span class="tag">태그2</span>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row d-flex align-items-start justify-content-end emoticon-boxes">
-                            <div class="blank">
-                            </div>
-                            <div class="emoticon-box justify-content-end">
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-check"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button active-button">
-                                    <i class="fa-solid fa-heart heart-icon"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-thumbs-up"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-smile"></i>
-                                    <span>5</span>
-                                </button>
-                                <button class="emoticon-button">
-                                    <i class="fa-solid fa-face-sad-cry"></i>
-                                    <span>5</span>
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
             </div>
             <div class="chat-send-box">
                 <div class="container-fluid">
@@ -683,14 +319,25 @@
                     <div class="col-1 d-flex align-items-center justify-content-end">
                         <i class="fa-solid fa-tag"></i>
                     </div>
-                    <div class="col-11">
+                    <div class="col-8">
                         <input
                                 name="tags"
-                                placeholder="태그로 검색해보세요."
+                                placeholder="조건에 따라 파일을 검색해보세요."
                                 value=""
                                 data-blacklist=".NET,PHP"
                                 autofocus
                         />
+                    </div>
+                    <div class="col-3">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                태그
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">태그</a></li>
+                                <li><a class="dropdown-item" href="#">파일명</a></li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -699,154 +346,105 @@
                     <table>
                         <thead>
                         <tr>
-                            <th>이름</th>
+                            <th>파일명</th>
                             <th>공유 날짜</th>
                             <th>보낸 사람</th>
                             <th>태그</th>
                             <th>다운로드</th>
                         </tr>
                         </thead>
-                            <tbody>
-                            <tr>
-                                <td>우영두</td>
-                                <td>2024-01-01</td>
-                                <td>(713) 123-8965</td>
-                                <td><a href="mailto:jmatman@stewart.com">jmatman@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Johnny</td>
-                                <td>Smith</td>
-                                <td>(713) 584-9614</td>
-                                <td><a href="mailto:jsmith@stewart.com">jsmith@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Susan</td>
-                                <td>Johnson</td>
-                                <td>(713) 847-1124</td>
-                                <td><a href="mailto:sjohnson@stewart.com">sjohnson@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
-                            <tr>
-                                <td>Tracy</td>
-                                <td>Richardson</td>
-                                <td>(713) 245-4821</td>
-                                <td><a href="mailto:trichard@stewart.com">trichard@stewart.com</a></td>
-                                <td><i class="fa-solid fa-download"></i></td>
-                            </tr>
+                        <tbody>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
+        <div class="image-area" style="display: none;">
+            <div class="tag-input-area">
+                <div class="row">
+                    <div class="col-1 d-flex align-items-center justify-content-end">
+                        <i class="fa-solid fa-tag"></i>
+                    </div>
+                    <div class="col-8">
+                        <input
+                                name="imageTags"
+                                placeholder="조건에 따라 사진을 검색해보세요."
+                                value=""
+                                data-blacklist=".NET,PHP"
+                                autofocus
+                        />
+                    </div>
+                    <div class="col-3">
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                태그
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="#">태그</a></li>
+                                <li><a class="dropdown-item" href="#">파일명</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
+            <div class="images">
+                <div class="row">
+                    <div class="col-3">
+                        <div class="image-box">
+                            <img src="https://www.jwps.co.kr/images/nose/gp/03_01_bg_m.jpg">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="image-box">
+                            <img src="https://www.jwps.co.kr/images/nose/gp/03_01_bg_m.jpg">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="image-box">
+                            <img src="https://www.jwps.co.kr/images/nose/gp/03_01_bg_m.jpg">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="image-box">
+                            <img src="https://www.jwps.co.kr/images/nose/gp/03_01_bg_m.jpg">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="image-box">
+                            <img src="https://www.jwps.co.kr/images/nose/gp/03_01_bg_m.jpg">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="image-box">
+                            <img src="https://www.jwps.co.kr/images/nose/gp/03_01_bg_m.jpg">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="image-box">
+                            <img src="https://www.jwps.co.kr/images/nose/gp/03_01_bg_m.jpg">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="image-box">
+                            <img src="https://www.jwps.co.kr/images/nose/gp/03_01_bg_m.jpg">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="image-box">
+                            <img src="https://www.jwps.co.kr/images/nose/gp/03_01_bg_m.jpg">
+                        </div>
+                    </div>
+                    <div class="col-3">
+                        <div class="image-box">
+                            <img src="https://www.jwps.co.kr/images/nose/gp/03_01_bg_m.jpg">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </div>
 </div>
 
@@ -863,6 +461,7 @@
 <%@ include file="/WEB-INF/views/chat_room/modal/chat-room-dropdown.jsp" %>
 <%@ include file="/WEB-INF/views/chat_room/modal/chat-delete-dropdown.jsp" %>
 <%@ include file="/WEB-INF/views/chat_room/modal/send-file-modal.jsp" %>
+<%@ include file="/WEB-INF/views/chat_room/modal/image-detail-modal.jsp" %>
 
 </body>
 

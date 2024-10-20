@@ -156,8 +156,10 @@ $(document).ready(function() {
 
         $('.chat-area').show();
         $('.file-area').hide();
+        $('.image-area').hide();
         $('.chat-button').addClass('active');
         $('.file-button').removeClass('active');
+        $('.image-button').removeClass('active');
 
 
         connectWebSocket(chatRoomId);
@@ -369,7 +371,7 @@ $(document).ready(function() {
             <div class="col-1"></div>` : `
             <div class="col-1">
                 <div class="chat-profile">
-                    <img src="${message.senderProfileUrl}" />
+                    <img src="${message.senderProfileUrl}" data-chat-id="${message.chatId}" />
                     <div class="status d-flex justify-content-center align-items-center">
                         <i class="fa-solid fa-check check-icon"></i>
                     </div>
@@ -397,7 +399,7 @@ $(document).ready(function() {
                                 <div class="file-box">
                                     <div class="row d-flex justify-content-between  align-items-center">
                                         <div class="col-12">
-                                            <img src="${message.chatContents}" alt="사진" class="chat-image"/>
+                                            <img src="${message.chatContents}" alt="사진" class="chat-image" data-chat-id="${message.chatId}"/>
                                             <div class="row">
                                                 <div class="tag-box">
                                                     ${createTagBoxHtml(message)}
@@ -437,7 +439,7 @@ $(document).ready(function() {
                                 <div class="file-box">
                                     <div class="row d-flex justify-content-between  align-items-center">
                                         <div class="col-12">
-                                            <img src="${message.chatContents}" alt="사진" class="chat-image"/>
+                                            <img src="${message.chatContents}" alt="사진" class="chat-image" data-chat-id="${message.chatId}"/>
                                             <div class="row">
                                                 <div class="tag-box">
                                                     ${createTagBoxHtml(message)}
@@ -1420,11 +1422,13 @@ $(document).ready(function() {
     let fileTagify;
 
     $('.file-button').on('click', function () {
-        $('.chat-area').hide()
+        $('.chat-area').hide();
+        $('.image-area').hide();
         $('.file-area').show();
         // file-button 상위 div에 active 추가
         $('.file-button').parent().addClass('active');
         $('.chat-button').parent().removeClass('active');
+        $('.image-button').parent().removeClass('active');
 
         if (fileTagify) {
             fileTagify.destroy();
@@ -1532,11 +1536,13 @@ $(document).ready(function() {
         tableBody.dataset.loading = 'true';
         let searchTags = fileTagify.value.map(tag => tag.value);
         let fileOffset = tableBody.children.length;
+        let searchType = $('.file-area .dropdown-toggle').text().trim().replace(/\s+/g, ' ');
+
         $.ajax({
             url: '/api/chatrooms/' + currentChatRoomId + '/attached-files',
             method: 'GET',
             dataType: 'json',
-            data: {offset: fileOffset, limit: 30, tags: searchTags},
+            data: {offset: fileOffset, limit: 30, tags: searchTags, searchType: searchType},
             success: function (data) {
                 console.log(data);
                 if (data.length < limit) {
@@ -1628,7 +1634,7 @@ $(document).ready(function() {
 
         // 파일 다운로드 요청
         $.ajax({
-            url: `/api/chatrooms/${chatRoomId}/chats/${messageId}/attached-file/download`,
+            url: `/api/chatrooms/chats/${messageId}/attached-file/download`,
             method: 'GET',
             xhrFields: {
                 responseType: 'blob' // Important
@@ -1670,8 +1676,12 @@ $(document).ready(function() {
         $('.chat-contents').show();
         $('.chat-area').show();
         $('.file-area').hide();
+        $('.image-area').hide();
         $('.chat-button').parent().addClass('active');
         $('.file-button').parent().removeClass('active');
+        $('.image-button').parent().removeClass('active');
+
+        $('.images .row').empty();
     });
 
     $('.chat-button').on('click', function () {
@@ -1679,9 +1689,11 @@ $(document).ready(function() {
         $('.chat-contents').show();
         $('.chat-area').show();
         $('.file-area').hide();
+        $('.image-area').hide();
         // chat-button 상위 div에 active 추가
         $('.chat-button').parent().addClass('active');
         $('.file-button').parent().removeClass('active');
+        $('.image-button').parent().removeClass('active');
     })
 
     $('.favor-box').on('click', function () {
@@ -1716,6 +1728,136 @@ $(document).ready(function() {
         });
     }
 
+    let imageTagify;
+
+    $('.image-button').on('click', function () {
+        $('.chat-area').hide()
+        $('.file-area').hide();
+        $('.image-area').show();
+        // file-button 상위 div에 active 추가
+        $('.file-button').parent().removeClass('active');
+        $('.chat-button').parent().removeClass('active');
+        $('.image-button').parent().addClass('active');
+
+        if (imageTagify) {
+            imageTagify.destroy();
+            // 태그 input 초기화
+            document.querySelector('input[name=imageTags]').value = '';
+        }
+
+
+        let inputElm = document.querySelector('input[name=imageTags]');
+
+        // 화이트 리스트 : 해당 문자만 태그로 추가 가능
+        let whitelist = ["서류","계획서","제안서","발표자료","ppt"];
+
+        // initialize Tagify
+        imageTagify = new Tagify(inputElm, {
+            enforceWhitelist: false, // 화이트리스트에서 허용된 태그만 사용
+            whitelist: whitelist // 화이트 리스트 배열. 화이트 리스트를 등록하면 자동으로 드롭다운 메뉴가 생긴다
+        })
+
+        imageTagify.on('add', onAddTag) // 태그가 추가되면
+            .on('remove', onRemoveTag) // 태그가 제거되면
+            .on('input', onInput) // 태그가 입력되고 있을 경우
+            .on('invalid', onInvalidTag) // 허용되지 않는 태그일 경우
+            .on('click', onTagClick) // 해시 태그 블럭을 클릭할 경우
+            .on('focus', onTagifyFocusBlur) // 포커스 될 경우
+            .on('blur', onTagifyFocusBlur) // 반대로 포커스를 잃을 경우
+
+            .on('edit:start', onTagEdit) // 입력된 태그 수정을 할 경우
+
+            .on('dropdown:hide dropdown:show', e => console.log(e.type)) // 드롭다운 메뉴가 사라질경우
+            .on('dropdown:select', onDropdownSelect) // 드롭다운 메뉴에서 아이템을 선택할 경우
+
+        function onAddTag(e) {
+            console.log("onAddTag: ", e.detail);
+            console.log("original input value: ", imageTagify.DOM.originalInput.value);
+            loadImageData();
+        }
+
+        function onRemoveTag(e) {
+            console.log("onRemoveTag:", e.detail, "tagify instance value:", imageTagify.DOM.originalInput.value);
+            loadImageData();
+        }
+
+        function onTagEdit(e) {
+            console.log("onTagEdit: ", e.detail);
+        }
+
+        function onInvalidTag(e) {
+            console.log("onInvalidTag: ", e.detail);
+        }
+
+        function onTagClick(e) {
+            console.log(e.detail);
+            console.log("onTagClick: ", e.detail);
+        }
+
+        function onTagifyFocusBlur(e) {
+            console.log(e.type, "event fired");
+        }
+
+        function onDropdownSelect(e) {
+            console.log("onDropdownSelect: ", e.detail);
+        }
+
+        function onInput(e) {
+            console.log("onInput: ", e.detail);
+
+            imageTagify.loading(true); // 태그 입력하는데 우측에 loader 애니메이션 추가
+            imageTagify.loading(false); // loader 애니메이션 제거
+
+            imageTagify.dropdown.show(e.detail.value); // 드롭다운 메뉴 보여주기
+            imageTagify.dropdown.hide(); // 드롭다운 제거
+        }
+
+        loadImageData();
+    });
+
+    $('.dropdown-menu a').click(function() {
+        // 클릭된 아이템의 텍스트를 가져옴
+        var selectedText = $(this).text();
+        // 버튼의 텍스트를 클릭된 아이템의 텍스트로 변경
+        $(this).closest('.btn-group').find('.dropdown-toggle').text(selectedText);
+    });
+
+    function loadImageData() {
+        let searchTags = imageTagify.value.map(tag => tag.value);
+        //button에 따라 searchType을 다르게 설정
+        let searchType = $('.image-area .dropdown-toggle').text().trim().replace(/\s+/g, ' ');
+        $.ajax({
+            url: '/api/chatrooms/' + currentChatRoomId + '/image',
+            method: 'GET',
+            dataType: 'json',
+            data: {tags: searchTags, searchType: searchType},
+            success: function (data) {
+                console.log(data);
+                addImageContents(data);
+            },
+            error: function (xhr, status, error) {
+                console.error('채팅방 파일 데이터를 가져오는 데 실패했습니다:', error);
+            }
+        });
+    }
+
+    function addImageContents(data) {
+        $('.images .row').empty();
+
+        data.forEach(function (image) {
+            // 이미지 생성
+            let appendImageContents = `
+                    <div class="col-3">
+                        <div class="image-box">
+                            <img src="${image.fileUrl}" data-file-id="${image.fileId}" data-chat-id="${image.chatId}">
+                        </div>
+                    </div>
+            `
+            // 이미지 추가
+            $('.images .row').append(appendImageContents);
+
+        });
+    }
 
 });
 
