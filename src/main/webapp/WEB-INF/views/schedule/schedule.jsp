@@ -19,6 +19,14 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       page="/WEB-INF/views/component/first-side-bar.jsp"
     ></jsp:include>
     <div id="contents">
+      <div id="popMenu" class="list-group" style="display: none; width: 150px">
+        <a
+          href=""
+          class="list-group-item list-group-item-action"
+          id="right-button-for-delete"
+          >⛔ 삭제하기</a
+        >
+      </div>
       <div id="add-schedule">
         <div id="add-schedule-button">
           <span><i class="fa-solid fa-calendar-plus"></i> 일정 등록</span>

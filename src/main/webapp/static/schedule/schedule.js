@@ -109,6 +109,15 @@ function fetchCalendarData() {
 }
 
 var schduleIdForDelete;
+
+// 우클릭 이벤트 닫기
+document.addEventListener("click", function (e) {
+  // 노출 초기화
+  popMenu.style.display = "none";
+  popMenu.style.top = null;
+  popMenu.style.left = null;
+});
+
 // 캘린더 랜더링
 document.addEventListener("DOMContentLoaded", function (employeeEvents) {
   var calendarEl = document.getElementById("calendar");
@@ -171,9 +180,26 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
       // 이벤트에 우클릭 이벤트 리스너 추가
       info.el.addEventListener("contextmenu", function (event) {
         event.preventDefault(); // 브라우저 기본 우클릭 메뉴를 막음
-        alert("이벤트를 우클릭했습니다: " + info.event.title);
+        // alert("이벤트를 우클릭했습니다: " + info.event.title);
+        var x = event.pageX + -70 + "px"; // 현재 마우스의 X좌표
+        var y = event.pageY + -30 + "px"; // 현재 마우스의 Y좌표
+
+        schduleIdForDelete = info.event.extendedProps.scheduleId;
+        // 디버깅을 위한 로그
+        console.log("삭제할 일정 ID:", schduleIdForDelete);
+        const popMenu = document.getElementById("popMenu"); // 팝업창을 담아옴
+
+        /*
+            스타일 지정, 우클릭 한 위치에 팝업창 띄워줌..
+        */
+        popMenu.style.position = "absolute"; // 변경: absolute로 설정
+        popMenu.style.left = x;
+        popMenu.style.top = y;
+        popMenu.style.display = "block"; // 변경: display를 block으로 설정
+        popMenu.style.zIndex = 10000; // zIndex 설정
       });
     },
+
     // 상세보기 구현
     eventClick: function (info) {
       const detailTitle = document.getElementById("detail-title");
@@ -731,6 +757,48 @@ deleteButton.addEventListener("click", function () {
         },
         error: function (error) {
           Swal.fire("오류", "일정삭제에 실패하였습니다.");
+          console.error("일정 삭제에 실패하였음 : " + error);
+        },
+      });
+    }
+  });
+});
+
+// 우클릭 삭제하기 구현
+var rightButtonDelete = document.getElementById("right-button-for-delete");
+
+rightButtonDelete.addEventListener("click", function (event) {
+  event.preventDefault();
+  // SweetAlert로 삭제 확인창 표시
+  Swal.fire({
+    title: "정말 삭제하시겠습니까?",
+    html: "일정의 주최자가 일정을 삭제하면<br>초대된 사람의 일정에서도 삭제됩니다.<br><br>또한, 초대 받은 일정은 거절로 상태가 변경됩니다.",
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "일정삭제",
+    cancelButtonText: "닫기",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: `/api/schedules/${schduleIdForDelete}`,
+        method: "DELETE",
+        success: function () {
+          // 삭제 성공 후 SweetAlert 표시
+          Swal.fire({
+            title: "삭제완료",
+            text: "일정이 삭제되었습니다.",
+            icon: "success",
+            confirmButtonText: "확인",
+          }).then((resultNext) => {
+            // 사용자가 확인 버튼을 클릭하면 리다이렉트
+            if (resultNext.isConfirmed) {
+              window.location.href = "/schedules"; // 성공 시 리다이렉트
+            }
+          });
+        },
+        error: function (error) {
+          Swal.fire("오류", "일정삭제에 실패하였습니다.", "error"); // 오류 메시지 표시
           console.error("일정 삭제에 실패하였음 : " + error);
         },
       });
