@@ -6,13 +6,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Data
-public class AttachedFileInfo {
+public class ImageInfo {
 
     private Long chatId;
+    private Long fileId;
     private String fileName;
-    private String writeDt;
-    private String sender;
-    private List<String> tags;
+    private String fileUrl;
+    List<String> tags;
 
     public void setTags(String tags) {
         if (tags == null) {

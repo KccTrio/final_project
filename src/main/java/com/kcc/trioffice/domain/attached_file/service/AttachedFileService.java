@@ -1,6 +1,7 @@
 package com.kcc.trioffice.domain.attached_file.service;
 
 import com.kcc.trioffice.domain.attached_file.dto.response.AttachedFileInfo;
+import com.kcc.trioffice.domain.attached_file.dto.response.ImageInfo;
 import com.kcc.trioffice.domain.attached_file.mapper.AttachedFileMapper;
 import com.kcc.trioffice.domain.attached_file.mapper.TagMapper;
 import com.kcc.trioffice.domain.chat_room.dto.request.ChatMessage;
@@ -131,13 +132,23 @@ public class AttachedFileService {
         }
     }
 
-    public ResponseEntity<byte[]> downloadAttachedFile(Long chatRoomId, Long chatId, Long employeeId) {
+    public ResponseEntity<byte[]> downloadAttachedFile(Long chatId, Long employeeId) {
         S3UploadFile s3UploadFile = attachedFileMapper.getAttachedFileByChatId(chatId).orElseThrow(
                 () -> new NotFoundException("해당 파일이 존재하지 않습니다."));
         return s3FileService.download(s3UploadFile.getFileUrl(), s3UploadFile.getFileName());
     }
 
-    public List<AttachedFileInfo> getAttachedFile(Long chatRoomId, Long employeeId, int limit, int offset, List<String> tags) {
-        return attachedFileMapper.getAttachedFile(chatRoomId, limit, offset, tags);
+    public List<AttachedFileInfo> getAttachedFile(Long chatRoomId, Long employeeId, int limit, int offset, String searchType, List<String> tags) {
+        return attachedFileMapper.getAttachedFile(chatRoomId, limit, offset, searchType, tags);
+    }
+
+    public List<ImageInfo> getImage(Long chatRoomId, Long employeeId, String searchType, List<String> tags) {
+        return attachedFileMapper.getImages(chatRoomId, searchType, tags);
+    }
+
+    public ResponseEntity<byte[]> downloadImage(Long fileId, Long employeeId) {
+        S3UploadFile s3UploadFile = attachedFileMapper.getAttachedFileByFileId(fileId).orElseThrow(
+                () -> new NotFoundException("해당 파일이 존재하지 않습니다."));
+        return s3FileService.download(s3UploadFile.getFileUrl(), s3UploadFile.getFileName());
     }
 }
