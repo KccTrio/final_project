@@ -108,6 +108,7 @@ function fetchCalendarData() {
   });
 }
 
+var schduleIdForDelete;
 // 캘린더 랜더링
 document.addEventListener("DOMContentLoaded", function (employeeEvents) {
   var calendarEl = document.getElementById("calendar");
@@ -185,7 +186,7 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
 
       //해당 일정에 schduleId ajax 통신 내용, 참여인원 status가져오기
       const scheduleId = info.event.extendedProps.scheduleId;
-
+      schduleIdForDelete = info.event.extendedProps.scheduleId;
       $.ajax({
         type: "GET",
         url: "/api/schedules/detail",
@@ -695,3 +696,44 @@ document.getElementById("schedule-form").onsubmit = function (event) {
     }
   });
 };
+// 일정 삭제
+var deleteButton = document.getElementById("detail-delete");
+
+deleteButton.addEventListener("click", function () {
+  console.log("현재 삭제하려고 하는 일정 : " + schduleIdForDelete);
+  // SweetAlert로 삭제 확인창 표시
+  Swal.fire({
+    title: "정말 삭제하시겠습니까?",
+    html: "일정의 주최자가 일정을 삭제하면<br>초대된 사람의 일정에서도 삭제됩니다.",
+
+    showCancelButton: true,
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+    confirmButtonText: "일정삭제",
+    cancelButtonText: "닫기",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: `/api/schedules/${schduleIdForDelete}`,
+        method: "DELETE",
+        success: function () {
+          Swal.fire({
+            title: "삭제완료",
+            text: "일정이 삭제되었습니다.",
+            icon: "success",
+            confirmButtonText: "확인",
+          }).then((result) => {
+            if (result.isConfirmed) {
+              // 성공시 리다이렉트
+              window.location.href = "/schedules";
+            }
+          });
+        },
+        error: function (error) {
+          Swal.fire("오류", "일정삭제에 실패하였습니다.");
+          console.error("일정 삭제에 실패하였음 : " + error);
+        },
+      });
+    }
+  });
+});
