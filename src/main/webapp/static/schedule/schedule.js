@@ -704,7 +704,7 @@ deleteButton.addEventListener("click", function () {
   // SweetAlert로 삭제 확인창 표시
   Swal.fire({
     title: "정말 삭제하시겠습니까?",
-    html: "일정의 주최자가 일정을 삭제하면<br>초대된 사람의 일정에서도 삭제됩니다.",
+    html: "일정의 주최자가 일정을 삭제하면<br>초대된 사람의 일정에서도 삭제됩니다.<br><br>또한, 초대 받은 일정은 거절로 상태가 변경됩니다.",
 
     showCancelButton: true,
     confirmButtonColor: "#d33",

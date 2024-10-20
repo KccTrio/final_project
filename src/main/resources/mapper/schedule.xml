@@ -108,6 +108,7 @@
 <update id="deleteInvitedSchedule" parameterType="map">
   update schedule_invite
   set is_deleted = 1
+    , is_participated = 1
     , modifier = #{employeeId}        
     , modified_dt = CURRENT_TIMESTAMP  
   where schedule_invite_id = #{scheduleId} and employee_id = #{employeeId}
