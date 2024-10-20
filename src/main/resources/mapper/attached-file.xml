@@ -57,41 +57,122 @@
         SELECT sub.*, ROWNUM rnum FROM (
           SELECT
             af.chat_id
+            , af.file_id
             , af.file_name
             , TO_CHAR(af.write_dt, 'YYYY-MM-DD HH24:MI:SS') AS writeDt
             , e.name AS sender
             , t.tags AS tags
             FROM
-              attached_file af
-            JOIN chat c
-              ON af.chat_id = c.chat_id
-            JOIN employee e
-              ON af.writer = e.employee_id
+            attached_file af
+            JOIN chat c ON af.chat_id = c.chat_id
+            JOIN employee e ON af.writer = e.employee_id
             LEFT JOIN (
               SELECT
-                file_id,
-                LISTAGG(name, ',') WITHIN GROUP (ORDER BY name) AS tags
+                file_id
+                , LISTAGG(name, ',') WITHIN GROUP (ORDER BY name) AS tags
                 FROM tag
+                WHERE is_deleted = 0
                 GROUP BY file_id
               ) t ON af.file_id = t.file_id
-            WHERE c.chatroom_id = #{chatRoomId}
-        <if test="tags != null and tags.size() != 0">
-              AND EXISTS (
-                SELECT 1 FROM tag t2
-                  WHERE t2.file_id = af.file_id
-                    AND t2.name IN
-            <foreach item="tag" collection="tags" open="(" separator="," close=")">
-                #{tag}
-            </foreach>
+          WHERE c.chatroom_id = #{chatRoomId}
+            AND af.is_deleted = 0
+            <choose>
+              <!-- '파일명'으로 검색할 경우 -->
+              <when test="searchType == '파일명' and tags != null and tags.size() > 0">
+                AND (
+                  <foreach item="tag" collection="tags" open="(" separator=" OR " close=")">
+                    af.file_name LIKE '%' || #{tag} || '%'
+                  </foreach>
                 )
-        </if>
+              </when>
+              <!-- '태그'로 검색할 경우 -->
+              <when test="searchType == '태그' and tags != null and tags.size() > 0">
+                AND af.file_id IN (
+                  SELECT file_id
+                    FROM tag
+                    WHERE name IN
+                      <foreach item="tag" collection="tags" open="(" separator="," close=")">
+                        #{tag}
+                      </foreach>
+                      AND is_deleted = 0
+                    GROUP BY file_id
+                )
+              </when>
+              <!-- '전체'일 경우 추가 조건 없음 -->
+              <otherwise>
+                <!-- 조건 없음 -->
+              </otherwise>
+            </choose>
+        ORDER BY af.write_dt DESC
+      ) sub
       <![CDATA[
-            ORDER BY
-              af.write_dt DESC
-            ) sub
-        WHERE ROWNUM <= #{limit} + #{offset}
-    ) WHERE rnum > #{offset}
+      WHERE ROWNUM <= #{limit} + #{offset}
+      ) WHERE rnum > #{offset}
     ]]>
     </select>
+
+  <select id="getImages" resultType="com.kcc.trioffice.domain.attached_file.dto.response.ImageInfo">
+    SELECT
+    af.chat_id
+    , af.file_id
+    , af.file_name
+    , af.file_url
+    , t.tags
+      FROM attached_file af
+      JOIN chat c ON af.chat_id = c.chat_id
+      JOIN employee e ON af.writer = e.employee_id
+      LEFT JOIN (
+        SELECT
+          file_id
+          , LISTAGG(name, ',') WITHIN GROUP (ORDER BY name) AS tags
+          FROM tag
+          WHERE is_deleted = 0
+          GROUP BY file_id
+          ) t ON af.file_id = t.file_id
+      WHERE c.chatroom_id = #{chatRoomId}
+        AND af.file_type = 1
+        AND af.is_deleted = 0
+    <choose>
+      <!-- '이름'으로 검색할 경우: tags 배열의 각 요소에 대해 LIKE 조건 적용 -->
+      <when test="searchType == '파일명' and tags != null and tags.size() > 0">
+        AND (
+          <foreach item="tag" collection="tags" open="(" separator=" OR " close=")">
+            af.file_name LIKE '%' || #{tag} || '%'
+          </foreach>
+        )
+      </when>
+      <!-- '태그'로 검색할 경우 -->
+      <when test="searchType == '태그' and tags != null and tags.size() > 0">
+        AND af.file_id IN (
+        SELECT file_id
+          FROM tag
+          WHERE name IN
+          <foreach item="tag" collection="tags" open="(" separator="," close=")">
+            #{tag}
+          </foreach>
+          AND is_deleted = 0
+          GROUP BY file_id
+        )
+      </when>
+      <!-- '전체'일 경우 추가 조건 없음 -->
+      <otherwise>
+        <!-- 조건 없음 -->
+      </otherwise>
+    </choose>
+    ORDER BY af.write_dt DESC
+  </select>
+
+  <select id="getAttachedFileByFileId" resultType="com.kcc.trioffice.global.image.dto.response.S3UploadFile">
+    SELECT
+      file_name
+      , file_url
+      , filename_extension AS fileExtension
+      , file_volume AS fileSize
+      , file_type
+      , file_id
+      FROM attached_file
+      WHERE file_id = #{fileId}
+        AND is_deleted = 0
+  </select>
 
 </mapper>

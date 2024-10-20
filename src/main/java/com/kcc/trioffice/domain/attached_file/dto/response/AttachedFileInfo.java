@@ -12,7 +12,7 @@ public class AttachedFileInfo {
     private String fileName;
     private String writeDt;
     private String sender;
-    List<String> tags;
+    private List<String> tags;
 
     public void setTags(String tags) {
         if (tags == null) {
