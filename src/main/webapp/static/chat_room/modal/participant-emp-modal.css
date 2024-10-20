@@ -10,7 +10,7 @@
 }
 
 /* 모달 콘텐츠 */
-.modal-content {
+#emp-modal .modal-content {
     padding: 20px;
     width: 250px;
     min-height: 100px;
