@@ -39,7 +39,6 @@ public class ScheduleRestController {
   @GetMapping("/schedules/detail")
   public ResponseEntity<ScheduleDetail> getScheduleDetail(@AuthenticationPrincipal PrincipalDetail principal,
       @RequestParam String scheduleId) {
-    System.out.println("서버에서 넘어온 schedule id : " + scheduleId);
     ScheduleDetail scheduleDetail = scheduleService.getScheduleDetail(scheduleId, principal.getEmployeeId());
     return ResponseEntity.ok(scheduleDetail);
   }

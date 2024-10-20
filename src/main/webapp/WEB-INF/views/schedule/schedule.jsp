@@ -131,7 +131,7 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       <div id="detail-container" class="hidden">
         <div id="detail-contents">
           <div id="detail-inner">
-            <div id="detail-title">우리은행 통합 뱅킹 솔루션 주간회의</div>
+            <div id="detail-title"></div>
 
             <div class="detail-dates">
               <label for="start-date">시작일:</label>
@@ -158,6 +158,8 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
             </div>
             <div class="detail-text">
               <div id="detail-text-title" data-schduleid="1">일정 내용</div>
+              <!-- 임시 Quill 컨테이너 -->
+              <div id="temp-quill-container" style="display: none"></div>
               <div id="detail-text-contents"></div>
             </div>
             <div id="detail-buttons">

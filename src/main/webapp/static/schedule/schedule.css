@@ -34,6 +34,11 @@
   color: white;
 }
 
+#temp-quill-container,
+.ql-toolbar.ql-snow {
+  display: none;
+}
+
 #add-schedule-button:active {
   background-color: #4b6dd1; /* 눌렸을 때 어두운 파란색으로 변경 */
   transform: scale(0.98); /* 살짝 크기를 줄여 눌린 느낌을 줌 */
@@ -375,8 +380,10 @@ input[name="employees[]"] {
 
 #detail-title {
   font-size: 33px;
-  font-family: "One Mobile Title", sans-serif;
+  font-family: "One Mobile Title", sans-serif !important;
   margin-top: 35px;
+  padding-bottom: 7px;
+  border-bottom: 2px solid darkgray;
 }
 #start-date-detail,
 #end-date-detail {
@@ -385,6 +392,11 @@ input[name="employees[]"] {
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 1.5px 1px #ccc;
+}
+
+#add-people-text,
+#detail-text-title {
+  font-weight: bold;
 }
 
 .detail-dates {
@@ -399,7 +411,15 @@ input[name="employees[]"] {
   margin-top: 5px;
   width: 460px;
   height: 120px;
-  border: 1px solid black;
+  border: 1px solid #cecece;
+  border-radius: 3px;
+}
+
+#detail-people-header {
+  background-color: #d2dae1;
+  font-size: 15px;
+  border-bottom: 1px solid #d2dae1;
+  font-weight: bold;
 }
 
 .detail-text {
@@ -410,7 +430,15 @@ input[name="employees[]"] {
   margin-top: 5px;
   width: 700px;
   height: 200px;
-  border: 1px solid black;
+  border: 1px solid #d2dae1;
+}
+
+#detail-table td,
+#detail-table tr {
+  border-bottom: 1px solid #d2dae1;
+}
+#detail-table td {
+  border-bottom: 1px solid #d2dae1;
 }
 
 /*디자인 후 활성화*/

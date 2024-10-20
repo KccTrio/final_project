@@ -41,7 +41,7 @@ public class ScheduleContorller {
   public ResponseEntity<?> saveSchdule(Principal principal,
       @RequestBody SaveSchedule saveSchedule) throws BadRequestException, ParseException, MessagingException {
     scheduleService.saveSchedule(principal.getName(), saveSchedule);
-
+ 
     System.out.println("넘어온 이메일체크 값 : " + saveSchedule.getEmailCheck());
     return ResponseEntity.ok("성공");
   }

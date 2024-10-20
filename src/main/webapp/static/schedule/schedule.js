@@ -61,7 +61,6 @@ function fetchCalendarData() {
   var dateData = getFirstAndLastDateOfMonth();
   console.log(dateData);
   //일정조회 ajax
-  //일정조회 ajax
   $.ajax({
     url: "/api/schedules/calendar",
     method: "GET",
@@ -103,7 +102,9 @@ function fetchCalendarData() {
 
       calendar.render(); // 캘린더 업데이트
     },
-    error: function () {},
+    error: function (xhr, status, error) {
+      console.error("일정 조회에 실패하였습니다.");
+    },
   });
 }
 
@@ -191,19 +192,89 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
           scheduleId: scheduleId,
         },
         success: function (scheduleDetail) {
-          console("일정 상세 조회 성공 :");
+          console.log("일정 상세 조회 성공 :");
+          // // 예: scheduleDetail에서 데이터 추출 후 처리
+          // console.log("내용:", scheduleDetail.contents);
+          // console.log("작성자:", scheduleDetail.writer);
+          // console.log("내 일정 여부:", scheduleDetail.isMySchedule);
+
+          // 사원 정보 출력
+          // 테이블 헤더 생성
+          var tableHTML = `
+            <table id="detail-table" style="width:100%; border-collapse: collapse;">
+                <thead id="detail-people-header">
+                    <tr>
+                        <th>이름</th>
+                        <th>부서</th>
+                        <th>참석 여부</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+
+          // 사원 정보 출력
+          scheduleDetail.scheduleDetailEmployees.forEach(function (employee) {
+            console.log("현재 회원의 상태 : " + employee.isParticipated);
+            // 참석 여부에 따라 표시할 텍스트를 결정
+            let participationStatus;
+            const participationValue = parseInt(employee.isParticipated, 10); // 문자열을 숫자로 변환
+
+            if (participationValue === 0) {
+              participationStatus = "💬 대기 중";
+            } else if (participationValue === 1) {
+              participationStatus = "❌ 거절";
+            } else if (participationValue === 2) {
+              participationStatus = "✔ 승인";
+            } else {
+              participationStatus = "상태 불명"; // 예외 처리
+            }
+            tableHTML += `
+                          <tr>
+                              <td style="border-right: 1px solid #d2dae1;">${employee.employeeName}</td>
+                              <td style="border-right: 1px solid #d2dae1;">${employee.deptName}</td>
+                              <td>${participationStatus}</td>
+                          </tr>
+                      `;
+          });
+
+          // 테이블 닫기
+          tableHTML += `
+                              </tbody id="detail-table-body">
+                          </table>
+                      `;
+
+          // 테이블을 add-people-table div에 추가
+          document.getElementById("add-people-table").innerHTML = tableHTML;
+
+          const quillDeltaString = scheduleDetail.contents; // Quill Delta 형식의 JSON 문자열
+
+          // JSON 문자열을 객체로 변환
+          const quillDelta = JSON.parse(quillDeltaString);
+          // Quill 임시 인스턴스 생성
+          const quill = new Quill("#temp-quill-container", {
+            theme: "snow",
+            readOnly: true, // 읽기 전용으로 설정
+          });
+
+          // Delta 형식을 HTML로 변환
+          // JSON 객체로 변환하여 설정
+          quill.setContents(quillDelta);
+
+          // HTML 가져오기
+          const htmlContent = quill.root.innerHTML; // Quill 에디터의 root에서 HTML 가져오기
+          console.log(
+            "quill로 파싱하기 전 내용 : " + JSON.stringify(quillDelta)
+          ); // JSON 형태로 보기 좋게 출력
+          console.log("quill로 파싱한 내용 : " + htmlContent); // 변환된 HTML 출력
+
+          // 내용을 div에 삽입
+          document.getElementById("detail-text-contents").innerHTML =
+            htmlContent;
         },
-        error: function () {},
+        error: function (error) {
+          console.error("일정 상세 정보를 서버로부터 받아올 수 없습니다.");
+        },
       });
-
-      detailContainer.classList.remove("hidden");
-      const detailTitle = document.getElementById("detail-title");
-      const detailStartDate = document.getElementById("start-date-detail");
-      const detailEndDate = document.getElementById("end-date-detail");
-
-      detailTitle.innerText = info.event.title;
-      detailStartDate.value = formatDateTime(info.event.startStr);
-      detailEndDate.value = formatDateTime(info.event.endStr);
 
       detailContainer.classList.remove("hidden");
     },
