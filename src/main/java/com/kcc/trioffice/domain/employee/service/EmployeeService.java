@@ -24,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -104,7 +105,7 @@ public class EmployeeService {
                         + "</div>"
                         + "<p>보안을 위해 로그인 후 비밀번호를 반드시 변경해 주시기 바랍니다.</p>"
                         + "<br>"
-                        + "<p style='font-size: 12px; color: #777;'>감사합니다.</p>"
+                        + "<p>감사합니다.</p>"
                         + "</div>";
                 helper.setText(htmlContent, true);
 
@@ -135,6 +136,23 @@ public class EmployeeService {
 
     public EmployeeInfo getEmployeeInfo(Long employeeId) {
         return employeeMapper.getEmployeeInfo(employeeId).orElseThrow(() -> new NotFoundException("해당 직원이 존재하지 않습니다."));
+    }
+
+    public Optional<List<SearchEmployee>> getAllEmployeesInfo() {
+        List<SearchEmployee> employees = employeeMapper.getAllEmployeesInfo();
+
+        if (employees.isEmpty()) {
+            throw new NotFoundException("등록된 직원이 없습니다.");
+        } else {
+            return Optional.of(employees);
+        }
+    }
+
+    public EmployeeInfo getEmployeeInfoFindByEmail(String email) {
+
+        return employeeMapper.getEmployeeInfoFindByEmail(email)
+                .orElseThrow(() -> new NotFoundException("해당 직원이 존재하지 않습니다."));
+
     }
 
     public EmployeeInfo findById(Long id) {

@@ -4,6 +4,7 @@ import lombok.Data;
 
 @Data
 public class EmployeeSchedules extends ComponentDto {
+  private Long scheduleId;
   private String name;
   private String startedDt;
   private String endedDt;

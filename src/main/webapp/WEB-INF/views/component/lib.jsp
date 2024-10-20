@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-pageEncoding="UTF-8" %>
+pageEncoding="UTF-8" %> <%@ taglib prefix="security"
+uri="http://www.springframework.org/security/tags" %>
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -51,11 +52,6 @@ pageEncoding="UTF-8" %>
     />
 
     <link
-      href="https://fonts.googleapis.com/css2?family=One+Mobile+Title:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
-
-    <link
       href="https://fonts.googleapis.com/css2?family=Nanum+Square:wght@400;700&family=One+Mobile+Title:wght@400;700&display=swap"
       rel="stylesheet"
     />
@@ -67,6 +63,31 @@ pageEncoding="UTF-8" %>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- sweet alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- mobiscroll -->
+    <link
+      href="<%= request.getContextPath() %>/static/component/mobiscroll/mobiscroll.javascript.min.css"
+      rel="stylesheet"
+    />
+    <script src="<%= request.getContextPath() %>/static/component/mobiscroll/mobiscroll.javascript.min.js"></script>
+
+    <!-- Quill  -->
+    <link
+      href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+    <!-- tagify -->
+    <!-- 소스 다운 -->
+    <script src="https://unpkg.com/@yaireo/tagify"></script>
+    <!-- 폴리필 (구버젼 브라우저 지원) -->
+    <script src="https://unpkg.com/@yaireo/tagify/dist/tagify.polyfills.min.js"></script>
+    <link
+      href="https://unpkg.com/@yaireo/tagify/dist/tagify.css"
+      rel="stylesheet"
+      type="text/css"
+    />
 
     <%--  FCM  --%>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>

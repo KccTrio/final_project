@@ -25,9 +25,16 @@ public class EmployeeRestController {
     private final EmployeeService employeeService;
 
     @GetMapping("/employees/all")
-    public ResponseEntity<List<SearchEmployee>> getEmployeesByCompany(@AuthenticationPrincipal PrincipalDetail principalDetail) {
+    public ResponseEntity<List<SearchEmployee>> getEmployeesByCompany(
+            @AuthenticationPrincipal PrincipalDetail principalDetail) {
         return ResponseEntity.ok(employeeService
                 .getEmployeeByCompanyId(principalDetail.getEmployeeId()));
+    }
+
+    @GetMapping("/employees/all/include")
+    public ResponseEntity<List<SearchEmployee>> getAllEmployeesInfo() {
+        List<SearchEmployee> allEmployeeData = employeeService.getAllEmployeesInfo().get();
+        return ResponseEntity.ok(allEmployeeData);
     }
 
     @GetMapping("/current-employee")

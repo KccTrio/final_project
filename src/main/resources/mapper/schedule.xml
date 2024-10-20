@@ -3,28 +3,89 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
+
 <mapper namespace="com.kcc.trioffice.domain.schedule.mapper.ScheduleMapper">
 
 
+
   <select id="getEmployeeSchedules" parameterType="map" resultType="com.kcc.trioffice.domain.schedule.dto.EmployeeSchedules">
-    SELECT
-      name
-      ,started_dt
-      ,ended_dt
-      FROM schedule
-      WHERE schedule_id
-        IN (
-             SELECT i.SCHEDULE_INVITE_ID AS scheduleInviteId
-               FROM schedule_invite i
-               WHERE is_participated = 2 and employee_id =
-                 (
-                   SELECT employee_id
-                     FROM employee
-                     WHERE email = #{employeeId}
-                 )
-           )
-        AND started_dt <![CDATA[>]]> ADD_MONTHS(TO_DATE(#{startDate}, 'YYYY-MM-DD'), -1)
-        AND ended_dt <![CDATA[<=]]> ADD_MONTHS(TO_DATE(#{endDate}, 'YYYY-MM-DD'), 1)
+  select schedule_id as scheduleId
+      ,name
+      ,started_dt as startedDt
+      ,ended_dt as endedDt
+  from schedule
+  where schedule_id IN (SELECT i.SCHEDULE_INVITE_ID AS scheduleInviteId
+                      from schedule_invite i
+                      where is_participated = 2 and employee_id = (
+                                                  select employee_id
+                                                  from employee
+                                                  where email = #{employeeId}
+                                                  )
+                      )
+      and started_dt <![CDATA[>]]> ADD_MONTHS(TO_DATE(#{startDate}, 'YYYY-MM-DD'), -1)
+      and ended_dt <![CDATA[<=]]> ADD_MONTHS(TO_DATE(#{endDate}, 'YYYY-MM-DD'), 1)
   </select>
 
+ <insert id="saveSchedule" parameterType="map" >
+    <selectKey keyProperty="saveSchedule.scheduleId" resultType="long" order="BEFORE">
+        SELECT seq_schedule.nextval FROM dual
+    </selectKey>
+    INSERT INTO schedule 
+    (schedule_id, name, started_dt, ended_dt, contents, writer, created_dt, modifier, modifed_dt, is_deleted)
+    VALUES (#{saveSchedule.scheduleId}, 
+            #{saveSchedule.name}, 
+            #{startedDt}, 
+            #{endedDt}, 
+            #{saveSchedule.contents}, 
+            #{saveSchedule.writer}, 
+            sysdate, 
+            #{saveSchedule.modifier}, 
+            sysdate, 
+            #{saveSchedule.isDeleted})
+  </insert>
+
+
+
+
+<insert id="saveScheduleInvite" parameterType="com.kcc.trioffice.domain.schedule.dto.SaveSchedule">
+    <foreach collection="employeeIds" item="employeeId" separator=";" open="DECLARE BEGIN" close="; END;">
+        <if test="employeeId != null">
+            INSERT INTO schedule_invite 
+            (schedule_invite_id, employee_id, is_participated, writer, created_dt, modifier, modified_dt, is_deleted)
+            VALUES (#{scheduleId}, #{employeeId}, 2, #{writer}, sysdate, #{modifier}, sysdate, #{isDeleted})
+        </if>
+    </foreach>
+</insert>
+
+ <resultMap id="ScheduleDetailResultMap" type="ScheduleDetail">
+    <!-- 단일 schedule 정보 -->
+    <result property="writer" column="writer"/>
+    <result property="contents" column="contents"/>
+
+    <!-- 직원 정보 리스트로 매핑 -->
+    <collection property="scheduleDetailEmployees" ofType="ScheduleDetailEmployees">
+        <result property="employeeName" column="employeeName"/>
+        <result property="deptName" column="deptName"/>
+        <result property="isParticipated" column="isParticipated"/>
+    </collection>
+</resultMap>
+
+
+
+<select id="getScheduleDetail" parameterType="String"  resultMap="ScheduleDetailResultMap">
+  SELECT s.writer
+    , s.contents
+    , i.is_participated as isParticipated
+    , e.name as employeeName
+    , d.name as deptName
+  from schedule s
+    left outer join schedule_invite i
+      on s.schedule_id = i.schedule_invite_id
+    left outer join employee e
+      on i.employee_id = e.employee_id
+    inner join department d
+      on e.dept_id = d.dept_id
+  where schedule_id = #{schedule_id}
+</select>
+  
 </mapper>

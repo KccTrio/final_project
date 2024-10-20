@@ -13,6 +13,7 @@ import java.util.Optional;
 @Mapper
 public interface EmployeeMapper {
     Optional<EmployeeInfo> getEmployeeInfo(Long employeeId);
+
     List<SearchEmployee> getEmployeeByCompanyIdExceptOneSelf(@Param("companyId") Long companyId, @Param("employeeId") Long employeeId);
     List<EmployeeInfo> getEmployeeInfoList(List<Long> employees);
 
@@ -28,5 +29,10 @@ public interface EmployeeMapper {
 
     Optional<AdminInfo> getAdminInfo();
 
+    List<SearchEmployee> getAllEmployeesInfo();
+
+    Optional<EmployeeInfo> getEmployeeInfoFindByEmail(String email);
+
+    List<String> getEmployeeEmailforSend(List<String> Ids);
     int saveFcmToken(@Param("employeeId") Long employeeId, @Param("fcmToken") String fcmToken);
 }
