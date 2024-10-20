@@ -21,6 +21,7 @@
                                                   from employee
                                                   where email = #{employeeId}
                                                   )
+                                                  and is_deleted = 0
                       )
       and started_dt <![CDATA[>]]> ADD_MONTHS(TO_DATE(#{startDate}, 'YYYY-MM-DD'), -1)
       and ended_dt <![CDATA[<=]]> ADD_MONTHS(TO_DATE(#{endDate}, 'YYYY-MM-DD'), 1)
@@ -31,7 +32,7 @@
         SELECT seq_schedule.nextval FROM dual
     </selectKey>
     INSERT INTO schedule 
-    (schedule_id, name, started_dt, ended_dt, contents, writer, created_dt, modifier, modifed_dt, is_deleted)
+    (schedule_id, name, started_dt, ended_dt, contents, writer, created_dt, modifier, modified_dt, is_deleted)
     VALUES (#{saveSchedule.scheduleId}, 
             #{saveSchedule.name}, 
             #{startedDt}, 
@@ -85,7 +86,32 @@
       on i.employee_id = e.employee_id
     inner join department d
       on e.dept_id = d.dept_id
-  where schedule_id = #{schedule_id}
+  where schedule_id = #{schedule_id} and s.is_deleted = 0
 </select>
+
+<update id="deleteMyScheduleInviteTable" parameterType="map">
+  update schedule_invite
+  set is_deleted = 1
+  , modifier = #{employeeId}        
+  , modified_dt = CURRENT_TIMESTAMP 
+  where schedule_invite_id = #{scheduleId}
+</update>
+
+<update id="deleteSchedule" parameterType="map">
+  update schedule
+  set is_deleted = 1
+  , modifier = #{employeeId}        
+  , modified_dt = CURRENT_TIMESTAMP  
+  where schedule_id = #{scheduleId}
+</update>
+
+<update id="deleteInvitedSchedule" parameterType="map">
+  update schedule_invite
+  set is_deleted = 1
+    , is_participated = 1
+    , modifier = #{employeeId}        
+    , modified_dt = CURRENT_TIMESTAMP  
+  where schedule_invite_id = #{scheduleId} and employee_id = #{employeeId}
+</update>
   
 </mapper>

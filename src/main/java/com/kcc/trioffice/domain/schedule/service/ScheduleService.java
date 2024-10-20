@@ -28,6 +28,7 @@ import com.kcc.trioffice.domain.schedule.dto.SaveSchedule;
 import com.kcc.trioffice.domain.schedule.dto.ScheduleDetail;
 import com.kcc.trioffice.domain.schedule.mapper.ScheduleMapper;
 import com.kcc.trioffice.global.exception.type.NotFoundException;
+import com.kcc.trioffice.global.exception.type.ScheduleDeleteException;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -51,7 +52,6 @@ public class ScheduleService {
   public List<EmployeeSchedules> getEmployeeSchedules(String startDate, String endDate) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
     String employeeId = authentication.getName();
-    System.out.println(employeeId);
     List<EmployeeSchedules> schdules = scheduleMapper.getEmployeeSchedules(employeeId, startDate, endDate);
 
     for (int i = 0; i < schdules.size(); i++) {
@@ -200,6 +200,28 @@ public class ScheduleService {
     // scheduleDetail.setScheduleDetailEmployees(scheduleMapper.getInviteEmployee);
 
     return scheduleDetail;
+  }
+
+  @Transactional
+  public void deleteSchedule(Long employeeId, Long scheduleId) {
+
+    //현재 로그인 객체와 일정의 주최자가 같은 사람인지 check
+    ScheduleDetail scheduleDetail = scheduleMapper.getScheduleDetail(scheduleId +"")
+    .orElseThrow(() -> new NotFoundException("일정 상세 정보를 가져올 수 없습니다."));
+    try {
+      if (employeeId.equals(scheduleDetail.getWriter())) {
+          // 주최자 == 로그인객체
+          scheduleMapper.deleteMyScheduleInviteTable(employeeId, scheduleId);
+          scheduleMapper.deleteSchedule(employeeId, scheduleId);
+      } else {
+          // 주최자 != 로그인객체
+          scheduleMapper.deleteInvitedSchedule(employeeId, scheduleId);
+      }
+  } catch (Exception e) {
+      // 삭제 실패 시 예외 처리
+      throw new ScheduleDeleteException("일정 삭제에 실패했습니다. 원인: " + e.getMessage());
+  }
+
   }
 
 }
