@@ -1,0 +1,9 @@
+#modalImage {
+    max-height: 700px !important;
+}
+
+.modal-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

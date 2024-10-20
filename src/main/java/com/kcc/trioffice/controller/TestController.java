@@ -21,9 +21,16 @@ public class TestController {
     return "/component/top-bar";
   }
 
-  @GetMapping("/notifications")
-  public String alram() {
-    return "/component/alram";
+  @GetMapping("/admin")
+  public String admin() {
+    return "/admin/admin";
   }
+
+  @GetMapping("/realAdmin")
+  public String realAdmin() {
+    return "/admin/realAdmin";
+  }
+
+
 
 }

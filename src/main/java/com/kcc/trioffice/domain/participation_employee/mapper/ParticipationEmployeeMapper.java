@@ -7,6 +7,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Optional;
 
 @Mapper
 public interface ParticipationEmployeeMapper {
@@ -19,5 +20,8 @@ public interface ParticipationEmployeeMapper {
     int deleteParticipationEmployee(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId);
     int updateIsEntered(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId, @Param("isEntered") boolean isEntered);
     int disconnectChatRoom(Long employeeId);
-
+    List<EmployeeInfo> getPtptEmpInfoByChatIdExceptOneself(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId);
+    List<EmployeeInfo> getFcmTokenByChatRoomId(@Param("chatRoomId") Long chatRoomId);
+    Optional<ParticipantEmployeeInfo> getPtptptEmpInfo(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId);
+    int favoriteChatRoom(@Param("chatRoomId") Long chatRoomId, @Param("employeeId") Long employeeId, @Param("isFavorited") boolean isFavorited);
 }

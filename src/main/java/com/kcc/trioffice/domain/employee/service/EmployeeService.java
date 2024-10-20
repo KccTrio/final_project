@@ -1,6 +1,7 @@
 package com.kcc.trioffice.domain.employee.service;
 
 import com.kcc.trioffice.domain.employee.dto.request.SaveEmployee;
+import com.kcc.trioffice.domain.employee.dto.request.SaveFcmToken;
 import com.kcc.trioffice.domain.employee.dto.response.AdminInfo;
 import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.dto.response.SearchEmployee;
@@ -12,12 +13,9 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
-import org.springframework.mail.MailSender;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,7 +35,6 @@ public class EmployeeService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final EmployeeMapper employeeMapper;
     private final JavaMailSender mailSender;
-    // private final EmployeeInfo employeeInfo = new EmployeeInfo();
 
     // 임시비밀번호 생성
     private String generateTempPassword() {
@@ -158,4 +155,12 @@ public class EmployeeService {
 
     }
 
+    public EmployeeInfo findById(Long id) {
+        return employeeMapper.getEmployeeInfo(id).orElseThrow(() -> new NotFoundException("사원이 없습니다."));
+    }
+
+    @Transactional
+    public void saveFcmToken(SaveFcmToken saveFcmToken, Long employeeId) {
+        employeeMapper.saveFcmToken(employeeId, saveFcmToken.getFcmToken());
+    }
 }

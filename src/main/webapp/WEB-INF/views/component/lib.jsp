@@ -56,6 +56,10 @@ uri="http://www.springframework.org/security/tags" %>
       rel="stylesheet"
     />
 
+    <%--  drop zone  --%>
+    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
+    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
+
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <!-- sweet alert -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -85,6 +89,9 @@ uri="http://www.springframework.org/security/tags" %>
       type="text/css"
     />
 
+    <%--  FCM  --%>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-messaging.js"></script>
     <style>
       /* 적용방법 */
       .test-font {

@@ -6,43 +6,53 @@
 <mapper namespace="com.kcc.trioffice.domain.chat_room.mapper.ChatMapper">
 
     <insert id="saveChatMessage" parameterType="com.kcc.trioffice.domain.chat_room.dto.request.ChatMessage">
-        <selectKey keyProperty="chatId" resultType="long" order="BEFORE">
-            SELECT SEQ_CHAT.NEXTVAL FROM DUAL
-        </selectKey>
-        INSERT INTO chat (
-            chat_id,
-            chatroom_id,
-            contents,
-            chat_type,
-            writer,
-            write_dt,
-            modifier,
-            modified_dt,
-            is_deleted
-        )
+      <selectKey keyProperty="chatId" resultType="long" order="BEFORE">
+          SELECT SEQ_CHAT.NEXTVAL FROM DUAL
+      </selectKey>
+      INSERT INTO chat (
+          chat_id
+          , chatroom_id
+          , contents
+          , chat_type
+          , writer
+          , write_dt
+          , modifier
+          , modified_dt
+          , is_deleted
+      )
         VALUES (
-            #{chatId},
-            #{roomId},
-            #{message},
-            #{chatType},
-            #{senderId},
-            SYSDATE,
-            #{senderId},
-            SYSDATE,
-            0
+          #{chatId}
+          , #{roomId}
+          , #{message}
+          , #{chatType}
+          , #{senderId}
+          , SYSDATE
+          , #{senderId}
+          , SYSDATE
+          , 0
         )
     </insert>
 
     <select id="getChatDetailInfo" parameterType="map" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ChatDetailInfo">
-        SELECT
-            chat_id AS chatId,
-            chatroom_id AS chatroomId,
-            contents,
-            chat_type AS chatType,
-            writer AS senderId
-        FROM
-            chat
-        WHERE
-            chat_id = #{chatId}
+      SELECT
+        chat_id
+        , chatroom_id
+        , contents
+        , chat_type
+        , writer AS senderId
+      FROM
+        chat
+      WHERE
+        chat_id = #{chatId}
     </select>
+
+    <update id="deleteChatMessage" parameterType="map">
+      UPDATE chat
+        SET
+          is_deleted = 1
+          , modifier = #{employeeId}
+          , modified_dt = SYSDATE
+        WHERE
+          chat_id = #{chatId}
+    </update>
 </mapper>

@@ -7,18 +7,17 @@
 
     <select id="getEmployeeByCompanyIdExceptOneSelf" parameterType="map"
             resultType="com.kcc.trioffice.domain.employee.dto.response.SearchEmployee">
-        SELECT e.employee_id as id
+      SELECT e.employee_id as id
              , e.name
              , d.name as deptName
              , e.position
-            FROM employee e
-            LEFT JOIN department d
-                ON e.dept_id = d.dept_id AND d.is_deleted = 0
-            WHERE e.company_id = #{companyId}
-                AND  e.employee_id != #{employeeId}
-                AND e.is_deleted = 0
-            ORDER BY
-                e.name
+        FROM employee e
+        LEFT JOIN department d
+          ON e.dept_id = d.dept_id AND d.is_deleted = 0
+        WHERE e.company_id = #{companyId}
+          AND  e.employee_id != #{employeeId}
+          AND e.is_deleted = 0
+        ORDER BY e.name
     </select>
 
     <select id="getAllEmployeesInfo" 
@@ -38,30 +37,31 @@
 
     <select id="getEmployeeInfo" parameterType="Long"
             resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
-        SELECT employee_id as employeeId
-               ,dept_id as deptId
-               ,company_id as companyId
-               ,email
-               ,password
-               ,phone_num as phoneNum
-               ,external_email as externalEmail
-               ,name
-               ,birth
-               ,profile_url as profileUrl
-               ,fax
-               ,location
-               ,is_receive_notification as isReceiveNotification
-               ,position
-               ,status
-               ,status_message as statusMessage
-               ,writer
-               ,write_dt as writeDt
-               ,modifier
-               ,modified_dt as modifiedDt
-               ,is_deleted as isDeleted
-            FROM employee e
-            WHERE employee_id = #{employee_id}
-                AND is_deleted = 0
+      SELECT employee_id
+             , dept_id
+             , company_id
+             , email
+             , password
+             , phone_num
+             , external_email
+             , name
+             , birth
+             , profile_url
+             , fax
+             , location
+             , is_receive_notification
+             , position
+             , status
+             , status_message
+             , fcm_token
+             , writer
+             , write_dt
+             , modifier
+             , modified_dt
+             , is_deleted
+        FROM employee e
+        WHERE employee_id = #{employee_id}
+          AND is_deleted = 0
     </select>
 
     <select id="getEmployeeInfoFindById" parameterType="String"
@@ -94,13 +94,34 @@
     
 
     <select id="getEmployeeInfoList" parameterType="java.util.List"
-            resultType="String">
-        SELECT name
-            FROM employee
-            WHERE employee_id IN
-            <foreach item="id" collection="list" open="(" separator="," close=")">
-                #{id}
-            </foreach>
+            resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
+      SELECT employee_id
+             ,dept_id
+             ,company_id
+             ,email
+             ,password
+             ,phone_num
+             ,external_email
+             ,name
+             ,birth
+             ,profile_url
+             ,fax
+             ,location
+             ,is_receive_notification
+             ,position
+             ,status
+             ,status_message
+             ,fcm_token
+             ,writer
+             ,write_dt
+             ,modifier
+             ,modified_dt
+             ,is_deleted as isDeleted
+        FROM employee
+        WHERE employee_id IN
+          <foreach item="id" collection="list" open="(" separator="," close=")">
+              #{id}
+          </foreach>
 
     </select>
 
@@ -133,94 +154,101 @@
     </select>
 
     <select id="findByEmail" parameterType="String" resultType="String">
-        SELECT email
-            FROM employee
-            WHERE email = #{email}
-                AND is_deleted = 0
+      SELECT email
+        FROM employee
+        WHERE email = #{email}
+          AND is_deleted = 0
     </select>
 
     <select id="getExternalEmail" parameterType="String" resultType="String" >
-        SELECT external_email
-            FROM employee
-            WHERE email = #{email}
-                AND is_deleted = 0
+      SELECT external_email
+        FROM employee
+        WHERE email = #{email}
+          AND is_deleted = 0
     </select>
 
     <update id="temporaryPassword" parameterType="map" >
-        UPDATE employee
-            SET password = #{incodingPassword}
-            WHERE email = #{email}
-                AND is_deleted = 0
+      UPDATE employee
+        SET password = #{incodingPassword}
+        WHERE email = #{email}
+          AND is_deleted = 0
     </update>
 
     <insert id="saveEmployee">
     INSERT INTO employee (
-        employee_id
-        , dept_id
-        , company_id
-        , email
-        , password
-        , phone_num
-        , external_email
-        , name
-        , birth
-        , profile_url
-        , fax
-        , location
-        , is_receive_notification
-        , position
-        , status
-        , status_message
-        , writer
-        , write_dt
-        , modifier
-        , modified_dt
-        , is_deleted
+      employee_id
+      , dept_id
+      , company_id
+      , email
+      , password
+      , phone_num
+      , external_email
+      , name
+      , birth
+      , profile_url
+      , fax
+      , location
+      , is_receive_notification
+      , position
+      , status
+      , status_message
+      , writer
+      , write_dt
+      , modifier
+      , modified_dt
+      , is_deleted
     ) VALUES (
-        seq_employee.nextval
-        , #{deptId}
-        , #{companyId}
-        , #{email}
-        , #{password}
-        , #{phoneNum}
-        , #{externalEmail}
-        , #{name}
-        , #{birth}
-        , #{profileUrl}
-        , #{fax}
-        , #{location}
-        , #{isReceiveNotification}
-        , #{position}
-        , #{status}
-        , #{statusMessage, jdbcType=VARCHAR} <!-- 여기에서 JDBC 타입 설정 -->
-        , #{writer}
-        , sysdate
-        , #{modifier}
-        , sysdate
-        , 0
+      seq_employee.nextval
+      , #{deptId}
+      , #{companyId}
+      , #{email}
+      , #{password}
+      , #{phoneNum}
+      , #{externalEmail}
+      , #{name}
+      , #{birth}
+      , #{profileUrl}
+      , #{fax}
+      , #{location}
+      , #{isReceiveNotification}
+      , #{position}
+      , #{status}
+      , #{statusMessage, jdbcType=VARCHAR} <!-- 여기에서 JDBC 타입 설정 -->
+      , #{writer}
+      , sysdate
+      , #{modifier}
+      , sysdate
+      , 0
     )
     </insert>
 
     <select id="getAdminInfo" resultType="com.kcc.trioffice.domain.employee.dto.response.AdminInfo">
     SELECT name
-        , phone_num as phoneNum
-    FROM employee
-    WHERE employee_id = (SELECT employee_id
-                            FROM role
-                            WHERE name = 'ROLE_ADMIN'
-                        )
+           , phone_num
+      FROM employee
+      WHERE employee_id =
+        (
+          SELECT employee_id
+            FROM role
+            WHERE name = 'ROLE_ADMIN'
+        )
     </select>
 
-<select id="getEmployeeEmailforSend" parameterType="List" resultType="String">
-  SELECT email
-  FROM employee
-  WHERE employee_id IN
-  <foreach collection="Ids" item="id" open="(" separator="," close=")">
-    #{id}
-  </foreach>
-  AND is_deleted = 0
-</select>
+  <select id="getEmployeeEmailforSend" parameterType="List" resultType="String">
+    SELECT email
+    FROM employee
+    WHERE employee_id IN
+    <foreach collection="Ids" item="id" open="(" separator="," close=")">
+      #{id}
+    </foreach>
+    AND is_deleted = 0
+  </select>
 
 
 
+    <update id="saveFcmToken" parameterType="map">
+      UPDATE employee
+        SET fcm_token = #{fcmToken}
+        WHERE employee_id = #{employeeId}
+    </update>
 </mapper>

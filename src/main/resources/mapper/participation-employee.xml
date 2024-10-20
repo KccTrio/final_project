@@ -6,134 +6,209 @@
 <mapper namespace="com.kcc.trioffice.domain.participation_employee.mapper.ParticipationEmployeeMapper">
 
     <insert id="saveParticipationEmployee" parameterType="map">
-        INSERT INTO participation_employee (chat_room_id, employee_id, is_favorited, is_entered, writer, write_dt, modifier, modified_dt, is_deleted)
+      INSERT INTO participation_employee (chat_room_id, employee_id, is_favorited, is_entered, writer, write_dt, modifier, modified_dt, is_deleted)
         VALUES (#{chatRoomId}, #{employeeId}, 0, 0, #{writer}, SYSDATE, #{writer}, SYSDATE, 0)
     </insert>
 
     <select id="getEmployeeByChatRoomIdExceptOneSelf" resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
-        SELECT
-            e.employee_id as employeeId
-            , e.dept_id as deptId
-            , e.company_id as companyId
-            , e.email
-            , e.password
-            , e.phone_num as phoneNum
-            , e.external_email as externalEmail
-            , e.name
-            , e.birth
-            , e.profile_url as profileUrl
-            , e.fax
-            , e.location
-            , e.is_receive_notification as isReceiveNotification
-            , e.position
-            , e.status
-            , e.status_message as statusMessage
-            , e.writer
-            , e.write_dt as writeDt
-            , e.modifier
-            , e.modified_dt as modifiedDt
-            , e.is_deleted as isDeleted
-        FROM
-            employee e
-                INNER JOIN participation_employee pe
-                    ON e.employee_id = pe.employee_id
-        WHERE
-            pe.chat_room_id = #{chatRoomId}
-            AND e.employee_id != #{employeeId}
+      SELECT
+        e.employee_id as employeeId
+        , e.dept_id as deptId
+        , e.company_id as companyId
+        , e.email
+        , e.password
+        , e.phone_num as phoneNum
+        , e.external_email as externalEmail
+        , e.name
+        , e.birth
+        , e.profile_url as profileUrl
+        , e.fax
+        , e.location
+        , e.is_receive_notification as isReceiveNotification
+        , e.position
+        , e.status
+        , e.status_message as statusMessage
+        , e.writer
+        , e.write_dt as writeDt
+        , e.modifier
+        , e.modified_dt as modifiedDt
+        , e.is_deleted as isDeleted
+        FROM employee e
+        INNER JOIN participation_employee pe
+          ON e.employee_id = pe.employee_id
+        WHERE pe.chat_room_id = #{chatRoomId}
+          AND e.employee_id != #{employeeId}
     </select>
 
     <select id="getParticipantEmployeeInfoByChatRoomId" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ParticipantEmployeeInfo">
-        SELECT
-            chat_room_id as chatRoomId
-            , employee_id as employeeId
-            , is_favorited as isFavorited
-            , chat_room_profile_url as chatRoomProfileUrl
-            , is_entered as isEntered
-        FROM
-            participation_employee
-        WHERE
-            chat_room_id = #{chatRoomId}
-            AND is_deleted = 0
+      SELECT
+        chat_room_id as chatRoomId
+        , employee_id as employeeId
+        , is_favorited as isFavorited
+        , chat_room_profile_url as chatRoomProfileUrl
+        , is_entered as isEntered
+        FROM participation_employee
+        WHERE chat_room_id = #{chatRoomId}
+          AND is_deleted = 0
     </select>
 
     <select id="getEmployeeInfoByChatRoomId" resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
-        SELECT
-            e.employee_id as employeeId
-            , e.dept_id as deptId
-            , e.company_id as companyId
-            , e.email
-            , e.password
-            , e.phone_num as phoneNum
-            , e.external_email as externalEmail
-            , e.name
-            , e.birth
-            , e.profile_url as profileUrl
-            , e.fax
-            , e.location
-            , e.is_receive_notification as isReceiveNotification
-            , e.position
-            , e.status
-            , e.status_message as statusMessage
-            , e.writer
-            , e.write_dt as writeDt
-            , e.modifier
-            , e.modified_dt as modifiedDt
-            , e.is_deleted as isDeleted
-        FROM
-            employee e
-                INNER JOIN participation_employee pe
-                    ON e.employee_id = pe.employee_id
-                    AND pe.is_deleted = 0
-        WHERE
-            pe.chat_room_id = #{chatRoomId}
-            AND e.is_deleted = 0
-        ORDER BY
-            e.name
+      SELECT
+        e.employee_id as employeeId
+        , e.dept_id as deptId
+        , e.company_id as companyId
+        , e.email
+        , e.password
+        , e.phone_num as phoneNum
+        , e.external_email as externalEmail
+        , e.name
+        , e.birth
+        , e.profile_url as profileUrl
+        , e.fax
+        , e.location
+        , e.is_receive_notification as isReceiveNotification
+        , e.position
+        , e.status
+        , e.status_message as statusMessage
+        , e.writer
+        , e.write_dt as writeDt
+        , e.modifier
+        , e.modified_dt as modifiedDt
+        , e.is_deleted as isDeleted
+        FROM employee e
+        INNER JOIN participation_employee pe
+          ON e.employee_id = pe.employee_id
+            AND pe.is_deleted = 0
+        WHERE pe.chat_room_id = #{chatRoomId}
+          AND e.is_deleted = 0
+        ORDER BY e.name
     </select>
 
     <select id="getEmployeeByChatRoomIdExceptParticipants" resultType="com.kcc.trioffice.domain.employee.dto.response.SearchEmployee">
-        SELECT e.employee_id as id, e.name, d.name as deptName, e.position
+      SELECT e.employee_id as id, e.name, d.name as deptName, e.position
         FROM employee e
-            LEFT JOIN department d ON e.dept_id = d.dept_id
+        LEFT JOIN department d
+          ON e.dept_id = d.dept_id
         WHERE e.company_id = #{companyId}
-            AND e.employee_id NOT IN
-                (
-                SELECT
-                    employee_id
-                    FROM
-                        participation_employee
-                    WHERE
-                        chat_room_id = #{chatRoomId}
-                            AND is_deleted = 0
-                )
-        AND e.is_deleted = 0
+          AND e.employee_id NOT IN
+            (
+             SELECT employee_id
+               FROM participation_employee
+               WHERE chat_room_id = #{chatRoomId}
+                 AND is_deleted = 0
+            )
+          AND e.is_deleted = 0
         ORDER BY e.name
     </select>
 
     <update id="deleteParticipationEmployee" parameterType="map">
-        UPDATE participation_employee
-            SET is_deleted = 1
-                , modifier = #{employeeId}
-                , modified_dt = SYSDATE
-            WHERE chat_room_id = #{chatRoomId}
-                AND employee_id = #{employeeId}
+      UPDATE participation_employee
+        SET is_deleted = 1
+            , modifier = #{employeeId}
+            , modified_dt = SYSDATE
+        WHERE chat_room_id = #{chatRoomId}
+          AND employee_id = #{employeeId}
     </update>
 
     <update id="updateIsEntered" parameterType="map">
-        UPDATE participation_employee
-            SET is_entered = #{isEntered}
-                , modifier = #{employeeId}
-                , modified_dt = SYSDATE
-            WHERE chat_room_id = #{chatRoomId}
-                AND employee_id = #{employeeId}
+      UPDATE participation_employee
+        SET is_entered = #{isEntered}
+            , modifier = #{employeeId}
+            , modified_dt = SYSDATE
+        WHERE chat_room_id = #{chatRoomId}
+          AND employee_id = #{employeeId}
     </update>
 
     <update id="disconnectChatRoom" parameterType="map">
-        UPDATE participation_employee
-            SET is_entered = 0
-                , modifier = #{employeeId}
-                , modified_dt = SYSDATE
-            WHERE is_entered = 1
+      UPDATE participation_employee
+        SET is_entered = 0
+            , modifier = #{employeeId}
+            , modified_dt = SYSDATE
+        WHERE is_entered = 1
     </update>
 
+    <select id="getPtptEmpInfoByChatIdExceptOneself" resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
+      SELECT
+        e.employee_id as employeeId
+        , e.dept_id as deptId
+        , e.company_id as companyId
+        , e.email
+        , e.password
+        , e.phone_num as phoneNum
+        , e.external_email as externalEmail
+        , e.name
+        , e.birth
+        , e.profile_url as profileUrl
+        , e.fax
+        , e.location
+        , e.is_receive_notification as isReceiveNotification
+        , e.position
+        , e.status
+        , e.status_message as statusMessage
+        , e.writer
+        , e.write_dt as writeDt
+        , e.modifier
+        , e.modified_dt as modifiedDt
+        , e.is_deleted as isDeleted
+        FROM employee e
+        INNER JOIN participation_employee pe
+          ON e.employee_id = pe.employee_id
+            AND pe.is_deleted = 0
+        WHERE pe.chat_room_id = #{chatRoomId}
+          AND e.employee_id != #{employeeId}
+    </select>
+
+    <select id="getFcmTokenByChatRoomId" resultType="com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo">
+      SELECT
+        e.employee_id as employeeId
+        , e.dept_id
+        , e.company_id
+        , e.email
+        , e.password
+        , e.phone_num
+        , e.external_email
+        , e.name
+        , e.birth
+        , e.profile_url
+        , e.fax
+        , e.location
+        , e.is_receive_notification
+        , e.position
+        , e.status
+        , e.status_message
+        , e.writer
+        , e.write_dt
+        , e.modifier
+        , e.modified_dt
+        , e.is_deleted
+        FROM employee e
+        INNER JOIN participation_employee pe
+          ON e.employee_id = pe.employee_id
+        WHERE pe.chat_room_id = #{chatRoomId}
+          AND pe.is_entered != 1
+          AND e.fcm_token IS NOT NULL
+          AND e.is_deleted = 0
+    </select>
+
+  <select id="getPtptptEmpInfo" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ParticipantEmployeeInfo">
+    SELECT
+      chat_room_id
+      , employee_id
+      , is_favorited
+      , chat_room_profile_url
+      , is_entered
+      FROM participation_employee
+      WHERE chat_room_id = #{chatRoomId}
+        AND employee_id = #{employeeId}
+        AND is_deleted = 0
+  </select>
+
+  <update id="favoriteChatRoom" parameterType="map">
+    UPDATE participation_employee
+      SET is_favorited = #{isFavorited}
+          , modifier = #{employeeId}
+          , modified_dt = SYSDATE
+      WHERE chat_room_id = #{chatRoomId}
+        AND employee_id = #{employeeId}
+  </update>
 </mapper>

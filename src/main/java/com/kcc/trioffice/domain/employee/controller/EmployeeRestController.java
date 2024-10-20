@@ -1,5 +1,6 @@
 package com.kcc.trioffice.domain.employee.controller;
 
+import com.kcc.trioffice.domain.employee.dto.request.SaveFcmToken;
 import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.dto.response.SearchEmployee;
 import com.kcc.trioffice.domain.employee.service.EmployeeService;
@@ -11,11 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -67,6 +64,11 @@ public class EmployeeRestController {
     public ResponseEntity<Map<String, Object>> findAdminNameAndPhoneNum() {
         Map<String, Object> adminInfo = employeeService.getAdminInfo();
         return ResponseEntity.ok(adminInfo);
+    }
+
+    @PostMapping("/employees/fcm-token")
+    public void saveFcmToken(@RequestBody SaveFcmToken saveFcmToken, @AuthenticationPrincipal PrincipalDetail principalDetail) {
+        employeeService.saveFcmToken(saveFcmToken, principalDetail.getEmployeeId());
     }
 
 }
