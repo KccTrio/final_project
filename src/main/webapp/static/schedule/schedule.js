@@ -149,9 +149,11 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
       info.el.style.cursor = "pointer";
       // 시간도 있는 이벤트에 색상 변경
       if (!info.event.allDay) {
-        info.el.style.color = "black"; // 시간대 이벤트 글자색
+        info.el.style.color = "black";
       } else {
         // info.el.style.backgroundColor = "#b4c8bb"; // 시간대 이벤트 배경색
+        info.el.style.backgroundColor = "#FF7364";
+        info.el.style.paddingLeft = "5px";
         info.el.style.border = "0px"; // 시간대 이벤트 배경색
       }
       // data-schedule-id 속성 추가
@@ -254,6 +256,9 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
           const quill = new Quill("#temp-quill-container", {
             theme: "snow",
             readOnly: true, // 읽기 전용으로 설정
+            modules: {
+              toolbar: false, // 툴바 비활성화
+            },
           });
 
           // Delta 형식을 HTML로 변환

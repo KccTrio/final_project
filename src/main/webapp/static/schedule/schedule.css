@@ -14,6 +14,13 @@
   justify-content: right;
 }
 
+#add-schedule-name,
+#title-text,
+#schedule-contents-title,
+#employee-name-location {
+  font-weight: bold;
+}
+
 #add-schedule-button {
   width: 150px;
   height: 40px;
@@ -32,11 +39,6 @@
 
 #add-schedule-button > span {
   color: white;
-}
-
-#temp-quill-container,
-.ql-toolbar.ql-snow {
-  display: none;
 }
 
 #add-schedule-button:active {
@@ -267,7 +269,7 @@
 #add-schedule-modal-buttons {
   display: flex;
   justify-content: end;
-  margin-top: 40px;
+  margin-top: 55px;
   margin-right: 10px;
 }
 
@@ -429,6 +431,7 @@ input[name="employees[]"] {
 #detail-text-contents {
   margin-top: 5px;
   width: 700px;
+  padding: 5px;
   height: 200px;
   border: 1px solid #d2dae1;
 }
@@ -436,6 +439,7 @@ input[name="employees[]"] {
 #detail-table td,
 #detail-table tr {
   border-bottom: 1px solid #d2dae1;
+  padding: 3px;
 }
 #detail-table td {
   border-bottom: 1px solid #d2dae1;
@@ -449,7 +453,7 @@ input[name="employees[]"] {
 #detail-buttons {
   justify-content: end;
   display: flex;
-  margin-top: 30px;
+  margin-top: 20px;
 }
 
 #detail-close {
@@ -475,7 +479,7 @@ input[name="employees[]"] {
   color: white;
   width: 100px;
   height: 40px;
-  background-color: cornflowerblue;
+  background-color: #0056b3;
   border: 1px solid #ccc;
   margin-right: 5px;
   border-radius: 5px;
