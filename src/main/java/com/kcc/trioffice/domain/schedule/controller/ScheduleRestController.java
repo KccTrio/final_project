@@ -48,7 +48,7 @@ public class ScheduleRestController {
 
   @DeleteMapping("/schedules/{scheduleId}") 
   public ResponseEntity<Void> deleteSchedule (@AuthenticationPrincipal PrincipalDetail principalDetail, @PathVariable Long scheduleId) {
-    System.out.println("현재 로그인된 객체 : " + principalDetail.getEmployeeId() + "클라부터 넘어온 schedules id : " + scheduleId);
+    scheduleService.deleteSchedule(principalDetail.getEmployeeId(), scheduleId);
     return new ResponseEntity<>(HttpStatus.OK);
   }
 
