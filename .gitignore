@@ -106,7 +106,7 @@ local.properties
 
 # yml ignore
 *.yaml
-*.yml
+application.yml
 src/main/resources/static/firebase-messaging-sw.js
 firebase-key.json
 
