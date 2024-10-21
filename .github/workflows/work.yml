@@ -15,10 +15,10 @@ jobs:
         with:
           ref: refs/heads/main
 
-      - name: application-prod.yml 생성
+      - name: application.yml 생성
         env:
           ACTIONS_STEP_DEBUG: true
-          APPLICATION_PROD: ${{ secrets.APPLICATION_YML }}
+          APPLICATION: ${{ secrets.APPLICATION_YML }}
         run: echo "$APPLICATION" > src/main/resources/application.yml
 
       - name: ✨ JDK 17 설정
