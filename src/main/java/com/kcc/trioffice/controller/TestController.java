@@ -2,6 +2,7 @@ package com.kcc.trioffice.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class TestController {
@@ -30,6 +31,12 @@ public class TestController {
   public String realAdmin() {
     return "/admin/realAdmin";
   }
+
+  @GetMapping("/health-check")
+  @ResponseBody
+    public String healthCheck() {
+        return "OK";
+    }
 
 
 
