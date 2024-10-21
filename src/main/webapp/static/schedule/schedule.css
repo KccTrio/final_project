@@ -118,6 +118,12 @@
   font-family: "One Mobile Title", sans-serif; /* 제목 폰트 설정 */
 }
 
+.fc .fc-toolbar-title {
+  font-size: 2.3rem;
+  margin: 0px;
+  margin-right: 55px;
+}
+
 .fc-scrollgrid-sync-inner > .fc-col-header-cell-cushion,
 .fc-day-mon .fc-daygrid-day-number,
 .fc-day-tue .fc-daygrid-day-number,
