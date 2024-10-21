@@ -13,7 +13,7 @@ jobs:
       - name: ✨ Checkout repository
         uses: actions/checkout@v3
         with:
-          ref: refs/heads/main
+          ref: refs/heads/develop
 
       - name: application.yml 생성
         run: |
