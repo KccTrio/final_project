@@ -10,6 +10,6 @@ public class NotificationController {
 
     @GetMapping("/notifications")
     public String getNotification() {
-        return "test-noti";
+        return "notification/notification";
     }
 }

@@ -9,12 +9,13 @@
 
 
   <select id="getEmployeeSchedules" parameterType="map" resultType="com.kcc.trioffice.domain.schedule.dto.EmployeeSchedules">
-  select schedule_id as scheduleId
-      ,name
-      ,started_dt as startedDt
-      ,ended_dt as endedDt
-  from schedule
-  where schedule_id IN (SELECT i.SCHEDULE_INVITE_ID AS scheduleInviteId
+    SELECT
+      schedule_id as scheduleId
+      , name
+      , started_dt as startedDt
+      , ended_dt as endedDt
+      FROM schedule
+      where schedule_id IN (SELECT i.SCHEDULE_INVITE_ID AS scheduleInviteId
                       from schedule_invite i
                       where is_participated = 2 and employee_id = (
                                                   select employee_id

@@ -1,9 +1,7 @@
 .contents {
-  margin-left: 441px;
-  width: 79rem;
-  height: 55.7rem;
+  flex: 1;
+  height: 100%;
   overflow-y: auto;
-  position: absolute;
   background-color: white;
 }
 

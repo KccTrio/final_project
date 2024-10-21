@@ -174,7 +174,7 @@
                 , (
                      SELECT COUNT(*)
                        FROM participation_employee pe
-                       WHERE pe.chat_room_id = c.chatroom_id
+                       WHERE pe.chat_room_id = c.chat_room_id
                          AND pe.is_deleted = 0
                          AND pe.write_dt <= c.write_dt
                    ) AS participantCount
@@ -182,7 +182,7 @@
                      (
                        SELECT COUNT(*)
                          FROM participation_employee pe
-                         WHERE pe.chat_room_id = c.chatroom_id
+                         WHERE pe.chat_room_id = c.chat_room_id
                            AND pe.is_deleted = 0
                            AND pe.write_dt <= c.write_dt
                      ) -
@@ -210,12 +210,12 @@
                   ON c.writer = e.employee_id
                 LEFT JOIN attached_file af
                   ON c.chat_id = af.chat_id AND af.is_deleted = 0
-                WHERE c.chatroom_id = #{chatRoomId}
+                WHERE c.chat_room_id = #{chatRoomId}
                   AND c.write_dt >=
                     (
                       SELECT pe.write_dt
                         FROM participation_employee pe
-                        WHERE pe.chat_room_id = c.chatroom_id
+                        WHERE pe.chat_room_id = c.chat_room_id
                           AND pe.employee_id = #{employeeId}
                           AND pe.is_deleted = 0
                     )
