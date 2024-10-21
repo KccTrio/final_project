@@ -65,6 +65,7 @@
 
     <!-- 직원 정보 리스트로 매핑 -->
     <collection property="scheduleDetailEmployees" ofType="ScheduleDetailEmployees">
+        <result property="employeeId" column="employee_id"/>
         <result property="employeeName" column="employeeName"/>
         <result property="deptName" column="deptName"/>
         <result property="isParticipated" column="isParticipated"/>
@@ -74,44 +75,46 @@
 
 
 <select id="getScheduleDetail" parameterType="String"  resultMap="ScheduleDetailResultMap">
-  SELECT s.writer
+  SELECT 
+    s.writer
     , s.contents
     , i.is_participated as isParticipated
+    , e.employee_id 
     , e.name as employeeName
     , d.name as deptName
-  from schedule s
-    left outer join schedule_invite i
-      on s.schedule_id = i.schedule_invite_id
-    left outer join employee e
-      on i.employee_id = e.employee_id
-    inner join department d
-      on e.dept_id = d.dept_id
-  where schedule_id = #{schedule_id} and s.is_deleted = 0
+    FROM schedule s
+      LEFT OUTER JOIN schedule_invite i
+        ON s.schedule_id = i.schedule_invite_id
+      LEFT OUTER JOIN employee e
+        ON i.employee_id = e.employee_id
+      INNER JOIN department d
+        ON e.dept_id = d.dept_id
+    WHERE schedule_id = #{schedule_id} and s.is_deleted = 0
 </select>
 
 <update id="deleteMyScheduleInviteTable" parameterType="map">
-  update schedule_invite
-  set is_deleted = 1
-  , modifier = #{employeeId}        
-  , modified_dt = CURRENT_TIMESTAMP 
-  where schedule_invite_id = #{scheduleId}
+  UPDATE schedule_invite
+    SET is_deleted = 1
+        , modifier = #{employeeId}        
+        , modified_dt = CURRENT_TIMESTAMP 
+    WHERE schedule_invite_id = #{scheduleId}
 </update>
 
 <update id="deleteSchedule" parameterType="map">
-  update schedule
-  set is_deleted = 1
-  , modifier = #{employeeId}        
-  , modified_dt = CURRENT_TIMESTAMP  
-  where schedule_id = #{scheduleId}
+  UPDATE schedule
+    SET is_deleted = 1
+        , modifier = #{employeeId}        
+        , modified_dt = CURRENT_TIMESTAMP  
+    WHERE schedule_id = #{scheduleId}
 </update>
 
 <update id="deleteInvitedSchedule" parameterType="map">
-  update schedule_invite
-  set is_deleted = 1
-    , is_participated = 1
-    , modifier = #{employeeId}        
-    , modified_dt = CURRENT_TIMESTAMP  
-  where schedule_invite_id = #{scheduleId} and employee_id = #{employeeId}
+  UPDATE schedule_invite
+    SET is_deleted = 1
+        , is_participated = 1
+        , modifier = #{employeeId}        
+        , modified_dt = CURRENT_TIMESTAMP  
+    WHERE schedule_invite_id = #{scheduleId} and employee_id = #{employeeId}
 </update>
   
 </mapper>

@@ -233,12 +233,12 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
             <table id="detail-table" style="width:100%; border-collapse: collapse;">
                 <thead id="detail-people-header">
                     <tr>
-                        <th>이름</th>
-                        <th>부서</th>
+                        <th style="padding-right: 100px;">이름</th>
+                        <th style="padding-right: 150px;">부서</th>
                         <th>참석 여부</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="detail-people-tbody">
         `;
 
           // 사원 정보 출력
@@ -259,9 +259,9 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
             }
             tableHTML += `
                           <tr>
-                              <td style="border-right: 1px solid #d2dae1;">${employee.employeeName}</td>
-                              <td style="border-right: 1px solid #d2dae1;">${employee.deptName}</td>
-                              <td>${participationStatus}</td>
+                              <td style="padding-right: 82px; border-right: 1px solid #d2dae1;">${employee.employeeName}</td>
+                              <td style="padding-right: 130px; border-right: 1px solid #d2dae1;">${employee.deptName}</td>
+                              <td style="padding-right: 99px;">${participationStatus}</td>
                           </tr>
                       `;
           });

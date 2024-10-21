@@ -21,7 +21,6 @@ public interface ScheduleMapper {
 
   Optional<ScheduleDetail> getScheduleDetail(String scheduleId);
 
-
   int deleteInvitedSchedule(Long employeeId, Long scheduleId);
 
   int deleteMyScheduleInviteTable(Long employeeId, Long scheduleId);

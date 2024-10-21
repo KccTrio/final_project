@@ -187,12 +187,12 @@ public class ScheduleService {
       scheduleDetail.setIsMySchedule(0);
     }
 
-    // int count = scheduleDetail.getScheduleDetailEmployees().size();
+    int count = scheduleDetail.getScheduleDetailEmployees().size();
 
-    // for (int i = 0; i < count; i++) {
-    // System.out.println("현재 초대된 회원은 " +
-    // scheduleDetail.getScheduleDetailEmployees().get(i).getEmployeeName());
-    // }
+    for (int i = 0; i < count; i++) {
+      System.out.println("현재 초대된 회원은 " +
+          scheduleDetail.getScheduleDetailEmployees().get(i).getEmployeeName());
+    }
     // System.out.println("상세 일정 : " + scheduleDetail.getContents() +
     // scheduleDetail.getWriter());
 
@@ -205,22 +205,22 @@ public class ScheduleService {
   @Transactional
   public void deleteSchedule(Long employeeId, Long scheduleId) {
 
-    //현재 로그인 객체와 일정의 주최자가 같은 사람인지 check
-    ScheduleDetail scheduleDetail = scheduleMapper.getScheduleDetail(scheduleId +"")
-    .orElseThrow(() -> new NotFoundException("일정 상세 정보를 가져올 수 없습니다."));
+    // 현재 로그인 객체와 일정의 주최자가 같은 사람인지 check
+    ScheduleDetail scheduleDetail = scheduleMapper.getScheduleDetail(scheduleId + "")
+        .orElseThrow(() -> new NotFoundException("일정 상세 정보를 가져올 수 없습니다."));
     try {
       if (employeeId.equals(scheduleDetail.getWriter())) {
-          // 주최자 == 로그인객체
-          scheduleMapper.deleteMyScheduleInviteTable(employeeId, scheduleId);
-          scheduleMapper.deleteSchedule(employeeId, scheduleId);
+        // 주최자 == 로그인객체
+        scheduleMapper.deleteMyScheduleInviteTable(employeeId, scheduleId);
+        scheduleMapper.deleteSchedule(employeeId, scheduleId);
       } else {
-          // 주최자 != 로그인객체
-          scheduleMapper.deleteInvitedSchedule(employeeId, scheduleId);
+        // 주최자 != 로그인객체
+        scheduleMapper.deleteInvitedSchedule(employeeId, scheduleId);
       }
-  } catch (Exception e) {
+    } catch (Exception e) {
       // 삭제 실패 시 예외 처리
       throw new ScheduleDeleteException("일정 삭제에 실패했습니다. 원인: " + e.getMessage());
-  }
+    }
 
   }
 
