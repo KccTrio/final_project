@@ -17,23 +17,18 @@ jobs:
 
       - name: application.yml 생성
         run: |
+          mkdir -p src/main/resources
           echo "${{ secrets.APPLICATION_YML }}" > src/main/resources/application.yml
 
       - name: Set up Json file
-        env:
-          JSON_SECRET: ${{ secrets.FIREBASE_PRIVATE_KEY_JSON }}
-          JSON_DIR: src/main/resources/static
-          JSON_FILE_NAME: firebase-key.json
         run: |
-          echo "${JSON_SECRET}" > $JSON_DIR/$JSON_FILE_NAME
+          mkdir -p src/main/resources/static
+          echo "${{ secrets.FIREBASE_PRIVATE_KEY_JSON }}" > src/main/resources/static/firebase-key.json
 
       - name: Set up firebase js
-        env:
-          FIREBASE_JS: ${{ secrets.FIREBASE_JS }}
-          FIREBASE_JS_DIR: src/main/resources/static
-          FIREBASE_JS_FILE_NAME: firebase-messaging-sw.js
         run: |
-          echo "${FIREBASE_JS}" > $FIREBASE_JS_DIR/$FIREBASE_JS_FILE_NAME
+          mkdir -p src/main/resources/static
+          echo "${{ secrets.FIREBASE_JS }}" > src/main/resources/static/firebase-messaging-sw.js
 
       - name: ✨ JDK 17 설정
         uses: actions/setup-java@v3
