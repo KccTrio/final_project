@@ -68,6 +68,7 @@
         <result property="employeeId" column="employee_id"/>
         <result property="employeeName" column="employeeName"/>
         <result property="deptName" column="deptName"/>
+        <result property="position" column="position"/>
         <result property="isParticipated" column="isParticipated"/>
     </collection>
 </resultMap>
@@ -82,6 +83,7 @@
     , e.employee_id 
     , e.name as employeeName
     , d.name as deptName
+    , e.position
     FROM schedule s
       LEFT OUTER JOIN schedule_invite i
         ON s.schedule_id = i.schedule_invite_id

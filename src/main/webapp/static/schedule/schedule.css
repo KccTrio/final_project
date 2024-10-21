@@ -154,7 +154,7 @@
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 999;
+  z-index: 1000;
 }
 
 .add-schedule-content {
@@ -162,7 +162,7 @@
   background-color: #ffffff;
   width: 800px;
   height: 730px;
-  z-index: 1000;
+  z-index: 1001;
   border-radius: 5px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1),
     /* 부드러운 그림자 */ 0 8px 16px rgba(0, 0, 0, 0.2); /* 더 깊은 그림자 */
@@ -503,10 +503,6 @@ input[name="employees[]"] {
   overflow-y: auto;
 }
 
-#detail-modify.hidden {
-  display: none;
-}
-
 #schedule-master {
   margin-top: 15px;
 }
@@ -517,4 +513,10 @@ input[name="employees[]"] {
   border: 1px solid #ccc;
   border-radius: 5px;
   box-shadow: 1.5px 1px #ccc;
+}
+
+/*일정 조회 */
+
+#detail-modify.hidden {
+  display: none;
 }

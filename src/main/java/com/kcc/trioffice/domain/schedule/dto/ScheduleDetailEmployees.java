@@ -7,6 +7,7 @@ public class ScheduleDetailEmployees {
   private Long employeeId;
   private String employeeName;
   private String deptName;
+  private String position;
   private String isParticipated;
 
 }

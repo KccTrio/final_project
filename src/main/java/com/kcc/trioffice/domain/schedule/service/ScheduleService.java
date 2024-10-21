@@ -179,11 +179,11 @@ public class ScheduleService {
     ScheduleDetail scheduleDetail = scheduleMapper.getScheduleDetail(scheduleId)
         .orElseThrow(() -> new NotFoundException("일정 상세 정보를 가져올 수 없습니다."));
 
-    System.out.println("현재 로그인 객체의 아이디 : " + employeeId);
+    System.out.println("현재 로그인 객체의 아이디 : " + employeeId + " " + scheduleDetail.getWriter());
     // 스케줄이 본인 것인지 check
-    if (employeeId == scheduleDetail.getWriter()) {
+    if (employeeId.equals(scheduleDetail.getWriter())) {
       scheduleDetail.setIsMySchedule(1);
-      // System.out.println("현재 스케줄은 로그인 객체의 것입니다.");
+      System.out.println("현재 스케줄은 로그인 객체의 것입니다.");
     } else {
       scheduleDetail.setIsMySchedule(0);
     }
