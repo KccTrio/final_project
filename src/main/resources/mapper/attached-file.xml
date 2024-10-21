@@ -74,7 +74,7 @@
                 WHERE is_deleted = 0
                 GROUP BY file_id
               ) t ON af.file_id = t.file_id
-          WHERE c.chatroom_id = #{chatRoomId}
+          WHERE c.chat_room_id = #{chatRoomId}
             AND af.is_deleted = 0
             <choose>
               <!-- '파일명'으로 검색할 경우 -->
@@ -129,7 +129,7 @@
           WHERE is_deleted = 0
           GROUP BY file_id
           ) t ON af.file_id = t.file_id
-      WHERE c.chatroom_id = #{chatRoomId}
+      WHERE c.chat_room_id = #{chatRoomId}
         AND af.file_type = 1
         AND af.is_deleted = 0
     <choose>

@@ -11,7 +11,7 @@
       </selectKey>
       INSERT INTO chat (
           chat_id
-          , chatroom_id
+          , chat_room_id
           , contents
           , chat_type
           , writer
@@ -36,7 +36,7 @@
     <select id="getChatDetailInfo" parameterType="map" resultType="com.kcc.trioffice.domain.chat_room.dto.response.ChatDetailInfo">
       SELECT
         chat_id
-        , chatroom_id
+        , chat_room_id
         , contents
         , chat_type
         , writer AS senderId
