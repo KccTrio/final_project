@@ -496,3 +496,7 @@ input[name="employees[]"] {
   height: 100px;
   overflow-y: auto;
 }
+
+#detail-modify.hidden {
+  display: none;
+}
