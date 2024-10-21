@@ -208,7 +208,20 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
 
       detailTitle.innerText = info.event.title;
       detailStartDate.value = formatDateTime(info.event.startStr);
-      detailEndDate.value = formatDateTime(info.event.endStr);
+      // detailEndDate.value = formatDateTime(info.event.endDate - 1);
+
+      //allDay일 때 종료일 재설정
+      if (info.event.allDay) {
+        const endDateTime = new Date(info.event.endStr);
+        endDateTime.setDate(endDateTime.getDate() - 1);
+        const tempEndDate = formatDateTime(
+          endDateTime.toISOString().split(".")[0]
+        ); // ISO 형식으로 변환 후 포맷
+
+        detailEndDate.value = tempEndDate.split(" ")[0];
+      } else {
+        detailEndDate.value = formatDateTime(info.event.endStr);
+      }
 
       // 주최자 넣기
       const masterDiv = document.getElementById("master-name");
