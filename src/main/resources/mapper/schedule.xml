@@ -116,5 +116,15 @@
         , modified_dt = CURRENT_TIMESTAMP  
     WHERE schedule_invite_id = #{scheduleId} and employee_id = #{employeeId}
 </update>
+
+<select id="getScheduleMaster" parameterType="Long" resultType="ScheduleMaster"> 
+      SELECT 
+        e.name as employeeName
+        , d.name as deptName
+        FROM employee e
+        INNER JOIN department d
+        USING (dept_id)
+        WHERE employee_id = #{writer}
+</select>
   
 </mapper>

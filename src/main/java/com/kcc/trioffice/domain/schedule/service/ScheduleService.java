@@ -26,6 +26,7 @@ import com.kcc.trioffice.domain.employee.mapper.EmployeeMapper;
 import com.kcc.trioffice.domain.schedule.dto.EmployeeSchedules;
 import com.kcc.trioffice.domain.schedule.dto.SaveSchedule;
 import com.kcc.trioffice.domain.schedule.dto.ScheduleDetail;
+import com.kcc.trioffice.domain.schedule.dto.ScheduleMaster;
 import com.kcc.trioffice.domain.schedule.mapper.ScheduleMapper;
 import com.kcc.trioffice.global.exception.type.NotFoundException;
 import com.kcc.trioffice.global.exception.type.ScheduleDeleteException;
@@ -198,6 +199,13 @@ public class ScheduleService {
 
     // 초대된 회원의 정보
     // scheduleDetail.setScheduleDetailEmployees(scheduleMapper.getInviteEmployee);
+
+    // 주최자
+    ScheduleMaster scheduleMaster = scheduleMapper.getScheduleMaster(scheduleDetail.getWriter())
+        .orElseThrow(() -> new NotFoundException("주최자를 찾을 수 없습니다."));
+    // System.out.println("현재 스케줄을 주최자는 : " + scheduleMaster.getEmployeeName() +
+    // scheduleMaster.getDeptName());
+    scheduleDetail.setScheduleMaster(scheduleMaster);
 
     return scheduleDetail;
   }

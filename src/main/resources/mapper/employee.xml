@@ -247,8 +247,11 @@
 
 
     <update id="saveFcmToken" parameterType="map">
-      UPDATE employee
-        SET fcm_token = #{fcmToken}
-        WHERE employee_id = #{employeeId}
+    UPDATE employee
+      SET fcm_token = #{fcmToken}
+      WHERE employee_id = #{employeeId}
     </update>
+
+
+    
 </mapper>

@@ -403,11 +403,11 @@ input[name="employees[]"] {
 }
 
 .detail-dates {
-  margin-top: 40px;
+  margin-top: 15px;
 }
 
 .add-people {
-  margin-top: 35px;
+  margin-top: 20px;
 }
 
 #add-people-table {
@@ -499,4 +499,16 @@ input[name="employees[]"] {
 
 #detail-modify.hidden {
   display: none;
+}
+
+#schedule-master {
+  margin-top: 15px;
+}
+
+#master-name {
+  width: 11rem;
+  height: 2rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 1.5px 1px #ccc;
 }

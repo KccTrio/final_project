@@ -11,4 +11,5 @@ public class ScheduleDetail {
   private String contents;
   private Long writer;
   private int isMySchedule;
+  private ScheduleMaster scheduleMaster;
 }

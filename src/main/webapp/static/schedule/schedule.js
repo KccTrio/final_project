@@ -210,6 +210,9 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
       detailStartDate.value = formatDateTime(info.event.startStr);
       detailEndDate.value = formatDateTime(info.event.endStr);
 
+      // 주최자 넣기
+      const masterDiv = document.getElementById("master-name");
+
       //해당 일정에 schduleId ajax 통신 내용, 참여인원 status가져오기
       const scheduleId = info.event.extendedProps.scheduleId;
       schduleIdForDelete = info.event.extendedProps.scheduleId;
@@ -226,6 +229,10 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
           // console.log("내용:", scheduleDetail.contents);
           // console.log("작성자:", scheduleDetail.writer);
           // console.log("내 일정 여부:", scheduleDetail.isMySchedule);
+          masterDiv.value =
+            scheduleDetail.scheduleMaster.employeeName +
+            " " +
+            scheduleDetail.scheduleMaster.deptName;
 
           // 사원 정보 출력
           // 테이블 헤더 생성

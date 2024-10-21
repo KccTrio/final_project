@@ -140,12 +140,21 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         <div id="detail-contents">
           <div id="detail-inner">
             <div id="detail-title"></div>
-
+            <div id="schedule-master">
+              주최자 :
+              <input
+                type="text"
+                value=""
+                id="master-name"
+                name="master-date"
+                readonly
+              />
+            </div>
             <div class="detail-dates">
               <label for="start-date">시작일:</label>
               <input
                 type="text"
-                value="2024-10-02"
+                value=""
                 id="start-date-detail"
                 name="start-date"
                 readonly

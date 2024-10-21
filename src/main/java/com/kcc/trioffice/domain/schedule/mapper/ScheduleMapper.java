@@ -9,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import com.kcc.trioffice.domain.schedule.dto.EmployeeSchedules;
 import com.kcc.trioffice.domain.schedule.dto.SaveSchedule;
 import com.kcc.trioffice.domain.schedule.dto.ScheduleDetail;
+import com.kcc.trioffice.domain.schedule.dto.ScheduleMaster;
 
 @Mapper
 public interface ScheduleMapper {
@@ -26,5 +27,7 @@ public interface ScheduleMapper {
   int deleteMyScheduleInviteTable(Long employeeId, Long scheduleId);
 
   int deleteSchedule(Long employeeId, Long scheduleId);
+
+  Optional<ScheduleMaster> getScheduleMaster(Long writer);
 
 }
