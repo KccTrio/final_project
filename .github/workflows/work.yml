@@ -23,7 +23,7 @@ jobs:
       - name: Set up Json file
         run: |
           mkdir -p src/main/resources/static
-          printf "%s" "${{ secrets.FIREBASE_PRIVATE_KEY_JSON }}" > src/main/resources/static/firebase-key.json
+          echo "${{ secrets.FIREBASE_PRIVATE_KEY_JSON }}" | base64 -d > src/main/resources/static/firebase-key.json
 
       - name: Set up firebase js
         run: |
