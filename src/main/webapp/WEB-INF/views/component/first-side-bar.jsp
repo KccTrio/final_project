@@ -70,11 +70,64 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
               <div id="chat-bot-close"><i class="fa-solid fa-xmark"></i></div>
             </div>
           </div>
-          <div id="chat-bot-messages">1</div>
+          <div id="chat-bot-messages">
+            <div class="chat-bot-client">
+              <p class="chat-bot-client-messages">
+                클라이언트 메세지입니다.클라이언트 메세지입니다.클라이언트
+                메세지입니다.클라이언트 메세지입니다.클라이언트
+                메세지입니다.클라이언트 메세지입니다.
+              </p>
+            </div>
+            <div class="chat-bot-server">
+              <p class="chat-bot-server-messages">챗봇의 답장입니다.</p>
+            </div>
+            <div class="chat-bot-client">
+              <p class="chat-bot-client-messages">클라이언트 메세지입니다.</p>
+            </div>
+            <div class="chat-bot-server">
+              <p class="chat-bot-server-messages">챗봇의 답장입니다.</p>
+            </div>
+            <div class="chat-bot-client">
+              <p class="chat-bot-client-messages">클라이언트 메세지입니다.</p>
+            </div>
+            <div class="chat-bot-server">
+              <p class="chat-bot-server-messages">챗봇의 답장입니다.</p>
+            </div>
+            <div class="chat-bot-client">
+              <p class="chat-bot-client-messages">클라이언트 메세지입니다.</p>
+            </div>
+            <div class="chat-bot-server">
+              <p class="chat-bot-server-messages">챗봇의 답장입니다.</p>
+            </div>
+            <div class="chat-bot-client">
+              <p class="chat-bot-client-messages">클라이언트 메세지입니다.</p>
+            </div>
+            <div class="chat-bot-server">
+              <p class="chat-bot-server-messages">챗봇의 답장입니다.</p>
+            </div>
+            <div class="chat-bot-client">
+              <p class="chat-bot-client-messages">클라이언트 메세지입니다.</p>
+            </div>
+            <div class="chat-bot-server">
+              <p class="chat-bot-server-messages">챗봇의 답장입니다.</p>
+            </div>
+            <div class="chat-bot-client">
+              <p class="chat-bot-client-messages">클라이언트 메세지입니다.</p>
+            </div>
+            <div class="chat-bot-server">
+              <p class="chat-bot-server-messages">챗봇의 답장입니다.</p>
+            </div>
+            <div class="chat-bot-client">
+              <p class="chat-bot-client-messages">클라이언트 메세지입니다.</p>
+            </div>
+            <div class="chat-bot-server">
+              <p class="chat-bot-server-messages">챗봇의 답장입니다.</p>
+            </div>
+          </div>
           <div id="chat-bot-guide">
             <div id="chat-bot-guide-first">
               <div class="chat-bot-guides">자주하는 질문 👀</div>
-              <div class="chat-bot-guides">식단표를 보여주세요🍳</div>
+              <div class="chat-bot-guides">챗봇 답변을 잘받는 TIP❗</div>
             </div>
             <div id="chat-bot-guide-second">
               <div class="chat-bot-guides">2024 신규기능 활용 세미나😊</div>

@@ -138,6 +138,8 @@
   border-bottom: 1px solid #e5e7eb;
   /* background-color: rgb(243, 243, 243); */
   height: 400px;
+  overflow-y: auto;
+  padding: 5px;
 }
 
 #chat-bot-guide,
@@ -190,4 +192,37 @@
 
 #chat-bot-guide-first {
   margin-left: 10px;
+}
+
+.chat-bot-client {
+  display: flex;
+  justify-content: end;
+  align-items: center;
+  padding-right: 3px;
+}
+
+.chat-bot-server {
+  display: flex;
+  align-items: center;
+  padding-left: 3px;
+}
+
+.chat-bot-client-messages {
+  background-color: #7ab7fa;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 350px;
+  /* width: 350px; */
+  margin-top: 3px;
+  display: flex;
+  justify-content: end;
+}
+
+.chat-bot-server-messages {
+  background-color: #e4f2f0;
+  margin-top: 3px;
+  padding: 10px;
+  border-radius: 5px;
+  max-width: 350px;
+  /* width: 350px; */
 }
