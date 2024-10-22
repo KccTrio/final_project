@@ -119,19 +119,48 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
                   </label>
                 </div>
               </div>
+            </div>
 
-              <div id="wyswyg">
-                <div id="schedule-contents-title">일정내용</div>
-                <div id="schedule-contents"></div>
-              </div>
-              <div id="add-schedule-modal-buttons">
-                <button type="submit" id="submit-add-schedule">일정 추가</button>
-                <button id="close-button">닫기</button>
-              </div>
+            <div id="wyswyg">
+              <div id="schedule-contents-title">일정내용</div>
+              <div id="schedule-contents"></div>
+            </div>
+            <div id="add-schedule-modal-buttons">
+              <button type="submit" id="submit-add-schedule">일정 추가</button>
+              <button id="close-button">닫기</button>
+            </div>
+            <input
+              type="hidden"
+              name="${_csrf.parameterName}"
+              value="${_csrf.token}"
+            />
+          </form>
+          <span id="close-button"></span>
+        </div>
+      </div>
+      <div id="detail-container" class="hidden">
+        <div id="detail-contents">
+          <div id="detail-inner">
+            <div id="detail-title"></div>
+            <div id="schedule-master">
+              주최자 :
               <input
-                type="hidden"
-                name="${_csrf.parameterName}"
-                value="${_csrf.token}"
+                type="text"
+                value=""
+                id="master-name"
+                name="master-date"
+                readonly
+              />
+            </div>
+            <div class="detail-dates">
+              <label for="start-date">시작일:</label>
+              <input
+                type="text"
+                value=""
+                id="start-date-detail"
+                name="start-date"
+                readonly
+
               />
             </form>
             <span id="close-button"></span>

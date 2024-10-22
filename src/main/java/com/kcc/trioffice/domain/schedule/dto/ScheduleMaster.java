@@ -5,11 +5,7 @@ import java.io.Serializable;
 import lombok.Data;
 
 @Data
-public class ScheduleDetailEmployees implements Serializable {
-  private Long employeeId;
+public class ScheduleMaster implements Serializable {
   private String employeeName;
   private String deptName;
-  private String position;
-  private String isParticipated;
-
 }

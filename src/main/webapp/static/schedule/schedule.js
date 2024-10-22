@@ -86,7 +86,8 @@ function fetchCalendarData() {
           start: formatDateToISO(schedule.startedDt),
           end: formatDateToISO(schedule.endedDt),
           extendedProps: {
-            // 추가 정보를 담기 - 스케줄의 각 id의 고유한 번호
+            // 추가 정보를 담기 - 스케줄의 각 id의 고유한 번호, 내스케줄여부
+            isMySchedule: schedule.isMySchedule,
             scheduleId: schedule.scheduleId,
           },
         };
@@ -157,20 +158,28 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
 
     eventDidMount: function (info) {
       info.el.style.cursor = "pointer";
-      // 시간도 있는 이벤트에 색상 변경
-      if (!info.event.allDay) {
-        info.el.style.color = "black";
+      // isMySchedule에 따른 색상 변경 처리
+      if (info.event.extendedProps.isMySchedule === 1) {
+        if (!info.event.allDay) {
+          info.el.style.color = "black";
+          info.el.style.backgroundColor = "white";
+          info.el.classList.add("time-event-dot"); // 클래스 추가
+        } else {
+          info.el.style.backgroundColor = "#FF7364";
+          info.el.style.paddingLeft = "5px";
+          info.el.style.border = "0px"; // 테두리 제거
+        }
       } else {
-        // info.el.style.backgroundColor = "#b4c8bb"; // 시간대 이벤트 배경색
-        info.el.style.backgroundColor = "#FF7364";
-        info.el.style.paddingLeft = "5px";
-        info.el.style.border = "0px"; // 시간대 이벤트 배경색
+        if (!info.event.allDay) {
+          info.el.style.color = "black";
+          info.el.style.backgroundColor = "white";
+        } else {
+          info.el.style.backgroundColor = "#6769FF";
+          info.el.style.paddingLeft = "5px";
+          info.el.style.border = "0px"; // 테두리 제거
+        }
       }
-      // data-schedule-id 속성 추가
-      info.el.setAttribute(
-        "data-schedule-id",
-        info.event.extendedProps.scheduleId
-      );
+
       // data-schedule-id 속성 추가
       info.el.setAttribute(
         "data-schedule-id",
@@ -202,13 +211,31 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
 
     // 상세보기 구현
     eventClick: function (info) {
+      //수정을 위한
+      scheduleIdForModify = info.event.extendedProps.scheduleId;
       const detailTitle = document.getElementById("detail-title");
       const detailStartDate = document.getElementById("start-date-detail");
       const detailEndDate = document.getElementById("end-date-detail");
 
       detailTitle.innerText = info.event.title;
       detailStartDate.value = formatDateTime(info.event.startStr);
-      detailEndDate.value = formatDateTime(info.event.endStr);
+      // detailEndDate.value = formatDateTime(info.event.endDate - 1);
+
+      //allDay일 때 종료일 재설정
+      if (info.event.allDay) {
+        const endDateTime = new Date(info.event.endStr);
+        endDateTime.setDate(endDateTime.getDate() - 1);
+        const tempEndDate = formatDateTime(
+          endDateTime.toISOString().split(".")[0]
+        ); // ISO 형식으로 변환 후 포맷
+
+        detailEndDate.value = tempEndDate.split(" ")[0];
+      } else {
+        detailEndDate.value = formatDateTime(info.event.endStr);
+      }
+
+      // 주최자 넣기
+      const masterDiv = document.getElementById("master-name");
 
       //해당 일정에 schduleId ajax 통신 내용, 참여인원 status가져오기
       const scheduleId = info.event.extendedProps.scheduleId;
@@ -226,6 +253,10 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
           // console.log("내용:", scheduleDetail.contents);
           // console.log("작성자:", scheduleDetail.writer);
           // console.log("내 일정 여부:", scheduleDetail.isMySchedule);
+          masterDiv.value =
+            scheduleDetail.scheduleMaster.employeeName +
+            " " +
+            scheduleDetail.scheduleMaster.deptName;
 
           // 사원 정보 출력
           // 테이블 헤더 생성
@@ -233,12 +264,12 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
             <table id="detail-table" style="width:100%; border-collapse: collapse;">
                 <thead id="detail-people-header">
                     <tr>
-                        <th>이름</th>
-                        <th>부서</th>
+                        <th style="padding-right: 100px;">이름</th>
+                        <th style="padding-right: 150px;">부서</th>
                         <th>참석 여부</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="detail-people-tbody">
         `;
 
           // 사원 정보 출력
@@ -259,9 +290,9 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
             }
             tableHTML += `
                           <tr>
-                              <td style="border-right: 1px solid #d2dae1;">${employee.employeeName}</td>
-                              <td style="border-right: 1px solid #d2dae1;">${employee.deptName}</td>
-                              <td>${participationStatus}</td>
+                              <td style="width: 125px; border-right: 1px solid #d2dae1;">${employee.employeeName}</td>
+                              <td style="width: 179px; border-right: 1px solid #d2dae1;">${employee.deptName}</td>
+                              <td style="width: 155px;">${participationStatus}</td>
                           </tr>
                       `;
           });
@@ -280,7 +311,7 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
           // JSON 문자열을 객체로 변환
           const quillDelta = JSON.parse(quillDeltaString);
           // Quill 임시 인스턴스 생성
-          const quill = new Quill("#temp-quill-container", {
+          const tmpQuill = new Quill("#temp-quill-container", {
             theme: "snow",
             readOnly: true, // 읽기 전용으로 설정
             modules: {
@@ -290,10 +321,10 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
 
           // Delta 형식을 HTML로 변환
           // JSON 객체로 변환하여 설정
-          quill.setContents(quillDelta);
+          tmpQuill.setContents(quillDelta);
 
           // HTML 가져오기
-          const htmlContent = quill.root.innerHTML; // Quill 에디터의 root에서 HTML 가져오기
+          const htmlContent = tmpQuill.root.innerHTML; // Quill 에디터의 root에서 HTML 가져오기
           console.log(
             "quill로 파싱하기 전 내용 : " + JSON.stringify(quillDelta)
           ); // JSON 형태로 보기 좋게 출력
@@ -302,6 +333,109 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
           // 내용을 div에 삽입
           document.getElementById("detail-text-contents").innerHTML =
             htmlContent;
+
+          const modifyButton = document.getElementById("detail-modify");
+          const addSchedule = document.getElementById("add-schedule-container");
+
+          // 수정 button hidden 여부
+          if (scheduleDetail.isMySchedule == 1) {
+            modifyButton.classList.remove("hidden");
+          } else {
+            modifyButton.classList.add("hidden");
+          }
+          //****************  일정수정 확인 누르면 일정의 데이터를 일정 등록 페이지에 넣어두기
+          modifyButton.addEventListener("click", function () {
+            const addScheduleButton = document.getElementById(
+              "add-schedule-modal-buttons"
+            );
+            addScheduleButton.innerHTML =
+              '<button type="submit" id="submit-add-schedule">일정 수정</button><br>' +
+              '<button id="close-button">닫기</button>';
+
+            const closeButton = document.getElementById("close-button");
+
+            // 모달 닫기 버튼 클릭 시 모달 닫기
+            closeButton.onclick = function (event) {
+              event.preventDefault(); // 기본 동작 방지
+              event.stopPropagation(); // 이벤트 전파 방지
+              modalContainer.classList.add("hidden");
+              //내용 비우기
+              document.getElementById("schedule-form").reset();
+              quill.setContents([]);
+            };
+
+            Swal.fire({
+              title: "일정을 수정하겠습니까?",
+              showCancelButton: true,
+              confirmButtonText: "확인",
+              cancelButtonText: "취소",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                addSchedule.classList.remove("hidden"); // 확인 버튼을 눌렀을 때 hidden 클래스 제거
+              }
+              $.ajax({
+                type: "GET",
+                url: "/api/schedules/detail",
+                dataType: "json",
+                data: {
+                  scheduleId: scheduleId,
+                },
+                success: function (scheduleDetail) {
+                  //수정 종료 시작일 종료일
+                  document.getElementById("schedule-name").value =
+                    info.event.title;
+
+                  document.getElementById("start-date").value =
+                    info.event.startStr;
+                  //allDay일 때 종료일 재설정
+                  if (info.event.allDay) {
+                    const endDateTime = new Date(info.event.endStr);
+                    endDateTime.setDate(endDateTime.getDate() - 1);
+                    tempEndDate = formatDateTime(
+                      endDateTime.toISOString().split(".")[0]
+                    );
+                    document.getElementById("end-date").value =
+                      tempEndDate.split(" ")[0];
+                  } // ISO 형식으로 변환 후 포맷
+
+                  //일정에 초대된 사람들 가져오기
+                  const existingEmployees =
+                    scheduleDetail.scheduleDetailEmployees.map(function (
+                      employee
+                    ) {
+                      return {
+                        name:
+                          employee.employeeName +
+                          "/" +
+                          employee.position +
+                          "/" +
+                          employee.deptName,
+                        value: employee.employeeId.toString(),
+                      };
+                    });
+                  makeTagify(existingEmployees);
+
+                  // 일정 내용 가져오기
+                  const quillDeltaString = scheduleDetail.contents; // Quill Delta 형식의 JSON 문자열
+
+                  // JSON 문자열을 객체로 변환
+                  const quillDelta = JSON.parse(quillDeltaString);
+                  // Delta 형식을 HTML로 변환
+                  // JSON 객체로 변환하여 설정
+                  quill.setContents(quillDelta);
+
+                  //초대된 사람들 수도 갱신
+                  const inviteCount = document.getElementById("count");
+                  inviteCount.innerText = tagify.value.length; // innerText로 값 설정
+                },
+                error: function (error) {
+                  console.log(
+                    "수정을 위한 일정의 상세를 가져올 수 없습니다" + error
+                  );
+                },
+              });
+            });
+          });
         },
         error: function (error) {
           console.error("일정 상세 정보를 서버로부터 받아올 수 없습니다.");
@@ -363,26 +497,43 @@ function formatDateTime(dateTimeStr) {
 // 일정등록 모달
 const addScheduleButton = document.getElementById("add-schedule-button");
 var modalContainer = document.getElementById("add-schedule-container");
-var closeButton = document.getElementById("close-button");
 
 // 버튼 클릭 시 모달 열기
 addScheduleButton.onclick = function () {
   modalContainer.classList.remove("hidden");
+  closeModelButtonSwitching();
+  makeTagify();
 };
 
-// 모달 닫기 버튼 클릭 시 모달 닫기
-closeButton.onclick = function (event) {
-  event.preventDefault(); // 기본 동작 방지
-  event.stopPropagation(); // 이벤트 전파 방지
-  modalContainer.classList.add("hidden");
+var closeButton = document.getElementById("close-button");
 
-  // Quill 에디터 내용 비우기
-  quill.setContents([]);
-};
+function closeModelButtonSwitching() {
+  const addScheduleButton = document.getElementById(
+    "add-schedule-modal-buttons"
+  );
+  addScheduleButton.innerHTML =
+    '<button type="submit" id="submit-add-schedule">일정 추가</button><br>' +
+    '<button id="close-button">닫기</button>';
+
+  // 새로운 closeButton 요소 재정의
+  closeButton = document.getElementById("close-button");
+
+  // 모달 닫기 버튼 클릭 시 모달 닫기
+  closeButton.onclick = function (event) {
+    event.preventDefault(); // 기본 동작 방지
+    event.stopPropagation(); // 이벤트 전파 방지
+    modalContainer.classList.add("hidden");
+    closeModelButtonSwitching();
+    //내용 비우기
+    document.getElementById("schedule-form").reset();
+    quill.setContents([]);
+  };
+}
 
 window.addEventListener("click", function (event) {
   if (event.target === modalContainer) {
     modalContainer.classList.add("hidden");
+    closeModelButtonSwitching();
   }
 });
 
@@ -489,7 +640,7 @@ var quill = new Quill("#schedule-contents", {
 /* 인원초대를 위한 code   태기파이 */
 var tagify;
 
-$(document).ready(function () {
+function makeTagify(existingEmployees = []) {
   // 화이트리스트 초기화
   let whitelist = [];
 
@@ -525,29 +676,29 @@ $(document).ready(function () {
         templates: {
           tag: function (tagData) {
             return `
-                          <tag title="${tagData.name}"
-                              contenteditable='false'
-                              spellcheck='false'
-                              class='tagify__tag ${
-                                tagData.class ? tagData.class : ""
-                              }'
-                              ${this.getAttributes(tagData)}>
-                              <x title='remove tag' class='tagify__tag__removeBtn'></x>
-                              <div>
-                                  <span class='tagify__tag-text'>${
-                                    tagData.name
-                                  }</span>
-                              </div>
-                          </tag>`;
+                    <tag title="${tagData.name}"
+                        contenteditable='false'
+                        spellcheck='false'
+                        class='tagify__tag ${
+                          tagData.class ? tagData.class : ""
+                        }'
+                        ${this.getAttributes(tagData)}>
+                        <x title='remove tag' class='tagify__tag__removeBtn'></x>
+                        <div>
+                            <span class='tagify__tag-text'>${
+                              tagData.name
+                            }</span>
+                        </div>
+                    </tag>`;
           },
           dropdownItem: function (tagData) {
             return `
-                          <div ${this.getAttributes(tagData)}
-                              class='tagify__dropdown__item ${
-                                tagData.class ? tagData.class : ""
-                              }'>
-                              <span>${tagData.name}</span>
-                          </div>`;
+                    <div ${this.getAttributes(tagData)}
+                        class='tagify__dropdown__item ${
+                          tagData.class ? tagData.class : ""
+                        }'>
+                        <span>${tagData.name}</span>
+                    </div>`;
           },
         },
         dropdown: {
@@ -557,7 +708,10 @@ $(document).ready(function () {
           enabled: 0, // 0으로 설정하면 입력한 글자 수와 상관없이 항상 드롭다운을 표시
         },
       });
-
+      // 기존 직원 태그 추가
+      if (existingEmployees.length > 0) {
+        tagify.addTags(existingEmployees);
+      }
       // 이벤트 리스너 등록 및 기타 Tagify 관련 설정
       // 만일 모든 태그 지우기 기능 버튼을 구현한다면
       // document
@@ -583,9 +737,8 @@ $(document).ready(function () {
       function onAddTag(e) {
         console.log("onAddTag: ", e.detail);
         console.log("original input value: ", inputElm.value);
-        inviteEmployee++;
         const inviteCount = document.getElementById("count");
-        inviteCount.innerText = inviteEmployee; // innerText로 값 설정
+        inviteCount.innerText = tagify.value.length; // innerText로 값 설정
       }
 
       function onRemoveTag(e) {
@@ -595,9 +748,8 @@ $(document).ready(function () {
           "tagify instance value:",
           tagify.value
         );
-        inviteEmployee--;
         const inviteCount = document.getElementById("count");
-        inviteCount.innerText = inviteEmployee; // innerText로 값 설정
+        inviteCount.innerText = tagify.value.length; // innerText로 값 설정
       }
 
       function onTagEdit(e) {
@@ -635,92 +787,187 @@ $(document).ready(function () {
       console.error("직원 데이터를 가져오는 데 실패했습니다:", error);
     },
   });
+}
+let scheduleIdForModify;
 
-  // AJAX 호출과 무관한 다른 코드가 있다면 여기에 추가
-});
+function submitAndModifySchedule(submitType) {
+  if (submitType == 1) {
+    console.log("일정 등록을 수행하겠습니다.");
+    // 확인 버튼이 눌렸을 때만 실행
+    Swal.fire({
+      title: "일정을 등록하시겠습니까?",
+      showCancelButton: true,
+      confirmButtonText: "저장",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 사용자가 확인 버튼을 클릭한 경우
+        // 입력 값 가져오기
+        var scheduleName = document.getElementById("schedule-name").value;
+        var startDate = document.getElementById("start-date").value;
+        var endDate = document.getElementById("end-date").value;
+
+        // 에디터 내용 가져오기
+        var deltaContent = quill.getContents();
+        var deltaContentJson = JSON.stringify(deltaContent); // JSON 문자열로 변환
+
+        // 선택한 직원 ID 가져오기
+        var selectedEmployeeIds = tagify.value.map(function (tag) {
+          return tag.value;
+        });
+
+        // 값들 확인
+        console.log(
+          "일정 추가:",
+          scheduleName,
+          startDate,
+          endDate,
+          selectedEmployeeIds,
+          deltaContentJson
+        );
+        var emailCheck;
+        const checkedEmailSend = document.getElementById("email-alram");
+        if (checkedEmailSend.checked) {
+          emailCheck = 1;
+        } else {
+          emailCheck = 0;
+        }
+
+        // 서버로 전송할 데이터 설정
+        var formData = {
+          name: scheduleName,
+          startedDt: startDate,
+          endedDt: endDate,
+          employeeIds: selectedEmployeeIds,
+          contents: deltaContentJson, // 에디터 내용 추가
+          emailCheck: emailCheck,
+        };
+        // 일정등록  AJAX
+        $.ajax({
+          url: "/schedules/save",
+          method: "POST",
+          contentType: "application/json",
+
+          data: JSON.stringify(formData),
+          success: function (response) {
+            Swal.fire({
+              title: "일정 등록을 성공했습니다.",
+              icon: "success",
+              confirmButtonText: "확인",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "/schedules";
+              }
+            }); // 입력 필드 초기화
+            document.getElementById("schedule-form").reset();
+            quill.setContents([]); // 에디터 내용 초기화
+          },
+          error: function (xhr, status, error) {
+            Swal.fire({
+              icon: "error",
+              title: "일정 등록을 실패했습니다.",
+            });
+            console.error("Error:", xhr.responseText); // 오류 응답 내용을 콘솔에 출력
+          },
+        });
+      }
+    });
+  } else {
+    // 확인 버튼이 눌렸을 때만 실행
+    Swal.fire({
+      title: "일정을 수정하시겠습니까?",
+      html: "초대받은 사람들의 초대 승인 여부는 초기화됩니다.",
+      showCancelButton: true,
+      confirmButtonText: "저장",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 사용자가 확인 버튼을 클릭한 경우
+        // 입력 값 가져오기
+        var scheduleName = document.getElementById("schedule-name").value;
+        var startDate = document.getElementById("start-date").value;
+        var endDate = document.getElementById("end-date").value;
+
+        // 에디터 내용 가져오기
+        var deltaContent = quill.getContents();
+        var deltaContentJson = JSON.stringify(deltaContent); // JSON 문자열로 변환
+
+        // 선택한 직원 ID 가져오기
+        var selectedEmployeeIds = tagify.value.map(function (tag) {
+          return tag.value;
+        });
+
+        // 값들 확인
+        console.log(
+          "일정 추가:",
+          scheduleName,
+          startDate,
+          endDate,
+          selectedEmployeeIds,
+          deltaContentJson
+        );
+        var emailCheck;
+        const checkedEmailSend = document.getElementById("email-alram");
+        if (checkedEmailSend.checked) {
+          emailCheck = 1;
+        } else {
+          emailCheck = 0;
+        }
+
+        // 서버로 전송할 데이터 설정
+        var formData = {
+          scheduleId: scheduleIdForModify,
+          name: scheduleName,
+          startedDt: startDate,
+          endedDt: endDate,
+          employeeIds: selectedEmployeeIds,
+          contents: deltaContentJson, // 에디터 내용 추가
+          emailCheck: emailCheck,
+        };
+        // 일정등록  AJAX
+        $.ajax({
+          url: "/api/schedules/modify",
+          method: "PATCH",
+          contentType: "application/json",
+          data: JSON.stringify(formData),
+          success: function (response) {
+            Swal.fire({
+              title: "일정 수정을 성공했습니다.",
+              icon: "success",
+              confirmButtonText: "확인",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "/schedules";
+              }
+            }); // 입력 필드 초기화
+            document.getElementById("schedule-form").reset();
+            quill.setContents([]); // 에디터 내용 초기화
+          },
+          error: function (xhr, status, error) {
+            Swal.fire({
+              icon: "error",
+              title: "일정 수정을 실패했습니다.",
+            });
+            console.error("Error:", xhr.responseText); // 오류 응답 내용을 콘솔에 출력
+          },
+        });
+      }
+    });
+  }
+}
 // 일정 추가 양식 제출 시 이벤트 처리
 document.getElementById("schedule-form").onsubmit = function (event) {
   event.preventDefault(); // 기본 제출 동작 방지
+  const submitButton = document.getElementById("submit-add-schedule");
+  const buttonText = submitButton.textContent; // 또는 submitButton.innerText;
+  let actionValue; // 값을 저장할 변수
 
-  // 확인 버튼이 눌렸을 때만 실행
-  Swal.fire({
-    title: "일정을 등록하시겠습니까?",
-    showCancelButton: true,
-    confirmButtonText: "저장",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // 사용자가 확인 버튼을 클릭한 경우
-      // 입력 값 가져오기
-      var scheduleName = document.getElementById("schedule-name").value;
-      var startDate = document.getElementById("start-date").value;
-      var endDate = document.getElementById("end-date").value;
-
-      // 에디터 내용 가져오기
-      var deltaContent = quill.getContents();
-      var deltaContentJson = JSON.stringify(deltaContent); // JSON 문자열로 변환
-
-      // 선택한 직원 ID 가져오기
-      var selectedEmployeeIds = tagify.value.map(function (tag) {
-        return tag.value;
-      });
-
-      // 값들 확인
-      console.log(
-        "일정 추가:",
-        scheduleName,
-        startDate,
-        endDate,
-        selectedEmployeeIds,
-        deltaContentJson
-      );
-      var emailCheck;
-      const checkedEmailSend = document.getElementById("email-alram");
-      if (checkedEmailSend.checked) {
-        emailCheck = 1;
-      } else {
-        emailCheck = 0;
-      }
-
-      // 서버로 전송할 데이터 설정
-      var formData = {
-        name: scheduleName,
-        startedDt: startDate,
-        endedDt: endDate,
-        employeeIds: selectedEmployeeIds,
-        contents: deltaContentJson, // 에디터 내용 추가
-        emailCheck: emailCheck,
-      };
-      // 일정등록  AJAX
-      // 일정등록  AJAX
-      $.ajax({
-        url: "/schedules/save",
-        method: "POST",
-        contentType: "application/json",
-
-        data: JSON.stringify(formData),
-        success: function (response) {
-          Swal.fire({
-            title: "일정 등록을 성공했습니다.",
-            icon: "success",
-            confirmButtonText: "확인",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.href = "/schedules";
-            }
-          }); // 입력 필드 초기화
-          document.getElementById("schedule-form").reset();
-          quill.setContents([]); // 에디터 내용 초기화
-        },
-        error: function (xhr, status, error) {
-          Swal.fire({
-            icon: "error",
-            title: "일정 등록을 실패했습니다.",
-          });
-          console.error("Error:", xhr.responseText); // 오류 응답 내용을 콘솔에 출력
-        },
-      });
-    }
-  });
+  if (buttonText === "일정 추가") {
+    actionValue = 1; // "일정 추가"일 때 1
+  } else if (buttonText === "일정 수정") {
+    actionValue = 2; // "일정 수정"일 때 2
+  } else {
+    actionValue = 0; // 기본값 (선택 사항)
+  }
+  submitAndModifySchedule(actionValue);
 };
 // 일정 삭제
 var deleteButton = document.getElementById("detail-delete");

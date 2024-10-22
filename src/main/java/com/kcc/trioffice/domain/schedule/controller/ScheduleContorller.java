@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -38,11 +39,11 @@ public class ScheduleContorller {
   }
 
   @PostMapping("/schedules/save")
-  public ResponseEntity<?> saveSchdule(Principal principal,
+  public ResponseEntity<?> saveSchedule(Principal principal,
       @RequestBody SaveSchedule saveSchedule) throws BadRequestException, ParseException, MessagingException {
     scheduleService.saveSchedule(principal.getName(), saveSchedule);
- 
-    System.out.println("넘어온 이메일체크 값 : " + saveSchedule.getEmailCheck());
+
+    // System.out.println("넘어온 이메일체크 값 : " + saveSchedule.getEmailCheck());
     return ResponseEntity.ok("성공");
   }
 

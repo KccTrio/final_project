@@ -1,10 +1,6 @@
 package com.kcc.trioffice.domain.schedule.dto;
 
-import java.sql.Timestamp;
-
-import lombok.Builder;
 import lombok.Data;
-import lombok.experimental.SuperBuilder;
 import java.util.List;
 
 @Data

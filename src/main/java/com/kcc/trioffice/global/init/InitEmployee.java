@@ -38,7 +38,7 @@ public class InitEmployee implements ApplicationRunner {
     // 사원 3명 생성하는 code
     // for (Long i = (long) 0; i < 3; i++) {
     // SaveEmployee saveEmployee = SaveEmployee.builder()
-    // .deptId((long) )
+    // .deptId((long) 1)
     // .companyId((long) 1)
     // .email("exam" + i + "@exam.com")
     // .password("1234")
