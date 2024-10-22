@@ -30,4 +30,7 @@ public interface ScheduleMapper {
 
   Optional<ScheduleMaster> getScheduleMaster(Long writer);
 
+  int modifySchedule(SaveSchedule saveSchedule, Timestamp startedDt, Timestamp endedDt);
+
+  int deleteScheduleInvite(Long deleteScheduleNum);
 }

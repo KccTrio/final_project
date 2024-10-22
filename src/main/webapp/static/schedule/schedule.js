@@ -202,6 +202,8 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
 
     // 상세보기 구현
     eventClick: function (info) {
+      //수정을 위한
+      scheduleIdForModify = info.event.extendedProps.scheduleId;
       const detailTitle = document.getElementById("detail-title");
       const detailStartDate = document.getElementById("start-date-detail");
       const detailEndDate = document.getElementById("end-date-detail");
@@ -279,9 +281,9 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
             }
             tableHTML += `
                           <tr>
-                              <td style="padding-right: 82px; border-right: 1px solid #d2dae1;">${employee.employeeName}</td>
-                              <td style="padding-right: 130px; border-right: 1px solid #d2dae1;">${employee.deptName}</td>
-                              <td style="padding-right: 99px;">${participationStatus}</td>
+                              <td style="width: 125px; border-right: 1px solid #d2dae1;">${employee.employeeName}</td>
+                              <td style="width: 179px; border-right: 1px solid #d2dae1;">${employee.deptName}</td>
+                              <td style="width: 155px;">${participationStatus}</td>
                           </tr>
                       `;
           });
@@ -329,9 +331,30 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
           // 수정 button hidden 여부
           if (scheduleDetail.isMySchedule == 1) {
             modifyButton.classList.remove("hidden");
+          } else {
+            modifyButton.classList.add("hidden");
           }
           //****************  일정수정 확인 누르면 일정의 데이터를 일정 등록 페이지에 넣어두기
           modifyButton.addEventListener("click", function () {
+            const addScheduleButton = document.getElementById(
+              "add-schedule-modal-buttons"
+            );
+            addScheduleButton.innerHTML =
+              '<button type="submit" id="submit-add-schedule">일정 수정</button><br>' +
+              '<button id="close-button">닫기</button>';
+
+            const closeButton = document.getElementById("close-button");
+
+            // 모달 닫기 버튼 클릭 시 모달 닫기
+            closeButton.onclick = function (event) {
+              event.preventDefault(); // 기본 동작 방지
+              event.stopPropagation(); // 이벤트 전파 방지
+              modalContainer.classList.add("hidden");
+              //내용 비우기
+              document.getElementById("schedule-form").reset();
+              quill.setContents([]);
+            };
+
             Swal.fire({
               title: "일정을 수정하겠습니까?",
               showCancelButton: true,
@@ -398,7 +421,7 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
                 },
                 error: function (error) {
                   console.log(
-                    "수정을위한 일정의 상세를 가져올 수 없습니다" + error
+                    "수정을 위한 일정의 상세를 가져올 수 없습니다" + error
                   );
                 },
               });
@@ -465,27 +488,43 @@ function formatDateTime(dateTimeStr) {
 // 일정등록 모달
 const addScheduleButton = document.getElementById("add-schedule-button");
 var modalContainer = document.getElementById("add-schedule-container");
-var closeButton = document.getElementById("close-button");
 
 // 버튼 클릭 시 모달 열기
 addScheduleButton.onclick = function () {
   modalContainer.classList.remove("hidden");
+  closeModelButtonSwitching();
   makeTagify();
 };
 
-// 모달 닫기 버튼 클릭 시 모달 닫기
-closeButton.onclick = function (event) {
-  event.preventDefault(); // 기본 동작 방지
-  event.stopPropagation(); // 이벤트 전파 방지
-  modalContainer.classList.add("hidden");
+var closeButton = document.getElementById("close-button");
 
-  // Quill 에디터 내용 비우기
-  quill.setContents([]);
-};
+function closeModelButtonSwitching() {
+  const addScheduleButton = document.getElementById(
+    "add-schedule-modal-buttons"
+  );
+  addScheduleButton.innerHTML =
+    '<button type="submit" id="submit-add-schedule">일정 추가</button><br>' +
+    '<button id="close-button">닫기</button>';
+
+  // 새로운 closeButton 요소 재정의
+  closeButton = document.getElementById("close-button");
+
+  // 모달 닫기 버튼 클릭 시 모달 닫기
+  closeButton.onclick = function (event) {
+    event.preventDefault(); // 기본 동작 방지
+    event.stopPropagation(); // 이벤트 전파 방지
+    modalContainer.classList.add("hidden");
+    closeModelButtonSwitching();
+    //내용 비우기
+    document.getElementById("schedule-form").reset();
+    quill.setContents([]);
+  };
+}
 
 window.addEventListener("click", function (event) {
   if (event.target === modalContainer) {
     modalContainer.classList.add("hidden");
+    closeModelButtonSwitching();
   }
 });
 
@@ -740,93 +779,186 @@ function makeTagify(existingEmployees = []) {
     },
   });
 }
+let scheduleIdForModify;
 
-$(document).ready(function () {
-  // AJAX 호출과 무관한 다른 코드가 있다면 여기에 추가
-});
+function submitAndModifySchedule(submitType) {
+  if (submitType == 1) {
+    console.log("일정 등록을 수행하겠습니다.");
+    // 확인 버튼이 눌렸을 때만 실행
+    Swal.fire({
+      title: "일정을 등록하시겠습니까?",
+      showCancelButton: true,
+      confirmButtonText: "저장",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 사용자가 확인 버튼을 클릭한 경우
+        // 입력 값 가져오기
+        var scheduleName = document.getElementById("schedule-name").value;
+        var startDate = document.getElementById("start-date").value;
+        var endDate = document.getElementById("end-date").value;
 
+        // 에디터 내용 가져오기
+        var deltaContent = quill.getContents();
+        var deltaContentJson = JSON.stringify(deltaContent); // JSON 문자열로 변환
+
+        // 선택한 직원 ID 가져오기
+        var selectedEmployeeIds = tagify.value.map(function (tag) {
+          return tag.value;
+        });
+
+        // 값들 확인
+        console.log(
+          "일정 추가:",
+          scheduleName,
+          startDate,
+          endDate,
+          selectedEmployeeIds,
+          deltaContentJson
+        );
+        var emailCheck;
+        const checkedEmailSend = document.getElementById("email-alram");
+        if (checkedEmailSend.checked) {
+          emailCheck = 1;
+        } else {
+          emailCheck = 0;
+        }
+
+        // 서버로 전송할 데이터 설정
+        var formData = {
+          name: scheduleName,
+          startedDt: startDate,
+          endedDt: endDate,
+          employeeIds: selectedEmployeeIds,
+          contents: deltaContentJson, // 에디터 내용 추가
+          emailCheck: emailCheck,
+        };
+        // 일정등록  AJAX
+        $.ajax({
+          url: "/schedules/save",
+          method: "POST",
+          contentType: "application/json",
+
+          data: JSON.stringify(formData),
+          success: function (response) {
+            Swal.fire({
+              title: "일정 등록을 성공했습니다.",
+              icon: "success",
+              confirmButtonText: "확인",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "/schedules";
+              }
+            }); // 입력 필드 초기화
+            document.getElementById("schedule-form").reset();
+            quill.setContents([]); // 에디터 내용 초기화
+          },
+          error: function (xhr, status, error) {
+            Swal.fire({
+              icon: "error",
+              title: "일정 등록을 실패했습니다.",
+            });
+            console.error("Error:", xhr.responseText); // 오류 응답 내용을 콘솔에 출력
+          },
+        });
+      }
+    });
+  } else {
+    // 확인 버튼이 눌렸을 때만 실행
+    Swal.fire({
+      title: "일정을 수정하시겠습니까?",
+      html: "초대받은 사람들의 초대 승인 여부는 초기화됩니다.",
+      showCancelButton: true,
+      confirmButtonText: "저장",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // 사용자가 확인 버튼을 클릭한 경우
+        // 입력 값 가져오기
+        var scheduleName = document.getElementById("schedule-name").value;
+        var startDate = document.getElementById("start-date").value;
+        var endDate = document.getElementById("end-date").value;
+
+        // 에디터 내용 가져오기
+        var deltaContent = quill.getContents();
+        var deltaContentJson = JSON.stringify(deltaContent); // JSON 문자열로 변환
+
+        // 선택한 직원 ID 가져오기
+        var selectedEmployeeIds = tagify.value.map(function (tag) {
+          return tag.value;
+        });
+
+        // 값들 확인
+        console.log(
+          "일정 추가:",
+          scheduleName,
+          startDate,
+          endDate,
+          selectedEmployeeIds,
+          deltaContentJson
+        );
+        var emailCheck;
+        const checkedEmailSend = document.getElementById("email-alram");
+        if (checkedEmailSend.checked) {
+          emailCheck = 1;
+        } else {
+          emailCheck = 0;
+        }
+
+        // 서버로 전송할 데이터 설정
+        var formData = {
+          scheduleId: scheduleIdForModify,
+          name: scheduleName,
+          startedDt: startDate,
+          endedDt: endDate,
+          employeeIds: selectedEmployeeIds,
+          contents: deltaContentJson, // 에디터 내용 추가
+          emailCheck: emailCheck,
+        };
+        // 일정등록  AJAX
+        $.ajax({
+          url: "/api/schedules/modify",
+          method: "PATCH",
+          contentType: "application/json",
+          data: JSON.stringify(formData),
+          success: function (response) {
+            Swal.fire({
+              title: "일정 수정을 성공했습니다.",
+              icon: "success",
+              confirmButtonText: "확인",
+            }).then((result) => {
+              if (result.isConfirmed) {
+                window.location.href = "/schedules";
+              }
+            }); // 입력 필드 초기화
+            document.getElementById("schedule-form").reset();
+            quill.setContents([]); // 에디터 내용 초기화
+          },
+          error: function (xhr, status, error) {
+            Swal.fire({
+              icon: "error",
+              title: "일정 수정을 실패했습니다.",
+            });
+            console.error("Error:", xhr.responseText); // 오류 응답 내용을 콘솔에 출력
+          },
+        });
+      }
+    });
+  }
+}
 // 일정 추가 양식 제출 시 이벤트 처리
 document.getElementById("schedule-form").onsubmit = function (event) {
   event.preventDefault(); // 기본 제출 동작 방지
+  const submitButton = document.getElementById("submit-add-schedule");
+  const buttonText = submitButton.textContent; // 또는 submitButton.innerText;
+  let actionValue; // 값을 저장할 변수
 
-  // 확인 버튼이 눌렸을 때만 실행
-  Swal.fire({
-    title: "일정을 등록하시겠습니까?",
-    showCancelButton: true,
-    confirmButtonText: "저장",
-  }).then((result) => {
-    if (result.isConfirmed) {
-      // 사용자가 확인 버튼을 클릭한 경우
-      // 입력 값 가져오기
-      var scheduleName = document.getElementById("schedule-name").value;
-      var startDate = document.getElementById("start-date").value;
-      var endDate = document.getElementById("end-date").value;
-
-      // 에디터 내용 가져오기
-      var deltaContent = quill.getContents();
-      var deltaContentJson = JSON.stringify(deltaContent); // JSON 문자열로 변환
-
-      // 선택한 직원 ID 가져오기
-      var selectedEmployeeIds = tagify.value.map(function (tag) {
-        return tag.value;
-      });
-
-      // 값들 확인
-      console.log(
-        "일정 추가:",
-        scheduleName,
-        startDate,
-        endDate,
-        selectedEmployeeIds,
-        deltaContentJson
-      );
-      var emailCheck;
-      const checkedEmailSend = document.getElementById("email-alram");
-      if (checkedEmailSend.checked) {
-        emailCheck = 1;
-      } else {
-        emailCheck = 0;
-      }
-
-      // 서버로 전송할 데이터 설정
-      var formData = {
-        name: scheduleName,
-        startedDt: startDate,
-        endedDt: endDate,
-        employeeIds: selectedEmployeeIds,
-        contents: deltaContentJson, // 에디터 내용 추가
-        emailCheck: emailCheck,
-      };
-      // 일정등록  AJAX
-      $.ajax({
-        url: "/schedules/save",
-        method: "POST",
-        contentType: "application/json",
-
-        data: JSON.stringify(formData),
-        success: function (response) {
-          Swal.fire({
-            title: "일정 등록을 성공했습니다.",
-            icon: "success",
-            confirmButtonText: "확인",
-          }).then((result) => {
-            if (result.isConfirmed) {
-              window.location.href = "/schedules";
-            }
-          }); // 입력 필드 초기화
-          document.getElementById("schedule-form").reset();
-          quill.setContents([]); // 에디터 내용 초기화
-        },
-        error: function (xhr, status, error) {
-          Swal.fire({
-            icon: "error",
-            title: "일정 등록을 실패했습니다.",
-          });
-          console.error("Error:", xhr.responseText); // 오류 응답 내용을 콘솔에 출력
-        },
-      });
-    }
-  });
+  if (buttonText === "일정 추가") {
+    actionValue = 1; // "일정 추가"일 때 1
+  } else if (buttonText === "일정 수정") {
+    actionValue = 2; // "일정 수정"일 때 2
+  } else {
+    actionValue = 0; // 기본값 (선택 사항)
+  }
+  submitAndModifySchedule(actionValue);
 };
 // 일정 삭제
 var deleteButton = document.getElementById("detail-delete");

@@ -46,8 +46,6 @@
   </insert>
 
 
-
-
 <insert id="saveScheduleInvite" parameterType="com.kcc.trioffice.domain.schedule.dto.SaveSchedule">
     <foreach collection="employeeIds" item="employeeId" separator=";" open="DECLARE BEGIN" close="; END;">
         <if test="employeeId != null">
@@ -57,6 +55,7 @@
         </if>
     </foreach>
 </insert>
+
 
  <resultMap id="ScheduleDetailResultMap" type="ScheduleDetail">
     <!-- 단일 schedule 정보 -->
@@ -73,6 +72,26 @@
     </collection>
 </resultMap>
 
+
+
+
+<!-- 수정 로직  -->
+<update id="modifySchedule" parameterType="map">
+  UPDATE 
+    schedule
+  SET
+    name = #{saveSchedule.name}
+    , started_dt = #{startedDt}
+    , ended_dt = #{endedDt}
+    , contents = #{saveSchedule.contents}
+  WHERE schedule_id = #{saveSchedule.scheduleId}
+</update>
+
+
+<delete id="deleteScheduleInvite" parameterType="Long">
+    DELETE FROM schedule_invite
+    WHERE schedule_invite_id = #{deleteScheduleNum}
+</delete>
 
 
 <select id="getScheduleDetail" parameterType="String"  resultMap="ScheduleDetailResultMap">
