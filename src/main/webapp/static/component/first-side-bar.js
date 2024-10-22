@@ -17,6 +17,9 @@ links.forEach((link) => {
 
 const chatBotButton = document.getElementsByClassName("chat-bot")[0];
 const chatBotContainer = document.getElementById("chat-bot-container");
+const chatBotCloseButton = document.getElementById("chat-bot-close");
+const chatBotListRemoveButton = document.getElementById("chat-bot-return");
+let chatBotList = document.getElementById("chat-bot-messages");
 
 chatBotButton.addEventListener("click", function () {
   chatBotContainer.classList.remove("hidden");
@@ -26,4 +29,12 @@ window.addEventListener("click", function (event) {
   if (event.target === chatBotContainer) {
     chatBotContainer.classList.add("hidden");
   }
+});
+
+chatBotCloseButton.addEventListener("click", function () {
+  chatBotContainer.classList.add("hidden");
+});
+
+chatBotListRemoveButton.addEventListener("click", function () {
+  chatBotList.innerHTML = ""; // 내용 지우기
 });

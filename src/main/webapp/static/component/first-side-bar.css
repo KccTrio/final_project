@@ -88,8 +88,8 @@
   z-index: 10001;
   background-color: white;
   position: fixed;
-  top: 20vw;
-  left: 3vw;
+  top: 341px;
+  left: 54px;
   border-radius: 10px;
 }
 
@@ -119,8 +119,9 @@
   display: flex;
 }
 
-#chat-bot-right-buttons > div {
-  margin-right: 5px;
+#chat-bot-right-buttons > div > i {
+  margin-right: 10px;
+  cursor: pointer;
 }
 
 #chat-bot-title {
@@ -129,4 +130,64 @@
   font-weight: bold;
   font-family: "One Mobile Title", sans-serif;
   font-weight: 400;
+  padding-left: 20px;
+}
+
+#chat-bot-messages {
+  width: 100%;
+  border-bottom: 1px solid #e5e7eb;
+  /* background-color: rgb(243, 243, 243); */
+  height: 400px;
+}
+
+#chat-bot-guide,
+#chat-bot-input-div {
+  width: 100%;
+  border-bottom: 1px solid #e5e7eb;
+  height: 50px;
+}
+
+#chat-bot-input-div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+#chat-bot-input {
+  width: 380px;
+  height: 40px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  box-shadow: 0.3px 0.3px #ccc;
+  padding-left: 10px;
+}
+.fa-location-arrow {
+  position: absolute;
+  cursor: pointer;
+  right: 25px;
+  font-size: 30px;
+  color: #0056b3;
+}
+
+#chat-bot-guide {
+  display: flex;
+  align-items: center;
+}
+
+.chat-bot-guides {
+  height: 20px;
+  border: 1px solid #ccc;
+  box-shadow: 0.3px 0.3px #ccc;
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 15px;
+  margin: 5px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#chat-bot-guide-first {
+  margin-left: 10px;
 }
