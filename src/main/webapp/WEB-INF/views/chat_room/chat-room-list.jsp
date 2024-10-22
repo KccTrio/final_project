@@ -70,6 +70,7 @@
 </head>
 <body>
 <jsp:include page="/WEB-INF/views/component/top-bar.jsp"/>
+<div class="layout-container">
 <jsp:include page="/WEB-INF/views/component/first-side-bar.jsp"/>
 
 <div class="second-side-bar">
@@ -447,7 +448,7 @@
         </div>
     </div>
 </div>
-
+</div>
 <div id="emoticon-box"
      style="display: none; position: absolute; padding: 5px; border: 1px solid #ccc; background: white;">
     <!-- Example emoticons, replace these with your actual emoticons -->

@@ -4,7 +4,7 @@ $(document).ready(function() {
 
     // AJAX를 통해 직원 목록 가져오기
     $.ajax({
-        url: 'http://localhost:8081/api/employees/all',
+        url: '/api/employees/all',
         method: 'GET',
         dataType: 'json',
         success: function(data) {
