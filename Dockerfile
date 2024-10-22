@@ -1,4 +1,4 @@
 FROM openjdk:17
-ARG JAR_FILE=target/trioffice-0.0.1-SNAPSHOT.jar
-COPY ${JAR_FILE} app.jar
-ENTRYPOINT ["java","-jar","-Dspring.profiles.active=prod","/app.jar"]
+ARG WAR_FILE=target/trioffice-0.0.1-SNAPSHOT.war
+COPY ${WAR_FILE} app.war
+ENTRYPOINT ["java","-jar","-Dspring.profiles.active=prod","/app.war"]
