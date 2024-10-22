@@ -646,7 +646,7 @@ function makeTagify(existingEmployees = []) {
 
   // AJAX를 통해 직원 목록 가져오기
   $.ajax({
-    url: "http://localhost:8081/api/employees/all/include",
+    url: "/api/employees/all/include",
     method: "GET",
     dataType: "json",
     success: function (allEmployeeData) {
