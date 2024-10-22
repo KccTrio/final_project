@@ -147,48 +147,6 @@
                         </div>
                     </div>
                 </c:forEach>
-
-                <div class="row chat-room chat-room-item justify-content-between">
-                    <div class="col-3">
-                        <div class="profile">
-                            <img
-                                    src="https://e7.pngegg.com/pngimages/1/723/png-clipart-graphy-business-portrait-business-people-public-relations.png"
-                            />
-                            <div
-                                    class="status d-flex justify-content-center align-items-center"
-                            >
-                                <i class="fa-solid fa-check check-icon"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-8 d-flex align-content-between flex-wrap no-padding-left">
-                        <div class="row d-flex justify-content-between name-time-box">
-                            <div class="col-8 no-padding-left">
-                                <div class="chat-room-name">
-                                    <p>dd</p>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="last-message-at sub-text ml-auto">
-                                    <p>14:30</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row w-100 d-flex justify-content-between align-items-end">
-                            <div class="col-9 no-padding-left">
-                                <div class="chat-room-last-message sub-text">
-                                    <p>dd </p>
-                                </div>
-                            </div>
-                            <div class="col-3 text-end">
-                                <div class="unread-count-box">
-                                    <p class="unread-count">1</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
@@ -201,7 +159,7 @@
         </div>
         <form
                 name="create-chatroom-form"
-                action="http://localhost:8081/chatrooms/save"
+                action="/chatrooms/save"
                 method="post"
         >
             <div class="create-input-box">
