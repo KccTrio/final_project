@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM openjdk:17-jdk-slim
 
 # 비대화식 모드 설정
 ENV DEBIAN_FRONTEND=noninteractive
@@ -14,4 +14,4 @@ ARG WAR_FILE=target/trioffice-0.0.1-SNAPSHOT.war
 COPY ${WAR_FILE} app.war
 
 # Java 애플리케이션 실행 시 시간대 설정
-ENTRYPOINT ["java","-jar","-Dspring.profiles.active=prod","-Duser.timezone=Asia/Seoul","/app.war"]
+ENTRYPOINT ["java", "-Duser.timezone=Asia/Seoul", "-jar", "-Dspring.profiles.active=prod", "/app.war"]
