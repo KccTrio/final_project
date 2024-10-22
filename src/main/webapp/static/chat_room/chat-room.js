@@ -10,7 +10,11 @@ var limit = 50; // 한 번에 로드할 메시지 수
 var hasMoreData = true; // 더 로드할 데이터가 있는지 확인
 var loading = false; // AJAX 로드 중복 실행 방지
 let dropzoneInitialized = false;
-let myDropzone = null;
+let myDropzone = null
+let reconnectInterval = 5000; // 재연결 간격 (밀리초 단위)
+let reconnectAttempts = 0;
+let maxReconnectAttempts = 10;
+
 
 
 $(document).ready(function() {
@@ -37,11 +41,28 @@ $(document).ready(function() {
         }
         var sockJs = new SockJS("/stomp/connection");
         stompClient = Stomp.over(sockJs);
+        stompClient.debug = null; // 디버그 로그 비활성화
 
         stompClient.connect({}, function () {
             console.log("WebSocket 연결 성공");
+            reconnectAttempts = 0; // 재연결 성공 시 재연결 횟수 초기화
             subscribeToChatRoomList();
+        }, function (error) {
+            console.error("WebSocket 연결 에러:", error);
+            reconnectWebSocket();
         });
+    }
+
+    function reconnectWebSocket() {
+        if (reconnectAttempts < maxReconnectAttempts) {
+            reconnectAttempts++;
+            console.log("WebSocket 연결이 끊어졌습니다. " + reconnectAttempts + "번째 재연결을 시도합니다...");
+            setTimeout(function () {
+                connectChatRoomListSocket();
+            }, reconnectInterval);
+        } else {
+            console.error("재연결 횟수 초과로 인해 더 이상 재연결을 시도하지 않습니다.");
+        }
     }
 
     function subscribeToChatRoomList() {
@@ -644,7 +665,8 @@ $(document).ready(function() {
 
     function connectWebSocket(chatRoomId) {
         if (!stompClient || !stompClient.connected) {
-            console.error("STOMP 클라이언트가 연결되어 있지 않습니다.");
+            console.error("STOMP 클라이언트가 연결되어 있지 않습니다. 재연결을 시도합니다...");
+            reconnectWebSocket();
             return;
         }
 
@@ -690,6 +712,9 @@ $(document).ready(function() {
                 console.log('삭제 처리:', receivedMessage);
                 deleteMessage(receivedMessage);
             }
+        }, function (error) {
+            console.error("채팅방 구독 중 에러 발생:", error);
+            reconnectWebSocket();
         });
     }
 
@@ -1671,7 +1696,13 @@ $(document).ready(function() {
         $('.save-contents').show();
     });
 
+    $('.cancel-button').on('click', function () {
+       $('.save-contents').hide();
+       $('.chat-contents').show();
+    });
+
     $('.chat-room-item').on('click', function () {
+        $('.save-contents').hide()
         $('.contents').hide();
         $('.chat-contents').show();
         $('.chat-area').show();
