@@ -20,7 +20,11 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         page="/WEB-INF/views/component/first-side-bar.jsp"
       ></jsp:include>
       <div id="contents">
-        <div id="popMenu" class="list-group" style="display: none; width: 150px">
+        <div
+          id="popMenu"
+          class="list-group"
+          style="display: none; width: 150px"
+        >
           <a
             href=""
             class="list-group-item list-group-item-action"
@@ -41,11 +45,11 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           </div>
         </div>
         <!-- <div id="calendar-bar">
-          <input type="month" id="date-picker" />
-          <button id="today-button"></button>
-          <button id="left-button"><</button>
-          <button id="right-button">></button>
-        </div> -->
+        <input type="month" id="date-picker" />
+        <button id="today-button"></button>
+        <button id="left-button"><</button>
+        <button id="right-button">></button>
+      </div> -->
 
         <div id="calendar"></div>
         <!-- 일정등록 모달 -->
@@ -119,48 +123,21 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
                   </label>
                 </div>
               </div>
-            </div>
 
-            <div id="wyswyg">
-              <div id="schedule-contents-title">일정내용</div>
-              <div id="schedule-contents"></div>
-            </div>
-            <div id="add-schedule-modal-buttons">
-              <button type="submit" id="submit-add-schedule">일정 추가</button>
-              <button id="close-button">닫기</button>
-            </div>
-            <input
-              type="hidden"
-              name="${_csrf.parameterName}"
-              value="${_csrf.token}"
-            />
-          </form>
-          <span id="close-button"></span>
-        </div>
-      </div>
-      <div id="detail-container" class="hidden">
-        <div id="detail-contents">
-          <div id="detail-inner">
-            <div id="detail-title"></div>
-            <div id="schedule-master">
-              주최자 :
+              <div id="wyswyg">
+                <div id="schedule-contents-title">일정내용</div>
+                <div id="schedule-contents"></div>
+              </div>
+              <div id="add-schedule-modal-buttons">
+                <button type="submit" id="submit-add-schedule">
+                  일정 추가
+                </button>
+                <button id="close-button">닫기</button>
+              </div>
               <input
-                type="text"
-                value=""
-                id="master-name"
-                name="master-date"
-                readonly
-              />
-            </div>
-            <div class="detail-dates">
-              <label for="start-date">시작일:</label>
-              <input
-                type="text"
-                value=""
-                id="start-date-detail"
-                name="start-date"
-                readonly
-
+                type="hidden"
+                name="${_csrf.parameterName}"
+                value="${_csrf.token}"
               />
             </form>
             <span id="close-button"></span>
@@ -170,12 +147,21 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           <div id="detail-contents">
             <div id="detail-inner">
               <div id="detail-title"></div>
-
+              <div id="schedule-master">
+                주최자 :
+                <input
+                  type="text"
+                  value=""
+                  id="master-name"
+                  name="master-date"
+                  readonly
+                />
+              </div>
               <div class="detail-dates">
                 <label for="start-date">시작일:</label>
                 <input
                   type="text"
-                  value="2024-10-02"
+                  value=""
                   id="start-date-detail"
                   name="start-date"
                   readonly
