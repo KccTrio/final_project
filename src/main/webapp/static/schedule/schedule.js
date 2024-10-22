@@ -86,7 +86,8 @@ function fetchCalendarData() {
           start: formatDateToISO(schedule.startedDt),
           end: formatDateToISO(schedule.endedDt),
           extendedProps: {
-            // 추가 정보를 담기 - 스케줄의 각 id의 고유한 번호
+            // 추가 정보를 담기 - 스케줄의 각 id의 고유한 번호, 내스케줄여부
+            isMySchedule: schedule.isMySchedule,
             scheduleId: schedule.scheduleId,
           },
         };
@@ -157,20 +158,28 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
 
     eventDidMount: function (info) {
       info.el.style.cursor = "pointer";
-      // 시간도 있는 이벤트에 색상 변경
-      if (!info.event.allDay) {
-        info.el.style.color = "black";
+      // isMySchedule에 따른 색상 변경 처리
+      if (info.event.extendedProps.isMySchedule === 1) {
+        if (!info.event.allDay) {
+          info.el.style.color = "black";
+          info.el.style.backgroundColor = "white";
+          info.el.classList.add("time-event-dot"); // 클래스 추가
+        } else {
+          info.el.style.backgroundColor = "#FF7364";
+          info.el.style.paddingLeft = "5px";
+          info.el.style.border = "0px"; // 테두리 제거
+        }
       } else {
-        // info.el.style.backgroundColor = "#b4c8bb"; // 시간대 이벤트 배경색
-        info.el.style.backgroundColor = "#FF7364";
-        info.el.style.paddingLeft = "5px";
-        info.el.style.border = "0px"; // 시간대 이벤트 배경색
+        if (!info.event.allDay) {
+          info.el.style.color = "black";
+          info.el.style.backgroundColor = "white";
+        } else {
+          info.el.style.backgroundColor = "#6769FF";
+          info.el.style.paddingLeft = "5px";
+          info.el.style.border = "0px"; // 테두리 제거
+        }
       }
-      // data-schedule-id 속성 추가
-      info.el.setAttribute(
-        "data-schedule-id",
-        info.event.extendedProps.scheduleId
-      );
+
       // data-schedule-id 속성 추가
       info.el.setAttribute(
         "data-schedule-id",

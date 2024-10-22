@@ -51,14 +51,20 @@ public class ScheduleService {
 
   Timestamp timestamp = Timestamp.valueOf(LocalDateTime.now());
 
-  public List<EmployeeSchedules> getEmployeeSchedules(String startDate, String endDate) {
+  public List<EmployeeSchedules> getEmployeeSchedules(String startDate, String endDate,
+      PrincipalDetail principalDetail) {
     Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String employeeId = authentication.getName();
-    List<EmployeeSchedules> schdules = scheduleMapper.getEmployeeSchedules(employeeId, startDate, endDate);
+    String employeeEmail = authentication.getName();
+    List<EmployeeSchedules> schdules = scheduleMapper.getEmployeeSchedules(employeeEmail, startDate, endDate);
 
     for (int i = 0; i < schdules.size(); i++) {
       System.out.println((i + 1) + "번의 일정명은 " + schdules.get(i).getStartedDt());
-
+      // 내 스케줄인지 처리
+      if (schdules.get(i).getWriter().equals(principalDetail.getEmployeeId())) {
+        schdules.get(i).setIsMySchedule(1);
+      } else {
+        schdules.get(i).setIsMySchedule(0);
+      }
     }
     return schdules;
   }

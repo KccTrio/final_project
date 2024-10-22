@@ -9,5 +9,7 @@ public class EmployeeSchedules extends ComponentDto {
   private String startedDt;
   private String endedDt;
   private String contents;
+  private Long writer;
+  private int isMySchedule;
 
 }

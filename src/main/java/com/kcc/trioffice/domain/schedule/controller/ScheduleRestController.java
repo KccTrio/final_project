@@ -36,11 +36,10 @@ public class ScheduleRestController {
 
   @GetMapping("/schedules/calendar")
   public ResponseEntity<List<EmployeeSchedules>> getEmployeeSchedules(@RequestParam String startDate,
-      @RequestParam String endDate) {
+      @RequestParam String endDate, @AuthenticationPrincipal PrincipalDetail principalDetail) {
 
     System.out.println("request Date : " + startDate + endDate);
-    List<EmployeeSchedules> schedules = scheduleService.getEmployeeSchedules(startDate, endDate);
-
+    List<EmployeeSchedules> schedules = scheduleService.getEmployeeSchedules(startDate, endDate, principalDetail);
     return ResponseEntity.ok(schedules);
   }
 
