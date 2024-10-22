@@ -54,7 +54,21 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
         </div>
       </div>
       <div class="chat-bot">
-        <div class="icons"><i class="fa-brands fa-2x fa-bots"></i></div>
+        <div class="icons" id="bot-icon">
+          <i class="fa-brands fa-2x fa-bots"></i>
+        </div>
+      </div>
+
+      <div id="chat-bot-container" class="hidden">
+        <div id="chat-bot-contents">
+          <div id="chat-bot-top-bar">
+            <div id="chat-bot-title">트리오챗</div>
+            <div id="chat-bot-right-buttons">
+              <div id="chat-bot-return">🔄</div>
+              <div id="chat-bot-close">❌</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <script src="<%= request.getContextPath() %>/static/component/first-side-bar.js"></script>

@@ -30,9 +30,10 @@
 .search > img {
   position: absolute;
   width: 17px;
-  top: 9px;
-  right: 1px;
+  top: 8px;
+  right: 9px;
   margin: 0;
+  cursor: pointer;
 }
 
 .main {

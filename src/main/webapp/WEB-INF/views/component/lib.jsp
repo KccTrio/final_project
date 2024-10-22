@@ -7,10 +7,7 @@ uri="http://www.springframework.org/security/tags" %>
   <head>
     <meta charset="UTF-8" />
     <title></title>
-    <link
-      rel="stylesheet"
-      href="<%= request.getContextPath() %>/static/component/reset.css"
-    />
+
     <link
       rel="stylesheet"
       href="<%= request.getContextPath() %>/static/component/main-contents.css"
@@ -32,11 +29,7 @@ uri="http://www.springframework.org/security/tags" %>
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
       rel="stylesheet"
     />
-    <!-- 폰트 2개 -->
-    <link
-      href="https://fonts.googleapis.com/css2?family=Nanum+Square:wght@400;700&family=One+Mobile+Title:wght@400;700&display=swap"
-      rel="stylesheet"
-    />
+
     <!-- 폰트어썸 -->
     <link
       rel="stylesheet"
@@ -51,13 +44,12 @@ uri="http://www.springframework.org/security/tags" %>
       rel="stylesheet"
     />
 
+    <%-- drop zone --%>
     <link
-      href="https://fonts.googleapis.com/css2?family=Nanum+Square:wght@400;700&family=One+Mobile+Title:wght@400;700&display=swap"
       rel="stylesheet"
+      href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css"
+      type="text/css"
     />
-
-    <%--  drop zone  --%>
-    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css"/>
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -89,10 +81,39 @@ uri="http://www.springframework.org/security/tags" %>
       type="text/css"
     />
 
-    <%--  FCM  --%>
+    <%-- FCM --%>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-messaging.js"></script>
+    <link
+      rel="stylesheet"
+      href="<%= request.getContextPath() %>/static/component/reset.css"
+    />
     <style>
+      /* NanumSquare_ac 폰트 정의 */
+      @font-face {
+        font-family: "NanumSquare_ac";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2107@1.1/NanumSquare_acR.woff")
+          format("woff");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      @font-face {
+        font-family: "NanumSquare_ac";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2107@1.1/NanumSquare_acB.woff")
+          format("woff");
+        font-weight: bold;
+        font-style: normal;
+      }
+
+      /* One Mobile Title 폰트 정의 */
+      @font-face {
+        font-family: "One Mobile Title";
+        src: url("https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2107@1.1/OneMobileTitle.woff")
+          format("woff");
+        font-weight: 400; /* Regular weight */
+        font-style: normal;
+      }
       /* 적용방법 */
       .test-font {
         font-family: "NanumSquare_ac", sans-serif;

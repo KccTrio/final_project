@@ -14,3 +14,16 @@ links.forEach((link) => {
     link.parentElement.classList.add("active");
   }
 });
+
+const chatBotButton = document.getElementsByClassName("chat-bot")[0];
+const chatBotContainer = document.getElementById("chat-bot-container");
+
+chatBotButton.addEventListener("click", function () {
+  chatBotContainer.classList.remove("hidden");
+});
+
+window.addEventListener("click", function (event) {
+  if (event.target === chatBotContainer) {
+    chatBotContainer.classList.add("hidden");
+  }
+});
