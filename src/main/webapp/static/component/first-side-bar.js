@@ -20,6 +20,8 @@ const chatBotContainer = document.getElementById("chat-bot-container");
 const chatBotCloseButton = document.getElementById("chat-bot-close");
 const chatBotListRemoveButton = document.getElementById("chat-bot-return");
 let chatBotList = document.getElementById("chat-bot-messages");
+const chatBotSubmitButton =
+  document.getElementsByClassName("fa-location-arrow")[0];
 
 chatBotButton.addEventListener("click", function () {
   chatBotContainer.classList.remove("hidden");
@@ -38,3 +40,32 @@ chatBotCloseButton.addEventListener("click", function () {
 chatBotListRemoveButton.addEventListener("click", function () {
   chatBotList.innerHTML = ""; // 내용 지우기
 });
+
+//client 채팅 submit 3개 하기
+const chatBotInput = document.getElementById("chat-bot-input");
+chatBotSubmitButton.addEventListener("click", function () {
+  submitChatBot();
+});
+
+chatBotInput.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    event.preventDefault(); // 기본 동작 방지 (폼 제출 방지)
+    submitChatBot();
+  }
+});
+
+function submitChatBot() {
+  //입력값 가져오고 있으면 채팅방으로 value비우기
+  const chatBotUserMessage = chatBotInput.value;
+  if (chatBotUserMessage) {
+    displayClientChatBotMessage(chatBotUserMessage);
+    chatBotUserMessage.value = "";
+  }
+}
+
+function displayClientChatBotMessage(message) {
+  const chatMessageElement = document.createElement("div");
+  chatMessageElement.className = "chat-bot-client";
+  chatMessageElement.innerHTML = `<p class="chat-bot-client-messages">${message}</p>`;
+  chatBotList.appendChild(chatMessageElement); // 메시지를 채팅방에 추가
+}
