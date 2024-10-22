@@ -1027,7 +1027,7 @@ $(document).ready(function() {
 
         // AJAX를 통해 직원 목록 가져오기
         $.ajax({
-            url: 'http://localhost:8081/api/chatrooms/' + currentChatRoomId + '/except-participants',
+            url: '/api/chatrooms/' + currentChatRoomId + '/except-participants',
             method: 'GET',
             dataType: 'json',
             success: function (data) {
