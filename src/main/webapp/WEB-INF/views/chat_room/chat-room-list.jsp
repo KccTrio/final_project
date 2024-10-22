@@ -147,48 +147,6 @@
                         </div>
                     </div>
                 </c:forEach>
-
-                <div class="row chat-room chat-room-item justify-content-between">
-                    <div class="col-3">
-                        <div class="profile">
-                            <img
-                                    src="https://e7.pngegg.com/pngimages/1/723/png-clipart-graphy-business-portrait-business-people-public-relations.png"
-                            />
-                            <div
-                                    class="status d-flex justify-content-center align-items-center"
-                            >
-                                <i class="fa-solid fa-check check-icon"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-8 d-flex align-content-between flex-wrap no-padding-left">
-                        <div class="row d-flex justify-content-between name-time-box">
-                            <div class="col-8 no-padding-left">
-                                <div class="chat-room-name">
-                                    <p>dd</p>
-                                </div>
-                            </div>
-                            <div class="col-4">
-                                <div class="last-message-at sub-text ml-auto">
-                                    <p>14:30</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row w-100 d-flex justify-content-between align-items-end">
-                            <div class="col-9 no-padding-left">
-                                <div class="chat-room-last-message sub-text">
-                                    <p>dd </p>
-                                </div>
-                            </div>
-                            <div class="col-3 text-end">
-                                <div class="unread-count-box">
-                                    <p class="unread-count">1</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
@@ -201,7 +159,7 @@
         </div>
         <form
                 name="create-chatroom-form"
-                action="http://localhost:8081/chatrooms/save"
+                action="/chatrooms/save"
                 method="post"
         >
             <div class="create-input-box">
@@ -243,7 +201,7 @@
                                     <button type="submit" class="create-button">생성</button>
                                 </div>
                                 <div class="col-6">
-                                    <button class="cancel-button" onclick="history.back();">취소</button>
+                                    <button type="button" class="cancel-button">취소</button>
                                 </div>
                             </div>
                         </div>
@@ -253,7 +211,22 @@
         </form>
     </div>
 </div>
-<div class="contents chat-contents">
+
+<div class="contents default-contents">
+    <div class="container-fluid">
+        <div class="default-area">
+            <div class="row justify-content-center align-items-center" style="height: 80vh;">
+                <div class="col-12 text-center">
+                    <img src="https://ouch-cdn2.icons8.com/6syYW4lbbu5TDy1nWCp6l-QJtDGMNcQd6WOIK2LtyH8/rs:fit:608:456/extend:false/wm:1:re:0:0:0.8/wmid:ouch/czM6Ly9pY29uczgu/b3VjaC1wcm9kLmFz/c2V0cy9zdmcvNzQ2/L2MwMmE0ODFjLWEx/ZGQtNGM0My04MGQ4/LWE3OGE0NmJiOGY4/Yy5zdmc.png" alt="채팅을 선택해주세요" class="placeholder-image">
+                    <h2 class="mt-4">채팅을 선택해주세요</h2>
+                    <p class="text-muted mt-2">왼쪽 목록에서 채팅방을 선택하여 대화를 시작하세요.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="contents chat-contents" style="display: none;">
     <div class="container-fluid">
         <div
                 class="row category d-flex align-items-center d-flex justify-content-between chat-room-selection"
@@ -273,7 +246,7 @@
             </div>
             <div class="col-4">
                 <div class="chat-room-name">
-                    <p class="group-name">우영두</p>
+                    <p class="group-name"></p>
                 </div>
             </div>
             <div
