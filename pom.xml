@@ -11,6 +11,7 @@
 	<groupId>com.kcc</groupId>
 	<artifactId>trioffice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
+	<packaging>war</packaging>
 	<name>trioffice</name>
 	<description>Demo project for Spring Boot</description>
 	<url/>
