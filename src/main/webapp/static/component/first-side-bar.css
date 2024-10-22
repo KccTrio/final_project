@@ -62,3 +62,71 @@
 .active .menu-text {
   color: #0056b3;
 }
+
+/*  */
+#chat-bot-container.hidden {
+  display: none;
+}
+
+#chat-bot-container {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+}
+
+#chat-bot-contents {
+  width: 400px;
+  /* height: 18rem; */
+  height: 550px;
+  border: 1px solid #e5e7eb;
+  z-index: 10001;
+  background-color: white;
+  position: fixed;
+  top: 20vw;
+  left: 3vw;
+  border-radius: 10px;
+}
+
+#bot-icon {
+  width: 50px;
+  /* margin-bottom: 5px; */
+  height: 50px;
+  border-radius: 70%;
+  border: 1px solid lightslategray;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 0.5px 1px 1px gray;
+  margin-bottom: 10px;
+}
+
+#chat-bot-top-bar {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+#chat-bot-right-buttons {
+  display: flex;
+}
+
+#chat-bot-right-buttons > div {
+  margin-right: 5px;
+}
+
+#chat-bot-title {
+  padding-left: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  font-family: "One Mobile Title", sans-serif;
+  font-weight: 400;
+}
