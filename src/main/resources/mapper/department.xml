@@ -53,6 +53,16 @@
           WHERE e.dept_id = #{deptId}
     </select>
 
+    <select id="getDepartments" resultType="com.kcc.trioffice.domain.department.dto.response.DepartmentInfo">
+        SELECT
+          d.dept_id
+          , d.name
+          , d.upper_dept_id
+          , d.dept_order
+          FROM department d
+          WHERE d.company_id = #{companyId}
+          ORDER BY d.dept_order
+    </select>
 
 
 </mapper>
