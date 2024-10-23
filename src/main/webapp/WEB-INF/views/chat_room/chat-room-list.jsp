@@ -436,6 +436,7 @@
 <%@ include file="/WEB-INF/views/chat_room/modal/chat-delete-dropdown.jsp" %>
 <%@ include file="/WEB-INF/views/chat_room/modal/send-file-modal.jsp" %>
 <%@ include file="/WEB-INF/views/chat_room/modal/image-detail-modal.jsp" %>
+<%@ include file="/WEB-INF/views/chat_room/modal/add-department-chat-modal.jsp" %>
 
 </body>
 
