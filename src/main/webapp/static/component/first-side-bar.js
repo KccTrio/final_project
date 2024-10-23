@@ -68,4 +68,6 @@ function displayClientChatBotMessage(message) {
   chatMessageElement.className = "chat-bot-client";
   chatMessageElement.innerHTML = `<p class="chat-bot-client-messages">${message}</p>`;
   chatBotList.appendChild(chatMessageElement); // 메시지를 채팅방에 추가
+
+  chatBotList.scrollTop = chatBotList.scrollHeight;
 }
