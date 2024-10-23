@@ -126,12 +126,20 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           </div>
           <div id="chat-bot-guide">
             <div id="chat-bot-guide-first">
-              <div class="chat-bot-guides">자주하는 질문 👀</div>
-              <div class="chat-bot-guides">챗봇 답변을 잘받는 TIP❗</div>
+              <div class="chat-bot-guides" id="chat-bot-guide-1">
+                자주하는 질문 👀
+              </div>
+              <div class="chat-bot-guides" id="chat-bot-guide-2">
+                챗봇 답변을 잘받는 TIP❗
+              </div>
             </div>
             <div id="chat-bot-guide-second">
-              <div class="chat-bot-guides">2024 신규기능 활용 세미나😊</div>
-              <div class="chat-bot-guides">✅맞춤법 검사를 부탁해요</div>
+              <div class="chat-bot-guides" id="chat-bot-guide-3">
+                2024 신규기능 활용 세미나😊
+              </div>
+              <div class="chat-bot-guides" id="chat-bot-guide-4">
+                ✅맞춤법 검사를 부탁해요
+              </div>
             </div>
           </div>
           <div id="chat-bot-input-div">
