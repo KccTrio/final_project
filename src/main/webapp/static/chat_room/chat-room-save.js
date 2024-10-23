@@ -133,7 +133,7 @@ $(document).ready(function() {
         }
     });
 
-    $('.add-dept-box').click(function() {
+    $('.add-dept-button').click(function() {
         $('#add-department-chat-modal').modal('show');
 
         function fSch() {
