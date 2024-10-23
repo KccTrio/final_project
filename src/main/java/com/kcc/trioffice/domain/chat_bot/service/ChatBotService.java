@@ -23,8 +23,8 @@ public class ChatBotService {
   private final ChatClient chatClient;
 
   public Map<String, String> getResponseChatBotMessage(String message) {
-    ChatResponse chatResponse;
-    message = "안녕 반가워 ";
+
+    System.out.println("서버로 보낸 메세지  " + message);
     Map<String, String> response = new HashMap<>();
     String responseMessage = "";
     try {
@@ -37,7 +37,7 @@ public class ChatBotService {
       new NotFoundException("GPT의 응답을 생성할 수 없습니다." + e);
     }
 
-    response.put("GPT 응답", responseMessage);
+    response.put("response", responseMessage);
 
     return response;
   }

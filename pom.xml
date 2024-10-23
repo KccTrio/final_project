@@ -137,6 +137,7 @@
 		</dependency>
 
 		<!-- spring ai -->
+	
 		<dependency>
 			<groupId>org.springframework.ai</groupId>
 			<artifactId>spring-ai-openai-spring-boot-starter</artifactId>
@@ -148,7 +149,7 @@
             <snapshots>
                 <enabled>false</enabled>
             </snapshots>
-        </repository>
+    </repository>
 	</dependencies>  
 
 	<build>
