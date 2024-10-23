@@ -20,7 +20,16 @@ button {
 }
 
 .add-dept-box {
-    margin-left: 115px !important;
+    margin-left: 10% !important;
+    cursor: pointer;
+}
+
+.add-dept-button {
+    background-color: #7AB7FA;
+    color: white;
+    width: 21%;
+    padding-left: 6px;
+    border-radius: 10px;
 }
 
 .user-plus-icon {

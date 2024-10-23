@@ -165,8 +165,10 @@
             <div class="create-input-box">
                 <div class="create-add-emp-box">
                     <div class="row add-dept-box">
-                        <i class="fa-solid fa-plus plus-icon"></i>
-                        <span>조직도로 추가하기</span>
+                        <div class="add-dept-button">
+                            <i class="fa-solid fa-plus plus-icon"></i>
+                            <span>조직도로 추가하기</span>
+                        </div>
                     </div>
                     <div class="row create-input-add-emp-box">
                         <div class="col-1">
