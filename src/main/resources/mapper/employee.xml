@@ -10,6 +10,7 @@
       SELECT e.employee_id as id
              , e.name
              , d.name as deptName
+             , d.dept_id
              , e.position
         FROM employee e
         LEFT JOIN department d
