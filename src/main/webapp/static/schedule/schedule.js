@@ -265,7 +265,7 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
                 <thead id="detail-people-header">
                     <tr>
                         <th style="width: 120px;">이름</th>
-                        <th style="padding-right: 150px;">부서</th>
+                        <th style="width: 175px;">부서</th>
                         <th>참석 여부</th>
                     </tr>
                 </thead>
