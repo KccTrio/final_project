@@ -88,6 +88,9 @@ uri="http://www.springframework.org/security/tags" %>
       rel="stylesheet"
       href="<%= request.getContextPath() %>/static/component/reset.css"
     />
+
+    <script src="<%= request.getContextPath() %>/static/component/common.js"></script>
+
     <style>
       /* NanumSquare_ac 폰트 정의 */
       @font-face {

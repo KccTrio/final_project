@@ -10,6 +10,7 @@
       SELECT e.employee_id as id
              , e.name
              , d.name as deptName
+             , d.dept_id
              , e.position
         FROM employee e
         LEFT JOIN department d
@@ -250,6 +251,14 @@
     UPDATE employee
       SET fcm_token = #{fcmToken}
       WHERE employee_id = #{employeeId}
+    </update>
+
+    <update id="changeEmployeeStatus">
+      UPDATE employee
+        SET status = #{status}
+            , modifier = #{employeeId}
+            , modified_dt = sysdate
+        WHERE employee_id = #{employeeId}
     </update>
 
 
