@@ -40,7 +40,7 @@ public class ChatBotService {
 
       Flux<String> responseFlux = Flux.fromStream(responseMessage.chars()
       .mapToObj(c -> String.valueOf((char) c)))
-      .delayElements(Duration.ofMillis(100)); // 100ms마다 한 글자씩 전송
+      .delayElements(Duration.ofMillis(30)); // 100ms마다 한 글자씩 전송
       StringBuilder messageBuilder = new StringBuilder();
 
 
