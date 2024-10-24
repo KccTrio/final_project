@@ -34,5 +34,8 @@ public interface EmployeeMapper {
     Optional<EmployeeInfo> getEmployeeInfoFindByEmail(String email);
 
     List<String> getEmployeeEmailforSend(List<Long> Ids);
+
     int saveFcmToken(@Param("employeeId") Long employeeId, @Param("fcmToken") String fcmToken);
+
+    int changeEmployeeStatus(@Param("employeeId") Long employeeId, @Param("status") Long status);
 }
