@@ -157,12 +157,28 @@ $(document).ready(function() {
     }
 
     function addProfileStatus(chatRoom) {
-        if (chatRoom.participantCount == 2) {
+        if (chatRoom.employeeStatus == 1) {
             return `<div class="status d-flex justify-content-center align-items-center">
-                            <i class="fa-solid fa-check check-icon"></i>
-                        </div>`;
+                        <i class="fa-solid fa-check check-icon"></i>
+                    </div>`;
+        } else if(chatRoom.employeeStatus == 2) {
+            return `<div class="absent-status d-flex justify-content-center align-items-center">
+                        <i class="fa-solid fa-minus"></i>
+                    </div>`;
+        } else if (chatRoom.employeeStatus == 3) {
+            return `<div class="inactive-status d-flex justify-content-center align-items-center">
+                        <i class="fa-solid fa-minus"></i>
+                    </div>`;
+        } else if (chatRoom.employeeStatus == 4) {
+            return `<div class="dnd-status d-flex justify-content-center align-items-center">
+                        <i class="fa-solid fa-minus"></i>
+                    </div>`;
         }
         return '';
+    }
+
+    function addStatus(chatRoom) {
+
     }
 
     function addChatRoomActive(chatRoom) {
@@ -261,6 +277,9 @@ $(document).ready(function() {
     function updateChatRoomInfo(data) {
         $('.contents .group-name').text(data.chatRoomName);
         $('.chat-room-profile-image').attr('src', data.chatRoomProfileImageUrl);
+        $('.chat-room-profile div').replaceWith(addProfileStatus(data));
+        console.log(data);
+
         console.log(data.participantCount)
         $('.emp-count').text(data.participantCount);
     }

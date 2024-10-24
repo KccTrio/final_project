@@ -253,6 +253,14 @@
       WHERE employee_id = #{employeeId}
     </update>
 
+    <update id="changeEmployeeStatus">
+      UPDATE employee
+        SET status = #{status}
+            , modifier = #{employeeId}
+            , modified_dt = sysdate
+        WHERE employee_id = #{employeeId}
+    </update>
+
 
     
 </mapper>

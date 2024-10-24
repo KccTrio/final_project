@@ -2,10 +2,12 @@ package com.kcc.trioffice.domain.employee.service;
 
 import com.kcc.trioffice.domain.employee.dto.request.SaveEmployee;
 import com.kcc.trioffice.domain.employee.dto.request.SaveFcmToken;
+import com.kcc.trioffice.domain.employee.dto.request.UpdateStatus;
 import com.kcc.trioffice.domain.employee.dto.response.AdminInfo;
 import com.kcc.trioffice.domain.employee.dto.response.EmployeeInfo;
 import com.kcc.trioffice.domain.employee.dto.response.SearchEmployee;
 import com.kcc.trioffice.domain.employee.mapper.EmployeeMapper;
+import com.kcc.trioffice.global.enums.StatusType;
 import com.kcc.trioffice.global.exception.type.EmployeeSaveException;
 import com.kcc.trioffice.global.exception.type.NotFoundException;
 
@@ -162,5 +164,10 @@ public class EmployeeService {
     @Transactional
     public void saveFcmToken(SaveFcmToken saveFcmToken, Long employeeId) {
         employeeMapper.saveFcmToken(employeeId, saveFcmToken.getFcmToken());
+    }
+
+    @Transactional
+    public void changeEmployeeStatus(Long employeeId, UpdateStatus updateStatus) {
+        employeeMapper.changeEmployeeStatus(employeeId, StatusType.toEnum(updateStatus.getStatus()).getValue());
     }
 }
