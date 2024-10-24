@@ -62,11 +62,49 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
       <div id="chat-bot-container" class="hidden">
         <div id="chat-bot-contents">
           <div id="chat-bot-top-bar">
-            <div id="chat-bot-title">트리오챗</div>
-            <div id="chat-bot-right-buttons">
-              <div id="chat-bot-return">🔄</div>
-              <div id="chat-bot-close">❌</div>
+            <div id="chat-bot-title">
+              <i class="fa-solid fa-comment-medical"></i> 트리오챗
             </div>
+            <div id="chat-bot-right-buttons">
+              <div id="chat-bot-return"><i class="fa-solid fa-rotate"></i></div>
+              <div id="chat-bot-close"><i class="fa-solid fa-xmark"></i></div>
+            </div>
+          </div>
+          <div id="chat-bot-messages">
+            <div class="chat-bot-server">
+              <p class="default-bot-message">
+고객지원팀입니다. 궁금하신 [현재 상황, 질문]을 
+자세히 입력해주세요.😊  
+              </p>
+            </div>
+
+            
+          </div>
+          <div id="chat-bot-guide">
+            <div id="chat-bot-guide-first">
+              <div class="chat-bot-guides" id="chat-bot-guide-1">
+                자주하는 질문 👀
+              </div>
+              <div class="chat-bot-guides" id="chat-bot-guide-2">
+                챗봇 답변을 잘받는 TIP❗
+              </div>
+            </div>
+            <div id="chat-bot-guide-second">
+              <div class="chat-bot-guides" id="chat-bot-guide-3">
+                2024 신규기능 활용 세미나😊
+              </div>
+              <div class="chat-bot-guides" id="chat-bot-guide-4">
+                ✅맞춤법 검사를 부탁해요
+              </div>
+            </div>
+          </div>
+          <div id="chat-bot-input-div">
+            <textarea
+              id="chat-bot-input"
+              placeholder="질문을 입력해주세요."
+              required
+            ></textarea>
+            <i class="fa-solid fa-location-arrow"></i>
           </div>
         </div>
       </div>
