@@ -19,6 +19,8 @@
             rel="stylesheet"
             href="<%= request.getContextPath() %>/static/notification/notification.css"
     />
+    <script src="/static/notification/notification.js" charset="utf-8"></script>
+
     <title>Insert title here</title>
 </head>
 <body>
@@ -35,14 +37,40 @@
                 </div>
             </div>
             <div class="notification-list">
+                <c:forEach items="${notifications}"
+                           var="notification">
+                    <div class="row notification-item justify-content-between align-items-center" data-notification-id="${notification.notificationId}" data-schedule-id="${notification.relatedId}">
+                    <div class="col-3">
+                        <i class="fa-regular fa-calendar-check"></i>
+                    </div>
+                    <div class="col-9">
+                        <div class="row w-100 justify-content-between">
+                            <div class="col-8 no-padding-left notification-title">
+                                <p>${notification.title}</p>
+                            </div>
+                            <div class="col-3 notification-time">
+                               <p>${notification.writeDt}</p>
+                            </div>
+                        </div>
+                        <div class="row notification-contents w-100">
+                            <div class="col-12">
+                                <p>${notification.contents}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </c:forEach>
                 <div class="row notification-item justify-content-between align-items-center">
                     <div class="col-3">
                         <i class="fa-regular fa-calendar-check"></i>
                     </div>
                     <div class="col-9">
-                        <div class="row notification-title w-100">
-                            <div class="col-12 no-padding-left">
+                        <div class="row w-100 justify-content-between">
+                            <div class="col-8 no-padding-left notification-title">
                                 <p>일정초대</p>
+                            </div>
+                            <div class="col-3 notification-time">
+                               <p>14:20</p>
                             </div>
                         </div>
                         <div class="row notification-contents w-100">
@@ -122,8 +150,8 @@
                     <div class="row justify-content-end">
                         <div class="col-4 d-flex justify-content-end">
                             <div id="detail-buttons">
-                                <button id="detail-modify">수락</button>
-                                <button id="detail-delete">거절</button>
+                                <button id="detail-approve">수락</button>
+                                <button id="detail-reject">거절</button>
                             </div>
                         </div>
                     </div>
