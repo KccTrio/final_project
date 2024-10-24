@@ -217,7 +217,7 @@
 
 .chat-bot-client-messages {
   background-color: #7ab7fa;
-  border-radius: 5px;
+  border-radius: 7px 7px 0 7px;
   max-width: 350px;
   /* width: 350px; */
   margin-top: 3px;
@@ -237,7 +237,7 @@
   background-color: #e4f2f0;
   margin-top: 3px;
   /* padding: 3px; */
-  border-radius: 5px;
+  border-radius: 0 7px 7px 7px;
   max-width: 350px;
   /* width: 350px; */
   word-wrap: break-word;
@@ -255,7 +255,7 @@
   background-color: #e4f2f0;
   margin-top: 3px;
   /* padding: 3px; */
-  border-radius: 5px;
+  border-radius: 0 7px 7px 7px;
   max-width: 350px;
   /* width: 350px; */
   word-wrap: break-word;

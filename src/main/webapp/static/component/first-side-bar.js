@@ -62,21 +62,25 @@ function submitChatBot() {
     displayClientChatBotMessage(chatBotUserMessage);
     chatBotInput.value = "";
   }
+
   console.log("클라이언트에서 보내는 메세지 : " + sendClientMessage);
-  $.ajax({
-    url: "/api/chat-bot",
-    type: "POST",
-    dataType: "json",
-    data: {
-      clientMessage: sendClientMessage,
-    },
-    success: function (serverMessage) {
-      displaysServerChatBotMessage(serverMessage.response);
-    },
-    error: function (error) {
-      console.log("서버로부터 답변을 받지 못했습니다. " + error);
-    },
-  });
+  const serverMessageElement = addServerMessageBox(); // 서버 메시지 박스 생성 및 반환값 저장
+
+  const eventSource = new EventSource(
+    `/api/chat-bot?clientMessage=${sendClientMessage}`
+  );
+
+  eventSource.onmessage = function (event) {
+    if (event.data) {
+      // 한 글자씩 응답을 받아서 채팅에 계속 추가
+      addServerMessage(event.data, serverMessageElement);
+    }
+  };
+
+  eventSource.onerror = function (event) {
+    console.error("Error occurred", event);
+    eventSource.close();
+  };
 }
 
 function displayClientChatBotMessage(message) {
@@ -88,11 +92,27 @@ function displayClientChatBotMessage(message) {
   chatBotList.scrollTop = chatBotList.scrollHeight;
 }
 
-function displaysServerChatBotMessage(message) {
-  const chatMessageElement = document.createElement("div");
-  chatMessageElement.className = "chat-bot-server";
-  chatMessageElement.innerHTML = `<p class="chat-bot-server-messages">${message}</p>`;
-  chatBotList.appendChild(chatMessageElement); // 메시지를 채팅방에 추가
+let serverMessageCount = 0;
+let chatMessageServerElement; // 서버 메시지 박스를 저장할 변수
 
+//채팅방에 채팅 박스 먼저 생성
+function addServerMessageBox() {
+  const chatMessageServerElement = document.createElement("div");
+  chatMessageServerElement.className = "chat-bot-server";
+  chatMessageServerElement.innerHTML = `<p class="chat-bot-server-messages">💬</p>`;
+  chatBotList.appendChild(chatMessageServerElement); // 서버 메시지 박스를 채팅방에 추가
+  serverMessageCount++;
+  return chatMessageServerElement; // 생성된 박스를 반환
+}
+
+//채팅박스에 내용채우기
+function addServerMessage(message, serverMessageElement) {
+  const addChatMessage = serverMessageElement.querySelector(
+    ".chat-bot-server-messages"
+  );
+  if (addChatMessage.innerText.includes("💬")) {
+    addChatMessage.innerText = addChatMessage.innerText.replace("💬", ""); // "💬"를 빈 문자열로 대체
+  }
+  addChatMessage.innerText += `${message}`;
   chatBotList.scrollTop = chatBotList.scrollHeight;
 }

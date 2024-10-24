@@ -1,13 +1,18 @@
 package com.kcc.trioffice.global.chat_bot;
 
 import org.springframework.ai.chat.client.ChatClient;
-
+import org.springframework.ai.openai.api.OpenAiApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import java.time.Duration;
 
 @Configuration
 public class ChatBotConfig {
+  // String DEFAULT_CHAT_MODEL;
+  // static {
+  // DEFAULT_CHAT_MODEL = OpenAiApi.ChatModel.GPT_3_5_TURBO.getValue();
+
+  // }
 
   @Bean
   ChatClient chatClient(ChatClient.Builder builder) {
