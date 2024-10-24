@@ -116,11 +116,35 @@
                                 <img
                                         src="${chatRoom.chatRoomProfileImageUrl}"
                                 />
-                                <div
-                                        class="status d-flex justify-content-center align-items-center"
-                                >
-                                    <i class="fa-solid fa-check check-icon"></i>
-                                </div>
+                                <c:choose>
+                                    <c:when test="${chatRoom.employeeStatus == null}">
+                                    </c:when>
+                                    <c:when test="${chatRoom.employeeStatus == 1}">
+                                        <div class="status d-flex justify-content-center align-items-center">
+                                            <i class="fa-solid fa-check check-icon"></i>
+                                        </div>
+                                    </c:when>
+                                    <c:when test="${chatRoom.employeeStatus == 2}">
+                                        <div class="absent-status d-flex justify-content-center align-items-center">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </div>
+                                    </c:when>
+                                    <c:when test="${chatRoom.employeeStatus == 3}">
+                                        <div class="inactive-status d-flex justify-content-center align-items-center">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </div>
+                                    </c:when>
+                                    <c:when test="${chatRoom.employeeStatus == 4}">
+                                        <div class="dnd-status d-flex justify-content-center align-items-center">
+                                            <i class="fa-solid fa-minus"></i>
+                                        </div>
+                                    </c:when>
+                                    <c:otherwise>
+                                        <div class="status d-flex justify-content-center align-items-center">
+                                            <i class="fa-solid fa-question"></i>
+                                        </div>
+                                    </c:otherwise>
+                                </c:choose>
                             </div>
                         </div>
                         <div class="col-8 d-flex align-content-between flex-wrap no-padding-left ">
