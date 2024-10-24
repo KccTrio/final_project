@@ -4,7 +4,10 @@ let currentScheduleId = 0;
 $(document).ready(function () {
 
     $(document).on('click', '.notification-list .notification-item', function() {
-        console.log("실행");
+
+        $('.default-contents').hide();
+        $('.notification-contents').show();
+
         let notificationId = $(this).data('notification-id');
         let scheduleId = $(this).data('schedule-id');
 
@@ -25,7 +28,9 @@ $(document).ready(function () {
             confirmButtonColor: "#3085d6",
             confirmButtonText: "참가",
             cancelButtonText: "취소",
-            cancelButtonColor: "#d33",
+            customClass: {
+                cancelButton: 'cancel-button-custom' // 여기에 CSS 클래스를 지정
+            }
         }).then((result) => {
             if (result.isConfirmed) {
                 Swal.fire({

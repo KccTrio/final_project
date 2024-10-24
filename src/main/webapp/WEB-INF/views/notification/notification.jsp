@@ -60,37 +60,28 @@
                     </div>
                 </div>
                 </c:forEach>
-                <div class="row notification-item justify-content-between align-items-center">
-                    <div class="col-3">
-                        <i class="fa-regular fa-calendar-check"></i>
-                    </div>
-                    <div class="col-9">
-                        <div class="row w-100 justify-content-between">
-                            <div class="col-8 no-padding-left notification-title">
-                                <p>일정초대</p>
-                            </div>
-                            <div class="col-3 notification-time">
-                               <p>14:20</p>
-                            </div>
-                        </div>
-                        <div class="row notification-contents w-100">
-                            <div class="col-12">
-                                <p>백엔드 회의에 초대되셨습니다.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
     </div>
-    <div class="contents">
+    <div class="contents default-contents">
+        <div class="container-fluid">
+            <div class="default-area">
+                <div class="row justify-content-center align-items-center" style="height: 80vh;">
+                    <div class="col-12 text-center">
+                        <img src="https://s3.ap-northeast-2.amazonaws.com/img.stibee.com/23010_1599648318.png" alt="채팅을 선택해주세요" class="placeholder-image" style="width: 600px; border-radius: 10px">
+                        <h2 class="mt-4">알림을 선택해주세요</h2>
+                        <p class="text-muted mt-2">왼쪽 목록에서 알림을 선택하여 알림을 확인하세요.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="contents notification-contents" style="display: none">
         <div class="container-fluid">
             <div class="detail-container d-flex justify-content-center align-items-center">
                 <div class="detail-inner">
                     <div class="row detail-contents">
                         <div class="col-12 detail-title d-flex justify-content-center">
-                            우리은행 통합 뱅킹 솔루션 회의
                         </div>
                     </div>
                     <div class="row writer-box">
