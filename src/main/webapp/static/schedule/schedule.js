@@ -264,7 +264,7 @@ document.addEventListener("DOMContentLoaded", function (employeeEvents) {
             <table id="detail-table" style="width:100%; border-collapse: collapse;">
                 <thead id="detail-people-header">
                     <tr>
-                        <th style="padding-right: 100px;">이름</th>
+                        <th style="width: 120px;">이름</th>
                         <th style="padding-right: 150px;">부서</th>
                         <th>참석 여부</th>
                     </tr>

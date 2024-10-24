@@ -30,6 +30,19 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+	<repositories>
+      <repository>
+         <id>maven-central</id>
+         <url>https://repo.maven.apache.org/maven2/</url>
+      </repository>
+      <repository>
+         <id>spring-snapshots</id>
+         <url>https://repo.spring.io/snapshot</url>
+         <snapshots>
+            <enabled>true</enabled>
+         </snapshots>
+      </repository>
+   </repositories>
 	<dependencies>
 		
 
@@ -138,21 +151,13 @@
 
 		<!-- spring ai -->
 	
-		<dependency>
-			<groupId>org.springframework.ai</groupId>
-			<artifactId>spring-ai-openai-spring-boot-starter</artifactId>
-			<version>1.0.0-SNAPSHOT</version>
-		</dependency>
-		<repository>
-            <id>snapshots-repo</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-            <snapshots>
-        			<enabled>true</enabled>
-            </snapshots>
-    </repository>
+			<dependency>
+         <groupId>org.springframework.ai</groupId>
+         <artifactId>spring-ai-openai-spring-boot-starter</artifactId>
+         <version>1.0.0-SNAPSHOT</version>
+      </dependency>
 
-
-
+   
 	</dependencies>  
 
 	<build>
