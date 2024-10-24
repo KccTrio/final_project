@@ -59,7 +59,7 @@ function submitChatBot() {
   const chatBotUserMessage = chatBotInput.value;
   if (chatBotUserMessage) {
     displayClientChatBotMessage(chatBotUserMessage);
-    chatBotUserMessage.value = "";
+    chatBotInput.value = "";
   }
 }
 
