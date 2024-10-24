@@ -156,6 +156,12 @@
 }
 
 #chat-bot-input {
+  overflow-y: auto;
+  word-wrap: break-word;
+  word-break: break-all;
+  resize: none;
+  padding: 10px;
+  padding-right: 30px;
   width: 380px;
   height: 40px;
   border: 1px solid #ccc;
@@ -227,6 +233,24 @@
   padding-bottom: 5px;
 }
 
+.default-bot-message {
+  background-color: #e4f2f0;
+  margin-top: 3px;
+  /* padding: 3px; */
+  border-radius: 5px;
+  max-width: 350px;
+  /* width: 350px; */
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+  font-size: 13px;
+  line-height: 1.2;
+  padding-right: 5px;
+  padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+}
+
 .chat-bot-server-messages {
   background-color: #e4f2f0;
   margin-top: 3px;
@@ -241,6 +265,8 @@
   line-height: 1.2;
   padding-right: 5px;
   padding-left: 5px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 
 .fa-location-arrow:active {

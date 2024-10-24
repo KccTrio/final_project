@@ -72,18 +72,13 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
           </div>
           <div id="chat-bot-messages">
             <div class="chat-bot-server">
-              <p class="chat-bot-server-messages">
+              <p class="default-bot-message">
 고객지원팀입니다. 궁금하신 [현재 상황, 질문]을 
 자세히 입력해주세요.😊  
               </p>
             </div>
 
-            <div class="chat-bot-server">
-              <p class="chat-bot-server-messages">
-고객지원팀입니다. 궁금하신 [현재 상황, 질문]을 
-자세히 입력해주세요.😊  
-              </p>
-            </div>
+            
           </div>
           <div id="chat-bot-guide">
             <div id="chat-bot-guide-first">
@@ -104,12 +99,11 @@ pageEncoding="UTF-8" %> <%@ include file="/WEB-INF/views/component/lib.jsp" %>
             </div>
           </div>
           <div id="chat-bot-input-div">
-            <input
-              type="text"
+            <textarea
               id="chat-bot-input"
               placeholder="질문을 입력해주세요."
               required
-            />
+            ></textarea>
             <i class="fa-solid fa-location-arrow"></i>
           </div>
         </div>

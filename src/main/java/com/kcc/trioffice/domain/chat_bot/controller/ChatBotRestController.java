@@ -24,9 +24,9 @@ public class ChatBotRestController {
   private final ChatBotService chatBotService;
 
   @PostMapping("/chat-bot")
-  public ResponseEntity<Map<String, String>> getClientMessages(@RequestParam String message) {
-    System.out.println("받은 메세지: " + message);
-    Map<String, String> response = chatBotService.getResponseChatBotMessage(message);
+  public ResponseEntity<Map<String, String>> getClientMessages(@RequestParam String clientMessage) {
+    System.out.println("받은 메세지: " + clientMessage);
+    Map<String, String> response = chatBotService.getResponseChatBotMessage(clientMessage);
     return ResponseEntity.ok(response);
   }
 

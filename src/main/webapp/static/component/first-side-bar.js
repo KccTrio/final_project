@@ -57,16 +57,41 @@ chatBotInput.addEventListener("keydown", function (event) {
 function submitChatBot() {
   //입력값 가져오고 있으면 채팅방으로 value비우기
   const chatBotUserMessage = chatBotInput.value;
+  const sendClientMessage = chatBotUserMessage;
   if (chatBotUserMessage) {
     displayClientChatBotMessage(chatBotUserMessage);
     chatBotInput.value = "";
   }
+  console.log("클라이언트에서 보내는 메세지 : " + sendClientMessage);
+  $.ajax({
+    url: "/api/chat-bot",
+    type: "POST",
+    dataType: "json",
+    data: {
+      clientMessage: sendClientMessage,
+    },
+    success: function (serverMessage) {
+      displaysServerChatBotMessage(serverMessage.response);
+    },
+    error: function (error) {
+      console.log("서버로부터 답변을 받지 못했습니다. " + error);
+    },
+  });
 }
 
 function displayClientChatBotMessage(message) {
   const chatMessageElement = document.createElement("div");
   chatMessageElement.className = "chat-bot-client";
   chatMessageElement.innerHTML = `<p class="chat-bot-client-messages">${message}</p>`;
+  chatBotList.appendChild(chatMessageElement); // 메시지를 채팅방에 추가
+
+  chatBotList.scrollTop = chatBotList.scrollHeight;
+}
+
+function displaysServerChatBotMessage(message) {
+  const chatMessageElement = document.createElement("div");
+  chatMessageElement.className = "chat-bot-server";
+  chatMessageElement.innerHTML = `<p class="chat-bot-server-messages">${message}</p>`;
   chatBotList.appendChild(chatMessageElement); // 메시지를 채팅방에 추가
 
   chatBotList.scrollTop = chatBotList.scrollHeight;
